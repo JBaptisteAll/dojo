@@ -1,0 +1,2186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Databricks DE Associate — Guide de Révision</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f14;
+    --surface: #16181f;
+    --surface2: #1e2028;
+    --border: #2a2d38;
+    --accent: #ff4d1c;
+    --accent2: #ff8c5a;
+    --text: #e8e9ee;
+    --muted: #7c7f8e;
+    --code-bg: #12141a;
+    --s1: #3b82f6;
+    --s2: #8b5cf6;
+    --s3: #10b981;
+    --s4: #f59e0b;
+    --s5: #ec4899;
+    --correct: #10b981;
+    --wrong: #ef4444;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0;
+    width: 260px;
+    height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+  .sidebar-logo {
+    padding: 24px 20px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-logo .brand {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .sidebar-logo .title {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+  .progress-bar-wrap {
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .progress-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .nav-section {
+    padding: 8px 0;
+  }
+  .nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 8px 20px 4px;
+  }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 20px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .nav-link:hover { color: var(--text); background: var(--surface2); }
+  .nav-link.active { color: var(--text); border-left-color: var(--accent); background: var(--surface2); }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .nav-quiz-link {
+    font-size: 11px;
+    color: var(--accent);
+    padding: 4px 20px 4px 38px;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+  }
+  .nav-quiz-link:hover { color: var(--accent2); }
+  .score-badge {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 10px;
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .score-badge.good { background: rgba(16,185,129,0.15); color: var(--correct); }
+  .score-badge.bad { background: rgba(239,68,68,0.15); color: var(--wrong); }
+
+  /* MAIN */
+  .main {
+    margin-left: 260px;
+    min-height: 100vh;
+    max-width: 900px;
+    padding: 48px 48px 80px;
+  }
+
+  /* HOME */
+  .home-hero {
+    padding: 60px 0 40px;
+  }
+  .home-hero .tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .home-hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 16px;
+  }
+  .home-hero p {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 600px;
+    line-height: 1.6;
+  }
+  .exam-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin: 40px 0;
+  }
+  .exam-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .exam-card .val {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+  }
+  .exam-card .key {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .sections-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 32px 0;
+  }
+  .section-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: block;
+  }
+  .section-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .section-card .s-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  .section-card .s-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .section-card .s-weight {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .weight-bar {
+    height: 3px;
+    border-radius: 2px;
+    margin-top: 12px;
+  }
+
+  /* SECTION PAGES */
+  .section-header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 24px;
+    margin-bottom: 36px;
+  }
+  .section-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .section-desc {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 600px;
+  }
+  .weight-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 16px;
+  }
+
+  /* CONTENT */
+  .content h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 36px 0 12px;
+    padding-top: 8px;
+  }
+  .content h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin: 24px 0 8px;
+  }
+  .content p {
+    color: #b0b3c1;
+    margin-bottom: 14px;
+    line-height: 1.75;
+  }
+  .content ul, .content ol {
+    padding-left: 20px;
+    margin-bottom: 14px;
+  }
+  .content li {
+    color: #b0b3c1;
+    margin-bottom: 6px;
+    line-height: 1.7;
+  }
+  .content strong { color: var(--text); font-weight: 600; }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    overflow-x: auto;
+    margin: 16px 0 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #a8b4c8;
+  }
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 6px;
+    color: var(--accent2);
+  }
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+  }
+  .callout {
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-left: 3px solid;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .callout.warning { background: rgba(245,158,11,0.08); border-color: #f59e0b; color: #d4a846; }
+  .callout.tip { background: rgba(59,130,246,0.08); border-color: #3b82f6; color: #7bb3f0; }
+  .callout.danger { background: rgba(239,68,68,0.08); border-color: #ef4444; color: #f08080; }
+  .callout.success { background: rgba(16,185,129,0.08); border-color: #10b981; color: #5dd4a8; }
+  .callout strong { color: inherit; font-weight: 700; }
+  .table-wrap { overflow-x: auto; margin: 16px 0 24px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--surface2); padding: 10px 14px; text-align: left; font-weight: 600; color: var(--text); border-bottom: 1px solid var(--border); }
+  td { padding: 9px 14px; border-bottom: 1px solid var(--border); color: #b0b3c1; }
+  tr:last-child td { border-bottom: none; }
+
+  /* DIVIDER */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* QUIZ */
+  .quiz-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-top: 48px;
+  }
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .quiz-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .quiz-count {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .quiz-intro {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+  .question-block {
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .question-block:last-of-type { border-bottom: none; }
+  .q-num {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+  .q-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+  .q-code {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #a8b4c8;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    white-space: pre;
+    overflow-x: auto;
+  }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 13px;
+    color: #b0b3c1;
+    line-height: 1.5;
+  }
+  .option:hover { border-color: var(--accent); color: var(--text); background: rgba(255,77,28,0.04); }
+  .option.selected { border-color: var(--accent); background: rgba(255,77,28,0.08); color: var(--text); }
+  .option.correct { border-color: var(--correct); background: rgba(16,185,129,0.1); color: #5dd4a8; }
+  .option.wrong { border-color: var(--wrong); background: rgba(239,68,68,0.1); color: #f08080; }
+  .option-letter {
+    width: 22px; height: 22px;
+    border-radius: 4px;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  .option.correct .option-letter { background: rgba(16,185,129,0.3); color: var(--correct); }
+  .option.wrong .option-letter { background: rgba(239,68,68,0.3); color: var(--wrong); }
+  .option.selected .option-letter { background: rgba(255,77,28,0.3); color: var(--accent); }
+  .explanation {
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.6;
+    display: none;
+  }
+  .explanation.correct-exp { background: rgba(16,185,129,0.08); color: #5dd4a8; border-left: 2px solid var(--correct); }
+  .explanation.wrong-exp { background: rgba(239,68,68,0.08); color: #f08080; border-left: 2px solid var(--wrong); }
+  .explanation strong { color: inherit; }
+  .quiz-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+  .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    font-family: 'Inter', sans-serif;
+  }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--accent); }
+  .quiz-result {
+    text-align: center;
+    padding: 24px 0;
+    display: none;
+  }
+  .result-score {
+    font-family: 'Syne', sans-serif;
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .result-label { font-size: 14px; color: var(--muted); margin-bottom: 20px; }
+  .result-bars { display: flex; gap: 4px; justify-content: center; margin-bottom: 20px; }
+  .result-bar { width: 16px; height: 40px; border-radius: 3px; }
+
+  /* MOBILE */
+  .menu-toggle {
+    display: none;
+    position: fixed;
+    top: 12px; left: 12px;
+    z-index: 200;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    color: var(--text);
+    font-size: 18px;
+  }
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; padding: 24px 20px 60px; }
+    .menu-toggle { display: flex; }
+    .home-hero h1 { font-size: 32px; }
+    .sections-grid { grid-template-columns: 1fr; }
+    .quiz-section { padding: 20px; }
+  }
+
+  /* PAGE TRANSITIONS */
+  .page { display: none; animation: fadeIn 0.2s ease; }
+  .page.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+<nav class="sidebar" id="sidebar">
+  <a href="index.html" style="display:block;margin:14px 16px 0;padding:7px 12px;background:rgba(255,77,28,.12);border:1px solid rgba(255,77,28,.35);color:#ff8c5a;text-decoration:none;font-size:12px;font-weight:500;border-radius:6px;text-align:center;transition:background .2s;" onmouseover="this.style.background='rgba(255,77,28,.25)'" onmouseout="this.style.background='rgba(255,77,28,.12)'">← Accueil</a>
+  <div class="sidebar-logo">
+    <div class="brand">Databricks</div>
+    <div class="title">DE Associate<br>Guide de révision</div>
+  </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-label"><span>Progression</span><span id="prog-text">0%</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Navigation</div>
+    <a class="nav-link active" onclick="showPage('home')">
+      <span class="nav-dot" style="background:#ff4d1c"></span>Accueil
+    </a>
+    <a class="nav-link" onclick="showPage('s0')">
+      <span class="nav-dot" style="background:#94a3b8"></span>Phase 0 — Fondations
+      <span class="score-badge" id="badge-s0" style="display:none"></span>
+    </a>
+    <a class="nav-quiz-link" onclick="showPage('s0'); setTimeout(()=>scrollToQuiz('quiz-s0'),300)">→ QCM Phase 0</a>
+    <a class="nav-link" onclick="showPage('s1')">
+      <span class="nav-dot" style="background:#3b82f6"></span>Section 1 — Plateforme
+      <span class="score-badge" id="badge-s1" style="display:none"></span>
+    </a>
+    <a class="nav-quiz-link" onclick="showPage('s1'); setTimeout(()=>scrollToQuiz('quiz-s1'),300)">→ QCM Section 1</a>
+    <a class="nav-link" onclick="showPage('s2')">
+      <span class="nav-dot" style="background:#8b5cf6"></span>Section 2 — Ingestion
+      <span class="score-badge" id="badge-s2" style="display:none"></span>
+    </a>
+    <a class="nav-quiz-link" onclick="showPage('s2'); setTimeout(()=>scrollToQuiz('quiz-s2'),300)">→ QCM Section 2</a>
+    <a class="nav-link" onclick="showPage('s3')">
+      <span class="nav-dot" style="background:#10b981"></span>Section 3 — Transformations
+      <span class="score-badge" id="badge-s3" style="display:none"></span>
+    </a>
+    <a class="nav-quiz-link" onclick="showPage('s3'); setTimeout(()=>scrollToQuiz('quiz-s3'),300)">→ QCM Section 3</a>
+    <a class="nav-link" onclick="showPage('s4')">
+      <span class="nav-dot" style="background:#f59e0b"></span>Section 4 — Production
+      <span class="score-badge" id="badge-s4" style="display:none"></span>
+    </a>
+    <a class="nav-quiz-link" onclick="showPage('s4'); setTimeout(()=>scrollToQuiz('quiz-s4'),300)">→ QCM Section 4</a>
+    <a class="nav-link" onclick="showPage('s5')">
+      <span class="nav-dot" style="background:#ec4899"></span>Section 5 — Gouvernance
+      <span class="score-badge" id="badge-s5" style="display:none"></span>
+    </a>
+    <a class="nav-quiz-link" onclick="showPage('s5'); setTimeout(()=>scrollToQuiz('quiz-s5'),300)">→ QCM Section 5</a>
+    <a class="nav-link" onclick="showPage('mock')" style="margin-top:8px;border-top:1px solid var(--border);padding-top:16px">
+      <span class="nav-dot" style="background:#ff4d1c"></span><strong>Mock Exam — 45 questions</strong>
+    </a>
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="home-hero">
+    <div class="tag">Certification · Databricks</div>
+    <h1>Data Engineer<br>Associate</h1>
+    <p>Guide de révision complet structuré selon les 5 sections officielles de l'examen, avec cours et QCM difficiles pour valider chaque thème.</p>
+  </div>
+  <div class="exam-cards">
+    <div class="exam-card"><div class="val">45</div><div class="key">Questions QCM</div></div>
+    <div class="exam-card"><div class="val">90</div><div class="key">Minutes</div></div>
+    <div class="exam-card"><div class="val">$200</div><div class="key">Frais d'exam</div></div>
+    <div class="exam-card"><div class="val">~70%</div><div class="key">Score requis</div></div>
+  </div>
+  <div class="sections-grid">
+    <a class="section-card" onclick="showPage('s1')">
+      <div class="s-icon">🏗️</div>
+      <div class="s-title">Section 1 — Plateforme Databricks</div>
+      <div class="s-weight">10% de l'examen</div>
+      <div class="weight-bar" style="background:rgba(59,130,246,0.3); width:10%"></div>
+    </a>
+    <a class="section-card" onclick="showPage('s2')">
+      <div class="s-icon">🔄</div>
+      <div class="s-title">Section 2 — Développement & Ingestion</div>
+      <div class="s-weight">30% de l'examen — priorité haute</div>
+      <div class="weight-bar" style="background:rgba(139,92,246,0.3); width:30%"></div>
+    </a>
+    <a class="section-card" onclick="showPage('s3')">
+      <div class="s-icon">⚙️</div>
+      <div class="s-title">Section 3 — Traitement & Transformations</div>
+      <div class="s-weight">31% de l'examen — priorité haute</div>
+      <div class="weight-bar" style="background:rgba(16,185,129,0.3); width:31%"></div>
+    </a>
+    <a class="section-card" onclick="showPage('s4')">
+      <div class="s-icon">🚀</div>
+      <div class="s-title">Section 4 — Mise en Production</div>
+      <div class="s-weight">18% de l'examen</div>
+      <div class="weight-bar" style="background:rgba(245,158,11,0.3); width:18%"></div>
+    </a>
+    <a class="section-card" onclick="showPage('s5')">
+      <div class="s-icon">🛡️</div>
+      <div class="s-title">Section 5 — Gouvernance & Qualité</div>
+      <div class="s-weight">11% de l'examen</div>
+      <div class="weight-bar" style="background:rgba(236,72,153,0.3); width:11%"></div>
+    </a>
+    <a class="section-card" onclick="showPage('s0')">
+      <div class="s-icon">📖</div>
+      <div class="s-title">Phase 0 — Fondations conceptuelles</div>
+      <div class="s-weight">À lire en premier</div>
+      <div class="weight-bar" style="background:rgba(148,163,184,0.3); width:100%"></div>
+    </a>
+    <a class="section-card" onclick="showPage('mock')" style="border-color:rgba(255,77,28,0.4);grid-column:1/-1">
+      <div class="s-icon">🎯</div>
+      <div class="s-title">Mock Exam — Simulation complète</div>
+      <div class="s-weight">45 questions aléatoires tirées de la banque complète · 90 minutes · Conditions réelles</div>
+      <div class="weight-bar" style="background:rgba(255,77,28,0.4); width:100%"></div>
+    </a>
+  </div>
+  <div class="callout tip"><strong>Conseil exam :</strong> Les sections 2 et 3 représentent 61% de l'examen. Concentre le plus gros de ton temps là-dessus. L'examen est principalement du SQL avec du Python.</div>
+</div>
+
+<!-- PHASE 0 -->
+<div id="page-s0" class="page">
+  <div class="section-header">
+    <div class="section-tag" style="color:#94a3b8">Phase 0 · Fondations</div>
+    <h1 class="section-title">Lakehouse, Delta Lake<br>& Unity Catalog</h1>
+    <p class="section-desc">Les concepts fondamentaux à maîtriser avant d'aborder les sections techniques de l'examen.</p>
+  </div>
+  <div class="content">
+    <h2>Pourquoi le Lakehouse existe</h2>
+    <p>Avant Databricks, les entreprises choisissaient entre deux architectures imparfaites :</p>
+    <p><strong>Data Lake</strong> : stockage cloud pas cher (S3, Azure Blob…), format ouvert, scalable. Mais aucune garantie de qualité, pas de transactions, requêtes lentes, impossible à gouverner.</p>
+    <p><strong>Data Warehouse</strong> (Snowflake, BigQuery…) : performant, fiable, ACID. Mais cher, format propriétaire, pas adapté au ML ni aux données non structurées.</p>
+    <p>La plupart des entreprises maintenaient <strong>les deux</strong> en parallèle, avec des pipelines de synchronisation entre eux — coûteux et source d'incohérences.</p>
+    <div class="callout tip"><strong>À l'examen :</strong> Si la question décrit une entreprise avec des silos de données, deux systèmes séparés, ou de l'incohérence inter-équipes → la réponse est "lakehouse + Databricks".</div>
+
+    <h2>Delta Lake : le moteur de fiabilité</h2>
+    <p>Delta Lake est le format de stockage qui rend le lakehouse possible. Une table Delta = <strong>fichiers Parquet</strong> (données colonaires) + un dossier <code>_delta_log</code> (journal de chaque transaction).</p>
+    <h3>Les 4 super-pouvoirs de Delta Lake</h3>
+    <ul>
+      <li><strong>ACID</strong> : soit l'écriture est complète, soit elle n'a pas eu lieu. Jamais de données à moitié écrites.</li>
+      <li><strong>Time travel</strong> : requêter les données telles qu'elles étaient à n'importe quelle version passée (<code>VERSION AS OF</code>, <code>TIMESTAMP AS OF</code>).</li>
+      <li><strong>Schema enforcement</strong> : Delta refuse d'écrire des données dont le schéma ne correspond pas à la table.</li>
+      <li><strong>OPTIMIZE / VACUUM</strong> : compactage des petits fichiers et nettoyage des fichiers obsolètes.</li>
+    </ul>
+    <pre><code>-- Time travel par version
+SELECT * FROM orders VERSION AS OF 5;
+
+-- Time travel par date
+SELECT * FROM orders TIMESTAMP AS OF '2024-01-15';
+
+-- Voir l'historique complet
+DESCRIBE HISTORY orders;
+
+-- Restaurer à une version antérieure
+RESTORE TABLE orders TO VERSION AS OF 3;
+
+-- Compacter les petits fichiers
+OPTIMIZE orders ZORDER BY (customer_id);
+
+-- Nettoyer les vieux fichiers (7 jours par défaut)
+VACUUM orders RETAIN 168 HOURS;</code></pre>
+    <div class="callout danger"><strong>Piège exam :</strong> Si tu exécutes <code>VACUUM</code> avec une rétention inférieure à 7 jours, tu perds la capacité de time travel pour les versions concernées. C'est un compromis explicite.</div>
+
+    <h2>L'architecture Medallion : Bronze / Silver / Gold</h2>
+    <p>Le pattern d'organisation des données dans un lakehouse. Pense à une raffinerie :</p>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Couche</th><th>Contenu</th><th>Règle clé</th><th>Consommateurs</th></tr>
+      <tr><td><strong>Bronze</strong></td><td>Données brutes telles qu'elles arrivent</td><td>Append-only, jamais modifiées</td><td>Ingestion uniquement</td></tr>
+      <tr><td><strong>Silver</strong></td><td>Données nettoyées, dédupliquées, validées</td><td>Règles qualité appliquées</td><td>Data engineers</td></tr>
+      <tr><td><strong>Gold</strong></td><td>Agrégations métier prêtes pour la BI</td><td>Modèle dimensionnel ou star schema</td><td>Analysts, BI tools, data scientists</td></tr>
+    </table>
+    </div>
+    <div class="callout tip"><strong>À l'examen :</strong> Les dashboards Tableau/Power BI doivent toujours interroger la couche <strong>Gold</strong>, jamais Silver ou Bronze. Silver est granulaire mais pas pré-agrégé.</div>
+
+    <h2>Unity Catalog : la gouvernance centralisée</h2>
+    <p>Unity Catalog (UC) répond à : <em>qui a le droit de voir et faire quoi sur quelles données ?</em></p>
+    <p>Il impose une hiérarchie à <strong>3 niveaux obligatoires</strong> :</p>
+    <pre><code>Metastore
+  └── Catalog  (ex: prod_catalog)
+        └── Schema  (ex: sales)
+              └── Table / View / Volume / Function</code></pre>
+    <p>Pour accéder à une table, il faut des permissions à <strong>chaque niveau</strong> :</p>
+    <pre><code>GRANT USE CATALOG ON CATALOG prod_catalog TO analysts;
+GRANT USE SCHEMA ON SCHEMA prod_catalog.sales TO analysts;
+GRANT SELECT ON TABLE prod_catalog.sales.orders TO analysts;</code></pre>
+    <div class="callout danger"><strong>Piège exam classique :</strong> Un utilisateur a <code>SELECT</code> sur une table mais ne peut pas y accéder → il lui manque <code>USE CATALOG</code> et/ou <code>USE SCHEMA</code>. La chaîne doit être complète.</div>
+  </div>
+  <hr class="section-divider">
+  <div class="quiz-section" id="quiz-s0">
+    <div class="quiz-header">
+      <div class="quiz-title">QCM — Phase 0 Fondations</div>
+      <div class="quiz-count" id="score-s0">0/6</div>
+    </div>
+    <p class="quiz-intro">Valide ta compréhension des concepts fondamentaux avant d'aborder les sections techniques.</p>
+    <div id="questions-s0"></div>
+    <div class="quiz-actions">
+      <button class="btn btn-primary" onclick="submitQuiz('s0')">Valider mes réponses</button>
+      <button class="btn btn-secondary" onclick="resetQuiz('s0')">Recommencer</button>
+    </div>
+    <div class="quiz-result" id="result-s0"></div>
+  </div>
+</div>
+
+<!-- SECTION 1 -->
+<div id="page-s1" class="page">
+  <div class="section-header">
+    <div class="section-tag" style="color:#3b82f6">Section 1 · 10% de l'examen</div>
+    <h1 class="section-title">La Plateforme<br>Databricks</h1>
+    <p class="section-desc">Comprendre l'écosystème complet : clusters, compute, notebooks et architecture générale.</p>
+    <div class="weight-chip" style="border-color:#3b82f6;color:#3b82f6">◉ 10% · ~4-5 questions</div>
+  </div>
+  <div class="content">
+    <h2>Les types de Compute</h2>
+    <p>Databricks propose plusieurs types de compute selon l'usage :</p>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Type</th><th>Usage</th><th>Caractéristique clé</th></tr>
+      <tr><td>All-purpose cluster</td><td>Développement interactif, notebooks</td><td>Démarré manuellement, persiste entre runs</td></tr>
+      <tr><td>Job cluster</td><td>Exécution de jobs automatisés</td><td>Démarre et s'arrête automatiquement</td></tr>
+      <tr><td>SQL Warehouse</td><td>Requêtes SQL analytiques, BI</td><td>Optimisé pour SQL, auto-suspend</td></tr>
+      <tr><td>Serverless</td><td>Jobs et pipelines sans gestion d'infra</td><td>Pas de configuration cluster, facturé à l'usage</td></tr>
+    </table>
+    </div>
+    <div class="callout tip"><strong>À l'examen :</strong> Pour des requêtes SQL depuis Tableau → SQL Warehouse. Pour exécuter un pipeline en prod → Job cluster (plus économique car éphémère). Pour du développement interactif → All-purpose cluster.</div>
+
+    <h2>Fonctionnalités des Notebooks</h2>
+    <p>Les notebooks Databricks supportent plusieurs langages dans le même notebook :</p>
+    <pre><code>-- SQL (par défaut dans une cellule SQL)
+SELECT * FROM orders LIMIT 10;
+
+# Python (prefixe %python ou cellule Python)
+df = spark.read.table("orders")
+display(df)
+
+# Changer de langage dans une cellule
+%sql
+SELECT count(*) FROM orders;
+
+%python
+print("Hello")</code></pre>
+    <p><code>dbutils</code> est l'utilitaire de Databricks pour manipuler des fichiers, des secrets, et orchestrer des notebooks :</p>
+    <pre><code># Lister des fichiers
+dbutils.fs.ls("dbfs:/data/")
+
+# Passer des paramètres entre notebooks
+result = dbutils.notebook.run("./child_notebook", timeout_seconds=60, arguments={"param": "value"})
+
+# Accéder à un secret
+secret = dbutils.secrets.get(scope="my_scope", key="my_key")</code></pre>
+
+    <h2>Serverless Compute</h2>
+    <p>Avec le compute serverless, Databricks gère l'infrastructure à ta place. Avantages : pas de temps de démarrage de cluster, facturation à la seconde, pas de configuration. Utilisé pour les SQL Warehouses serverless, les jobs serverless et les pipelines Lakeflow serverless.</p>
+    <div class="callout warning"><strong>Important :</strong> Serverless ≠ gratuit. C'est un modèle de tarification différent (à l'usage plutôt qu'à l'heure de cluster), généralement plus cher à l'usage mais sans coût fixe.</div>
+
+    <h2>Databricks Connect</h2>
+    <p>Databricks Connect permet d'exécuter du code Spark depuis un IDE local (VS Code, PyCharm) sur un cluster Databricks distant. Utile pour le développement avec tests locaux.</p>
+  </div>
+  <hr class="section-divider">
+
+  <!-- QUIZ S1 -->
+  <div class="quiz-section" id="quiz-s1">
+    <div class="quiz-header">
+      <div class="quiz-title">QCM — Section 1</div>
+      <div class="quiz-count" id="score-s1">0/6</div>
+    </div>
+    <p class="quiz-intro">Questions difficiles calquées sur le style de l'examen réel. Chaque question teste un piège ou une nuance.</p>
+    <div id="questions-s1"></div>
+    <div class="quiz-actions">
+      <button class="btn btn-primary" onclick="submitQuiz('s1')">Valider mes réponses</button>
+      <button class="btn btn-secondary" onclick="resetQuiz('s1')">Recommencer</button>
+    </div>
+    <div class="quiz-result" id="result-s1"></div>
+  </div>
+</div>
+
+<!-- SECTION 2 -->
+<div id="page-s2" class="page">
+  <div class="section-header">
+    <div class="section-tag" style="color:#8b5cf6">Section 2 · 30% de l'examen</div>
+    <h1 class="section-title">Développement<br>& Ingestion</h1>
+    <p class="section-desc">Auto Loader, COPY INTO, Lakeflow Spark Declarative Pipelines, CDC — la section la plus lourde de l'examen.</p>
+    <div class="weight-chip" style="border-color:#8b5cf6;color:#8b5cf6">◉ 30% · ~13-14 questions</div>
+  </div>
+  <div class="content">
+    <h2>Auto Loader vs COPY INTO</h2>
+    <p>C'est <strong>le</strong> point de confusion numéro 1 à l'examen. Retiens cette règle simple :</p>
+    <div class="table-wrap">
+    <table>
+      <tr><th></th><th>Auto Loader</th><th>COPY INTO</th></tr>
+      <tr><td>Usage</td><td>Ingestion continue en streaming</td><td>Chargement batch / one-shot</td></tr>
+      <tr><td>Nouveaux fichiers</td><td>Détectés automatiquement</td><td>Non, exécution manuelle</td></tr>
+      <tr><td>Checkpoint</td><td>Requis (obligatoire)</td><td>Non requis</td></tr>
+      <tr><td>Schema location</td><td>Requis pour le streaming</td><td>Non requis</td></tr>
+      <tr><td>Syntaxe</td><td>PySpark ou SQL (cloud_files)</td><td>SQL uniquement</td></tr>
+    </table>
+    </div>
+
+    <h3>Syntaxe Auto Loader (PySpark)</h3>
+    <pre><code>df = spark.readStream \
+    .format("cloudFiles") \
+    .option("cloudFiles.format", "json") \
+    .option("cloudFiles.schemaLocation", "/Volumes/cat/schema/ck1") \
+    .option("cloudFiles.schemaEvolutionMode", "rescue") \
+    .load("s3://data-lake/orders/")
+
+df.writeStream \
+    .trigger(availableNow=True)  # batch-like : traite tout puis s'arrête
+    .format("delta") \
+    .option("checkpointLocation", "/Volumes/cat/schema/write_ck") \
+    .mode("append") \
+    .table("orders_bronze")</code></pre>
+
+    <h3>Syntaxe COPY INTO (SQL)</h3>
+    <pre><code>COPY INTO catalog.schema.raw_data
+FROM 's3://my-bucket/archive/2024-01/'
+FILEFORMAT = JSON
+FORMAT_OPTIONS ('inferSchema' = 'true')
+COPY_OPTIONS ('mergeSchema' = 'true');</code></pre>
+
+    <h3>Modes de schéma evolution dans Auto Loader</h3>
+    <ul>
+      <li><code>addNewColumns</code> : ajoute automatiquement les nouvelles colonnes (défaut)</li>
+      <li><code>rescue</code> : garde le schéma existant, met les colonnes inconnues dans <code>_rescued_data</code></li>
+      <li><code>failOnNewColumns</code> : arrête le pipeline si une nouvelle colonne est détectée</li>
+      <li><code>none</code> : ignore le schema stocké (rarement utilisé)</li>
+    </ul>
+    <div class="callout danger"><strong>Piège exam :</strong> Sans <code>cloudFiles.schemaLocation</code> dans un pipeline streaming Auto Loader → le pipeline plante immédiatement. Ce paramètre est obligatoire en mode streaming.</div>
+
+    <h2>Lakeflow Spark Declarative Pipelines</h2>
+    <p>Anciennement "Delta Live Tables". Tu déclares tes tables en SQL ou Python, et Lakeflow gère l'orchestration, les dépendances, les retries et la qualité automatiquement.</p>
+    <h3>Streaming Table vs Materialized View</h3>
+    <div class="table-wrap">
+    <table>
+      <tr><th></th><th>STREAMING TABLE</th><th>MATERIALIZED VIEW</th></tr>
+      <tr><td>Refresh</td><td>Incrémental uniquement</td><td>Full ou incrémental</td></tr>
+      <tr><td>Usage</td><td>Ingestion de nouvelles données</td><td>Agrégations et transformations</td></tr>
+      <tr><td>Source</td><td>Externe (cloud storage, kafka…)</td><td>D'autres tables du pipeline</td></tr>
+      <tr><td>Keyword SQL</td><td>CREATE STREAMING TABLE</td><td>CREATE MATERIALIZED VIEW</td></tr>
+    </table>
+    </div>
+    <pre><code>-- Bronze : streaming table depuis Auto Loader
+CREATE STREAMING TABLE bronze_orders
+COMMENT "Raw orders from cloud storage"
+AS SELECT *
+FROM cloud_files("s3://bucket/orders/", "csv",
+  map("header", "true"));
+
+-- Silver : materialized view avec contrainte qualité
+CREATE MATERIALIZED VIEW silver_orders
+CONSTRAINT valid_amount EXPECT (amount > 0) ON VIOLATION DROP ROW
+AS SELECT order_id, customer_id, CAST(amount AS DECIMAL(10,2)) AS amount
+FROM STREAM(live.bronze_orders);
+
+-- Gold : agrégation
+CREATE MATERIALIZED VIEW gold_daily_revenue
+AS SELECT DATE(order_date) AS day, SUM(amount) AS revenue
+FROM live.silver_orders
+GROUP BY DATE(order_date);</code></pre>
+
+    <h2>CDC avec APPLY CHANGES</h2>
+    <p>Change Data Capture : traitement d'un flux d'insertions, mises à jour et suppressions provenant d'un système source.</p>
+    <pre><code>APPLY CHANGES INTO live.customers_silver
+FROM STREAM(live.customers_cdc)
+KEYS (customer_id)
+SEQUENCE BY event_timestamp
+WHEN MATCHED AND operation = 'DELETE' THEN DELETE
+WHEN MATCHED THEN UPDATE SET *
+WHEN NOT MATCHED THEN INSERT *;</code></pre>
+    <p><strong>SCD Type 1</strong> (défaut) : écrase l'ancienne valeur. <strong>SCD Type 2</strong> (ajoute <code>STORED AS SCD TYPE 2</code>) : conserve l'historique en créant de nouvelles lignes avec colonnes <code>__start_version</code>, <code>__end_version</code>, <code>__current</code>.</p>
+    <div class="callout tip"><strong>À l'examen :</strong> SCD Type 2 est utilisé quand tu as besoin d'analyser <em>l'évolution historique</em> d'un enregistrement. SCD Type 1 quand tu n'as besoin que de l'état actuel.</div>
+
+    <h2>Triggers dans les pipelines streaming</h2>
+    <ul>
+      <li><code>trigger(availableNow=True)</code> : traite tous les fichiers disponibles une fois, puis s'arrête (comportement batch)</li>
+      <li><code>trigger(processingTime="5 minutes")</code> : micro-batch toutes les 5 minutes</li>
+      <li><code>trigger(once=True)</code> : même chose qu'<code>availableNow</code> (ancienne syntaxe)</li>
+    </ul>
+  </div>
+  <hr class="section-divider">
+  <div class="quiz-section" id="quiz-s2">
+    <div class="quiz-header">
+      <div class="quiz-title">QCM — Section 2</div>
+      <div class="quiz-count" id="score-s2">0/7</div>
+    </div>
+    <p class="quiz-intro">Questions difficiles sur l'ingestion de données — section la plus piégeuse de l'examen.</p>
+    <div id="questions-s2"></div>
+    <div class="quiz-actions">
+      <button class="btn btn-primary" onclick="submitQuiz('s2')">Valider mes réponses</button>
+      <button class="btn btn-secondary" onclick="resetQuiz('s2')">Recommencer</button>
+    </div>
+    <div class="quiz-result" id="result-s2"></div>
+  </div>
+</div>
+
+<!-- SECTION 3 -->
+<div id="page-s3" class="page">
+  <div class="section-header">
+    <div class="section-tag" style="color:#10b981">Section 3 · 31% de l'examen</div>
+    <h1 class="section-title">Traitement &<br>Transformations</h1>
+    <p class="section-desc">PySpark DataFrames, DDL/DML Delta, optimisation des requêtes et pipelines Lakeflow complets.</p>
+    <div class="weight-chip" style="border-color:#10b981;color:#10b981">◉ 31% · ~14 questions</div>
+  </div>
+  <div class="content">
+    <h2>DDL et DML Delta Lake</h2>
+    <h3>MERGE INTO — le pattern upsert</h3>
+    <pre><code>MERGE INTO target_table t
+USING source_data s ON t.customer_id = s.customer_id
+WHEN MATCHED AND s.operation = 'DELETE' THEN DELETE
+WHEN MATCHED THEN UPDATE SET t.name = s.name, t.email = s.email
+WHEN NOT MATCHED THEN INSERT (customer_id, name, email) VALUES (s.customer_id, s.name, s.email);</code></pre>
+    <div class="callout tip"><strong>À l'examen :</strong> MERGE INTO est atomique. Si plusieurs WHEN MATCHED clauses existent, seule la première qui correspond est exécutée.</div>
+
+    <h3>CREATE OR REPLACE TABLE (CRAS)</h3>
+    <pre><code>-- CRAS : atomique, préserve le delta log et l'historique
+CREATE OR REPLACE TABLE summary_table AS
+SELECT region, SUM(amount) as total FROM orders GROUP BY region;
+
+-- ≠ DROP + CREATE (perd l'historique et n'est pas atomique)</code></pre>
+
+    <h3>INSERT INTO vs INSERT OVERWRITE</h3>
+    <pre><code>-- Ajoute des lignes (append)
+INSERT INTO orders SELECT * FROM new_orders;
+
+-- Remplace tout le contenu de la table
+INSERT OVERWRITE orders SELECT * FROM corrected_orders;</code></pre>
+
+    <h2>PySpark DataFrame Aggregations</h2>
+    <pre><code>from pyspark.sql import functions as F
+
+# Agrégations multiples en une seule passe
+df.groupBy("category").agg(
+    F.count("*").alias("total_orders"),
+    F.sum("amount").alias("total_revenue"),
+    F.avg("amount").alias("avg_value"),
+    F.countDistinct("customer_id").alias("unique_customers")
+).show()</code></pre>
+
+    <h3>Window Functions</h3>
+    <pre><code>from pyspark.sql.window import Window
+
+window_spec = Window.partitionBy("region").orderBy(F.desc("revenue"))
+
+df.withColumn("rank", F.row_number().over(window_spec)) \
+  .withColumn("running_total", F.sum("revenue").over(
+      Window.partitionBy("region").orderBy("date"))) \
+  .filter(F.col("rank") <= 3)  # Top 3 par région</code></pre>
+
+    <div class="table-wrap">
+    <table>
+      <tr><th>Fonction</th><th>Comportement avec ex-aequo</th><th>Exemple (1,1,3)</th></tr>
+      <tr><td><code>row_number()</code></td><td>Rang strict, pas de doublons</td><td>1, 2, 3</td></tr>
+      <tr><td><code>rank()</code></td><td>Même rang pour les ex-aequo, gaps</td><td>1, 1, 3</td></tr>
+      <tr><td><code>dense_rank()</code></td><td>Même rang pour les ex-aequo, pas de gaps</td><td>1, 1, 2</td></tr>
+    </table>
+    </div>
+
+    <h2>Optimisation des requêtes</h2>
+    <h3>Liquid Clustering (remplace le partitioning classique)</h3>
+    <pre><code>-- Activer Liquid Clustering sur une table
+CREATE TABLE events (id BIGINT, event_date DATE, region STRING)
+CLUSTER BY (event_date, region);
+
+-- Sur une table existante
+ALTER TABLE events CLUSTER BY (event_date, region);
+
+-- OPTIMIZE pour réorganiser physiquement
+OPTIMIZE events;</code></pre>
+    <p>Liquid Clustering est <strong>plus flexible</strong> que le partitionnement classique : tu peux changer les colonnes de clustering sans recréer la table, et il gère mieux les colonnes haute cardinalité.</p>
+
+    <h3>Predictive Optimization</h3>
+    <p>Databricks peut automatiquement déclencher <code>OPTIMIZE</code> et <code>VACUUM</code> sur tes tables Unity Catalog sans que tu aies à le planifier. Active-le avec <code>ALTER TABLE t SET TBLPROPERTIES ('delta.autoOptimize.optimizeWrite' = 'true')</code>.</p>
+
+    <h2>Tables managées vs externes</h2>
+    <div class="table-wrap">
+    <table>
+      <tr><th></th><th>Managed (gérée)</th><th>External (externe)</th></tr>
+      <tr><td>Stockage</td><td>Géré par Unity Catalog</td><td>Chemin cloud que tu spécifies</td></tr>
+      <tr><td>DROP TABLE</td><td>Supprime données ET métadonnées</td><td>Supprime UNIQUEMENT les métadonnées</td></tr>
+      <tr><td>Usage typique</td><td>Tables internes au lakehouse</td><td>Données existantes à l'extérieur</td></tr>
+    </table>
+    </div>
+    <pre><code>-- Table managée (Unity Catalog gère le stockage)
+CREATE TABLE catalog.schema.orders (id INT, amount DECIMAL);
+
+-- Table externe (tu spécifies l'emplacement)
+CREATE TABLE catalog.schema.orders_external
+LOCATION 's3://my-bucket/orders/';</code></pre>
+    <div class="callout danger"><strong>Piège exam :</strong> <code>DROP TABLE</code> sur une table managée = destruction des données. Sur une table externe = seules les métadonnées sont supprimées, les données sur S3 restent intactes.</div>
+  </div>
+  <hr class="section-divider">
+  <div class="quiz-section" id="quiz-s3">
+    <div class="quiz-header">
+      <div class="quiz-title">QCM — Section 3</div>
+      <div class="quiz-count" id="score-s3">0/7</div>
+    </div>
+    <p class="quiz-intro">Questions sur PySpark, Delta DDL/DML et optimisation — section la plus technique de l'examen.</p>
+    <div id="questions-s3"></div>
+    <div class="quiz-actions">
+      <button class="btn btn-primary" onclick="submitQuiz('s3')">Valider mes réponses</button>
+      <button class="btn btn-secondary" onclick="resetQuiz('s3')">Recommencer</button>
+    </div>
+    <div class="quiz-result" id="result-s3"></div>
+  </div>
+</div>
+
+<!-- SECTION 4 -->
+<div id="page-s4" class="page">
+  <div class="section-header">
+    <div class="section-tag" style="color:#f59e0b">Section 4 · 18% de l'examen</div>
+    <h1 class="section-title">Mise en Production<br>des Pipelines</h1>
+    <p class="section-desc">Workflows, Databricks Asset Bundles, déploiement et monitoring des pipelines.</p>
+    <div class="weight-chip" style="border-color:#f59e0b;color:#f59e0b">◉ 18% · ~8 questions</div>
+  </div>
+  <div class="content">
+    <h2>Databricks Workflows (Jobs)</h2>
+    <p>Les Workflows permettent d'orchestrer des tâches (notebooks, scripts Python, pipelines Lakeflow) avec des dépendances, des planifications et une gestion des erreurs.</p>
+    <h3>Repair & Rerun</h3>
+    <p>Si un job multi-tâches échoue à l'étape 3/5, tu peux utiliser <strong>Repair Run</strong> pour reprendre depuis l'étape 3 sans re-exécuter les étapes 1 et 2 déjà réussies.</p>
+    <div class="callout tip"><strong>À l'examen :</strong> Repair Run = reprise depuis la tâche échouée. Re-run = tout recommencer depuis le début. Toujours préférer Repair Run pour les jobs longs.</div>
+
+    <h2>Databricks Asset Bundles (DAB)</h2>
+    <p>Les DAB permettent de gérer ton infrastructure Databricks (jobs, pipelines, clusters) comme du code (<strong>Infrastructure as Code</strong>), versionné avec Git et déployable en CI/CD.</p>
+    <pre><code># Structure d'un bundle
+bundle:
+  name: my-data-pipeline
+
+resources:
+  jobs:
+    ingest_job:
+      name: "Daily Ingestion - ${var.environment}"
+      tasks:
+        - task_key: ingest
+          notebook_task:
+            notebook_path: ./src/ingest
+          new_cluster:
+            spark_version: "14.3.x-scala2.12"
+            node_type_id: "i3.xlarge"
+            num_workers: 2
+      schedule:
+        quartz_cron_expression: "0 0 6 * * ?"
+        timezone_id: "Europe/Paris"
+
+variables:
+  environment:
+    default: dev</code></pre>
+    <pre><code># Déploiement
+databricks bundle deploy --target prod
+
+# Exécution
+databricks bundle run ingest_job</code></pre>
+
+    <h3>DAB vs déploiement traditionnel</h3>
+    <div class="table-wrap">
+    <table>
+      <tr><th></th><th>DAB</th><th>Déploiement UI / API manuel</th></tr>
+      <tr><td>Versionning</td><td>Git, PR, code review</td><td>Pas versionné</td></tr>
+      <tr><td>Multi-environnements</td><td>dev / staging / prod via variables</td><td>Configuration manuelle par env</td></tr>
+      <tr><td>CI/CD</td><td>Natif (GitHub Actions, Azure DevOps…)</td><td>Scripts custom fragiles</td></tr>
+      <tr><td>Reproductibilité</td><td>Garantie</td><td>Non garantie</td></tr>
+    </table>
+    </div>
+
+    <h2>Serverless Compute pour les Jobs</h2>
+    <p>En mode serverless, pas besoin de configurer un cluster. Avantages : démarrage quasi-instantané (vs 2-5 min pour un cluster classique), pas de configuration. Idéal pour les jobs courts et fréquents.</p>
+
+    <h2>Monitoring et Observabilité</h2>
+    <p>Chaque pipeline Lakeflow génère un <strong>event log</strong> automatique accessible via :</p>
+    <pre><code>SELECT * FROM event_log('pipeline_id')
+WHERE level = 'ERROR'
+ORDER BY timestamp DESC;</code></pre>
+    <p>Le <strong>Spark UI</strong> permet d'analyser les performances : stages lents, skew de données, shuffles excessifs. Accès via le cluster > Spark UI dans l'interface Databricks.</p>
+  </div>
+  <hr class="section-divider">
+  <div class="quiz-section" id="quiz-s4">
+    <div class="quiz-header">
+      <div class="quiz-title">QCM — Section 4</div>
+      <div class="quiz-count" id="score-s4">0/6</div>
+    </div>
+    <p class="quiz-intro">Questions sur le déploiement et la mise en production des pipelines Databricks.</p>
+    <div id="questions-s4"></div>
+    <div class="quiz-actions">
+      <button class="btn btn-primary" onclick="submitQuiz('s4')">Valider mes réponses</button>
+      <button class="btn btn-secondary" onclick="resetQuiz('s4')">Recommencer</button>
+    </div>
+    <div class="quiz-result" id="result-s4"></div>
+  </div>
+</div>
+
+<!-- SECTION 5 -->
+<div id="page-s5" class="page">
+  <div class="section-header">
+    <div class="section-tag" style="color:#ec4899">Section 5 · 11% de l'examen</div>
+    <h1 class="section-title">Gouvernance<br>& Qualité</h1>
+    <p class="section-desc">Unity Catalog en profondeur : permissions, lineage, audit logs, Delta Sharing et Lakehouse Federation.</p>
+    <div class="weight-chip" style="border-color:#ec4899;color:#ec4899">◉ 11% · ~5 questions</div>
+  </div>
+  <div class="content">
+    <h2>Unity Catalog — Permissions détaillées</h2>
+    <p>Rappel de la hiérarchie : <strong>Metastore → Catalog → Schema → Table/View/Volume/Function</strong></p>
+    <h3>Privilèges clés à retenir</h3>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Privilège</th><th>Permet de</th><th>Niveau</th></tr>
+      <tr><td>USE CATALOG</td><td>Accéder au catalog (obligatoire)</td><td>Catalog</td></tr>
+      <tr><td>USE SCHEMA</td><td>Accéder au schema (obligatoire)</td><td>Schema</td></tr>
+      <tr><td>SELECT</td><td>Lire une table/vue</td><td>Table/Schema/Catalog</td></tr>
+      <tr><td>MODIFY</td><td>INSERT/UPDATE/DELETE</td><td>Table</td></tr>
+      <tr><td>CREATE TABLE</td><td>Créer des tables dans un schema</td><td>Schema</td></tr>
+      <tr><td>READ VOLUME</td><td>Lire depuis un volume UC</td><td>Volume</td></tr>
+      <tr><td>WRITE VOLUME</td><td>Écrire dans un volume UC</td><td>Volume</td></tr>
+      <tr><td>ALL PRIVILEGES</td><td>Tous les droits</td><td>N'importe lequel</td></tr>
+    </table>
+    </div>
+    <pre><code>-- Donner accès complet à une équipe sur un schema
+GRANT USE CATALOG ON CATALOG prod TO `data-team`;
+GRANT USE SCHEMA ON SCHEMA prod.finance TO `data-team`;
+GRANT SELECT, MODIFY ON SCHEMA prod.finance TO `data-team`;
+
+-- Voir les permissions d'un objet
+SHOW GRANTS ON TABLE prod.finance.transactions;
+
+-- Révoquer
+REVOKE SELECT ON TABLE prod.finance.transactions FROM `analyst-group`;
+
+-- Transférer la propriété
+ALTER TABLE prod.finance.transactions OWNER TO `platform-team`;</code></pre>
+    <div class="callout warning"><strong>Héritage :</strong> <code>GRANT SELECT ON CATALOG</code> donne SELECT sur toutes les tables actuelles ET futures du catalog. L'héritage est automatique vers le bas.</div>
+
+    <h2>Lineage dans Unity Catalog</h2>
+    <p>Unity Catalog trace automatiquement la lineage au niveau colonne : d'où vient cette colonne ? Qui la lit ? Quelles tables en dépendent ?</p>
+    <p>Accessible via l'UI Databricks (Data Explorer > table > Lineage) ou via les system tables :</p>
+    <pre><code>SELECT * FROM system.access.table_lineage
+WHERE target_table_full_name = 'prod.finance.transactions';</code></pre>
+
+    <h2>Audit Logs</h2>
+    <pre><code>-- Qui a accédé à une table sensible ces 7 derniers jours ?
+SELECT identity, action_name, event_time
+FROM system.access.audit
+WHERE request_params LIKE '%transactions%'
+  AND event_time >= CURRENT_DATE() - INTERVAL 7 DAYS
+ORDER BY event_time DESC;</code></pre>
+
+    <h2>Delta Sharing</h2>
+    <p>Partage de données en direct sans copie, via un protocole ouvert. Le destinataire n'a pas besoin d'être sur Databricks.</p>
+    <div class="table-wrap">
+    <table>
+      <tr><th></th><th>D2D (Databricks to Databricks)</th><th>D2O (Databricks to Open)</th></tr>
+      <tr><td>Destinataire</td><td>Sur Databricks</td><td>N'importe quel outil (Tableau, pandas…)</td></tr>
+      <tr><td>Auth</td><td>Unity Catalog natif</td><td>Bearer token</td></tr>
+      <tr><td>Accès</td><td>Read-only (jamais write)</td><td>Read-only</td></tr>
+    </table>
+    </div>
+    <p><strong>Modèle de coût :</strong> Le fournisseur paye le stockage. Le destinataire paye le compute de ses requêtes.</p>
+    <div class="callout danger"><strong>Piège exam :</strong> Delta Sharing est <strong>toujours read-only</strong>. Si le partenaire a besoin de modifier les données, il faut une autre solution (ETL, API). Et les partages ne permettent pas à l'extérieur d'écrire dans tes tables.</div>
+
+    <h2>Lakehouse Federation</h2>
+    <p>Permet de requêter des données dans des systèmes externes (PostgreSQL, MySQL, Snowflake, BigQuery…) directement depuis Databricks, <strong>sans les ingérer</strong>. Les données restent dans leur système source.</p>
+    <pre><code>-- Créer une connexion vers PostgreSQL
+CREATE CONNECTION pg_prod
+TYPE POSTGRESQL
+OPTIONS (host 'my-pg-host.com', port '5432', database 'sales');
+
+-- Créer un catalog étranger (foreign catalog)
+CREATE FOREIGN CATALOG pg_sales
+USING CONNECTION pg_prod
+OPTIONS (database 'sales_db');
+
+-- Requêter comme n'importe quelle table
+SELECT * FROM pg_sales.public.customers LIMIT 100;</code></pre>
+  </div>
+  <hr class="section-divider">
+  <div class="quiz-section" id="quiz-s5">
+    <div class="quiz-header">
+      <div class="quiz-title">QCM — Section 5</div>
+      <div class="quiz-count" id="score-s5">0/6</div>
+    </div>
+    <p class="quiz-intro">Questions sur la gouvernance, Unity Catalog et le partage de données.</p>
+    <div id="questions-s5"></div>
+    <div class="quiz-actions">
+      <button class="btn btn-primary" onclick="submitQuiz('s5')">Valider mes réponses</button>
+      <button class="btn btn-secondary" onclick="resetQuiz('s5')">Recommencer</button>
+    </div>
+    <div class="quiz-result" id="result-s5"></div>
+  </div>
+</div>
+<!-- MOCK EXAM -->
+<div id="page-mock" class="page">
+  <div class="section-header">
+    <div class="section-tag" style="color:#ff4d1c">Simulation · Examen Blanc</div>
+    <h1 class="section-title">Mock Exam<br>Databricks DE Associate</h1>
+    <p class="section-desc">45 questions tirées aléatoirement de la banque complète. Conditions réelles : 90 minutes, sans aide.</p>
+  </div>
+
+  <!-- START SCREEN -->
+  <div id="mock-start">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px;margin-bottom:32px">
+      <div class="exam-card"><div class="val">45</div><div class="key">Questions</div></div>
+      <div class="exam-card"><div class="val">90</div><div class="key">Minutes</div></div>
+      <div class="exam-card"><div class="val" id="mock-pool-size">—</div><div class="key">Questions en banque</div></div>
+      <div class="exam-card"><div class="val">~70%</div><div class="key">Score requis</div></div>
+    </div>
+    <div class="callout warning" style="margin-bottom:24px"><strong>Règles :</strong> Un timer compte à rebours. Tu peux naviguer entre les questions. La correction s'affiche uniquement à la fin. Si tu ne réponds pas à une question elle est comptée comme incorrecte.</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <button class="btn btn-primary" onclick="startMock()" style="font-size:15px;padding:14px 28px">Lancer le Mock Exam</button>
+      <button class="btn btn-secondary" onclick="startMock(true)">Mode entraînement (sans timer)</button>
+    </div>
+  </div>
+
+  <!-- EXAM IN PROGRESS -->
+  <div id="mock-exam" style="display:none">
+    <!-- Header sticky -->
+    <div style="position:sticky;top:0;z-index:50;background:var(--bg);padding:12px 0 16px;border-bottom:1px solid var(--border);margin-bottom:28px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text)">
+          Question <span id="mock-current-num">1</span> / 45
+        </div>
+        <div style="display:flex;align-items:center;gap:16px">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:600" id="mock-timer">90:00</div>
+          <div style="font-size:12px;color:var(--muted)" id="mock-answered-count">0 répondues</div>
+        </div>
+      </div>
+      <!-- Progress dots -->
+      <div id="mock-dots" style="display:flex;flex-wrap:wrap;gap:4px;margin-top:10px"></div>
+    </div>
+
+    <!-- Question display -->
+    <div id="mock-question-area"></div>
+
+    <!-- Navigation -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
+      <button class="btn btn-secondary" id="mock-prev" onclick="mockNav(-1)">← Précédente</button>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-secondary" id="mock-next" onclick="mockNav(1)">Suivante →</button>
+        <button class="btn btn-primary" onclick="confirmSubmitMock()" style="background:#ef4444">Terminer l'exam</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="mock-results" style="display:none">
+    <div style="text-align:center;padding:32px 0 24px">
+      <div style="font-family:'Syne',sans-serif;font-size:64px;font-weight:800;line-height:1" id="mock-final-pct"></div>
+      <div style="font-size:16px;color:var(--muted);margin:8px 0 4px" id="mock-final-score"></div>
+      <div style="font-size:14px;font-weight:600;margin-bottom:24px" id="mock-final-msg"></div>
+      <div id="mock-result-bars" style="display:flex;flex-wrap:wrap;gap:3px;justify-content:center;margin-bottom:24px;max-width:600px;margin-left:auto;margin-right:auto"></div>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="showMockCorrections()">Voir les corrections</button>
+        <button class="btn btn-secondary" onclick="resetMock()">Nouvel exam</button>
+      </div>
+    </div>
+    <!-- Corrections -->
+    <div id="mock-corrections" style="display:none;margin-top:32px">
+      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)">Corrections détaillées</div>
+      <div id="mock-corrections-list"></div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+const QUIZ_DATA = {
+  s0: [
+    {
+      q: "Une entreprise possède un data lake S3 pour le stockage brut et un data warehouse Redshift pour la BI. Les équipes se plaignent d'incohérences entre les deux systèmes et de coûts de maintenance élevés. Quelle architecture résout fondamentalement ce problème ?",
+      opts: [
+        "Ajouter un outil ETL plus performant entre les deux systèmes",
+        "Migrer tout vers Redshift et abandonner le data lake",
+        "Adopter une architecture Lakehouse qui combine les avantages des deux dans un seul système",
+        "Synchroniser les données toutes les heures au lieu de toutes les nuits"
+      ],
+      ans: 2,
+      exp: "Le Lakehouse est précisément conçu pour éliminer le besoin d'avoir deux systèmes séparés. En combinant le stockage ouvert et scalable d'un data lake (Delta Lake sur S3) avec la fiabilité et la gouvernance d'un data warehouse (ACID, schema enforcement, Unity Catalog), il supprime le besoin de synchronisation entre systèmes, éliminant les incohérences et les coûts de maintenance double."
+    },
+    {
+      q: "Qu'est-ce que le dossier `_delta_log` dans une table Delta Lake ?",
+      opts: [
+        "Un dossier de logs d'erreurs pour le debugging",
+        "Le journal de transactions qui enregistre chaque opération et permet ACID, time travel et schema enforcement",
+        "Un index qui accélère les requêtes sur les colonnes les plus utilisées",
+        "Un dossier de backups automatiques créés par Databricks"
+      ],
+      ans: 1,
+      exp: "Le _delta_log est le cœur de Delta Lake. C'est une série de fichiers JSON qui enregistrent chaque transaction (INSERT, UPDATE, DELETE, MERGE, OPTIMIZE…). Ce journal est ce qui rend possibles les transactions ACID (soit la transaction est complète dans le log, soit elle ne l'est pas), le time travel (chaque version est loguée), et le schema enforcement (le schéma est également stocké dans le log)."
+    },
+    {
+      q: "Un ingénieur exécute `VACUUM orders RETAIN 24 HOURS`. Quelle est la conséquence principale ?",
+      opts: [
+        "Les données des 24 dernières heures sont supprimées pour libérer de l'espace",
+        "Les fichiers Parquet obsolètes datant de plus de 24 heures sont supprimés, rendant le time travel impossible au-delà de 24 heures",
+        "La table est verrouillée en lecture seule pendant 24 heures",
+        "VACUUM avec une rétention aussi courte est bloqué par défaut et nécessite une configuration spéciale"
+      ],
+      ans: 1,
+      exp: "VACUUM supprime les fichiers Parquet que le _delta_log ne référence plus. La rétention par défaut est 7 jours (168h), ce qui permet le time travel sur 7 jours. Avec RETAIN 24 HOURS, tu ne peux plus requêter les versions antérieures à 24h. Attention : Databricks bloque VACUUM avec une rétention < 7 jours par défaut. Il faut SET spark.databricks.delta.retentionDurationCheck.enabled = false pour outrepasser cette protection."
+    },
+    {
+      q: "Dans l'architecture Medallion, quelle est la règle absolue pour la couche Bronze ?",
+      opts: [
+        "Les données Bronze doivent être transformées et dédupliquées avant d'être stockées",
+        "La couche Bronze est en append-only : les données brutes ne sont jamais modifiées ni supprimées après ingestion",
+        "Bronze stocke uniquement les données des 30 derniers jours pour économiser le stockage",
+        "La couche Bronze nécessite un schéma strict défini avant ingestion"
+      ],
+      ans: 1,
+      exp: "La couche Bronze est append-only : on n'y fait jamais de UPDATE, DELETE ou OVERWRITE. Les données brutes sont ingérées telles quelles depuis les sources. Cela garantit une source de vérité immuable : si quelque chose se passe mal en Silver ou Gold, on peut toujours re-traiter depuis Bronze. C'est aussi pour cette raison que Bronze utilise des STREAMING TABLES dans Lakeflow (ajout incrémental uniquement)."
+    },
+    {
+      q: "Un data analyst veut construire un dashboard Power BI sur les ventes mensuelles par région. Il a accès aux couches Bronze, Silver et Gold. Quelle couche doit-il interroger ?",
+      opts: [
+        "Bronze, car c'est la source de vérité avec toutes les données",
+        "Silver, car les données sont propres et fiables",
+        "Gold, car les données sont pré-agrégées et optimisées pour la BI",
+        "Peu importe, les trois donnent le même résultat"
+      ],
+      ans: 2,
+      exp: "La couche Gold est conçue pour la BI et les dashboards. Elle contient des données pré-agrégées (ventes mensuelles par région dans ce cas) qui permettent à Power BI de rendre les dashboards rapidement sans faire des agrégations coûteuses à la volée. Silver contient des données granulaires propres mais non agrégées — interroger Silver depuis Power BI serait beaucoup plus lent et cher en compute. Bronze n'est jamais exposé aux outils BI."
+    },
+    {
+      q: "Quelle affirmation décrit correctement le format de stockage de Delta Lake ?",
+      opts: [
+        "Delta Lake utilise un format binaire propriétaire incompatible avec d'autres outils",
+        "Delta Lake stocke les données en fichiers Parquet (format colonnaire open source) + un _delta_log de transactions JSON",
+        "Delta Lake remplace Parquet par un nouveau format plus compressé appelé DeltaFormat",
+        "Delta Lake stocke les données en CSV pour maximiser la compatibilité"
+      ],
+      ans: 1,
+      exp: "Delta Lake est construit sur Parquet, un format colonnaire open source. Tes données physiques sont dans des fichiers .parquet lisibles par Spark, pandas, Trino, et tout outil compatible Parquet. Le _delta_log ajoute la couche transactionnelle par-dessus en JSON. Cela signifie que tes données ne sont pas 'enfermées' dans Databricks — tu gardes la propriété des fichiers sur ton stockage cloud."
+    }
+  ],
+  s1: [
+    {
+      q: "Un data analyst veut exécuter des requêtes SQL interactives depuis Tableau sur des tables Delta en production. Quel type de compute Databricks est le plus approprié ?",
+      opts: ["All-purpose cluster avec auto-termination", "Job cluster partagé entre les équipes", "SQL Warehouse (serverless ou classic)", "Databricks Connect depuis un environnement local"],
+      ans: 2,
+      exp: "SQL Warehouse est optimisé pour les requêtes SQL analytiques et les outils BI comme Tableau. Il supporte le protocole JDBC/ODBC requis par Tableau, gère l'auto-suspend, et est facturable à l'usage. Les all-purpose clusters coûtent cher à maintenir actifs et ne sont pas optimisés pour SQL analytique."
+    },
+    {
+      q: "Un ingénieur a développé un notebook qui doit s'exécuter chaque nuit à 2h. Il veut minimiser les coûts. Quelle est la meilleure configuration ?",
+      opts: ["All-purpose cluster toujours actif avec auto-termination à 60 min", "Job cluster créé à chaque exécution et détruit après", "SQL Warehouse avec planification", "All-purpose cluster partagé avec l'équipe"],
+      ans: 1,
+      exp: "Les job clusters sont créés au démarrage du job et détruits à la fin. C'est la configuration la plus économique pour des jobs planifiés car tu ne paies que pendant l'exécution. Les all-purpose clusters coûtent même quand ils attendent la prochaine exécution."
+    },
+    {
+      q: "Quelle affirmation décrit correctement la relation entre Databricks et Delta Lake ?",
+      opts: [
+        "Delta Lake est propriétaire de Databricks et uniquement disponible sur leur plateforme",
+        "Delta Lake est un format open source qui stocke des données en Parquet avec un _delta_log pour les transactions",
+        "Delta Lake remplace entièrement Parquet et stocke les données dans un format binaire propriétaire",
+        "Delta Lake est uniquement disponible sur AWS S3 et ne supporte pas Azure ou GCS"
+      ],
+      ans: 1,
+      exp: "Delta Lake est open source (Apache License). Il stocke les données en fichiers Parquet (format colonnaire standard) plus un dossier _delta_log contenant les commits JSON de chaque transaction. Cela rend les données lisibles par d'autres outils (Spark, pandas, Iceberg UniForm…)."
+    },
+    {
+      q: "Un notebook utilise `%sql` puis `%python` dans des cellules successives. Quelle affirmation est vraie ?",
+      opts: [
+        "Impossible : un notebook Databricks ne supporte qu'un seul langage",
+        "Les variables définies en Python ne sont pas accessibles dans les cellules %sql suivantes",
+        "Chaque cellule peut utiliser un langage différent via les magic commands %sql, %python, %scala, %r",
+        "Les magic commands %sql créent une connexion séparée au SQL Warehouse"
+      ],
+      ans: 2,
+      exp: "Databricks supporte le multi-langage dans un seul notebook via les magic commands (%sql, %python, %scala, %r, %sh). Le contexte Spark est partagé entre les cellules. Les DataFrames Python peuvent être lus en SQL via des vues temporaires."
+    },
+    {
+      q: "Quelle est la différence principale entre `trigger(availableNow=True)` et `trigger(processingTime='5 minutes')` dans un pipeline Auto Loader ?",
+      opts: [
+        "availableNow traite les données en temps réel, processingTime en batch",
+        "availableNow traite tous les fichiers disponibles en une fois puis s'arrête, processingTime crée des micro-batches à intervalle régulier",
+        "availableNow est disponible uniquement avec COPY INTO, processingTime avec Auto Loader",
+        "Il n'y a aucune différence fonctionnelle, c'est juste une question de préférence syntaxique"
+      ],
+      ans: 1,
+      exp: "availableNow=True traite tous les fichiers disponibles au moment du déclenchement comme un seul batch, puis arrête le stream. C'est le comportement 'batch-like'. processingTime='5 minutes' maintient le stream actif et crée un micro-batch toutes les 5 minutes."
+    },
+    {
+      q: "Un développeur veut utiliser son IDE local (VS Code) pour écrire et tester du code PySpark qui s'exécute sur un cluster Databricks distant. Quelle fonctionnalité utilise-t-il ?",
+      opts: ["Databricks Connect", "dbutils.notebook.run()", "SQL Warehouse + JDBC", "Databricks CLI avec bundle deploy"],
+      ans: 0,
+      exp: "Databricks Connect permet d'exécuter du code PySpark depuis un IDE local sur un cluster Databricks distant. Le code est soumis au cluster mais peut être édité et debugué localement. C'est différent des notebooks web qui nécessitent l'interface Databricks."
+    }
+  ],
+  s2: [
+    {
+      q: "Un pipeline doit ingérer des fichiers JSON qui arrivent sur S3 à des intervalles imprévisibles (entre 1 et 100 fichiers par heure). Quel outil choisir ?",
+      opts: ["COPY INTO exécuté toutes les heures via un job planifié", "Auto Loader avec cloudFiles.format='json' en mode streaming", "spark.read.json() avec un trigger manuel", "Lakehouse Federation vers S3"],
+      ans: 1,
+      exp: "Auto Loader est conçu pour l'ingestion continue depuis un stockage cloud. Il détecte automatiquement les nouveaux fichiers (via directory listing ou file notification), gère le checkpoint et s'adapte à n'importe quel débit. COPY INTO est one-shot et ne détecte pas les nouveaux fichiers automatiquement."
+    },
+    {
+      q: "Ce code Auto Loader va-t-il fonctionner en mode streaming ?\n\nspark.readStream\n  .format('cloudFiles')\n  .option('cloudFiles.format', 'parquet')\n  .load('s3://data/events/')",
+      opts: [
+        "Oui, Auto Loader fonctionne sans options supplémentaires",
+        "Non, il manque l'option cloudFiles.schemaLocation qui est obligatoire en mode streaming",
+        "Non, Auto Loader ne supporte pas le format Parquet, uniquement JSON et CSV",
+        "Oui, mais uniquement si les fichiers ont un schema fixe et prévisible"
+      ],
+      ans: 1,
+      exp: "En mode streaming, cloudFiles.schemaLocation est OBLIGATOIRE. Auto Loader a besoin de stocker le schéma inféré à cet emplacement pour le réutiliser entre les micro-batches. Sans cette option, le pipeline plante immédiatement au démarrage."
+    },
+    {
+      q: "Un ingénieur configure Auto Loader avec `cloudFiles.schemaEvolutionMode = 'rescue'`. Un nouveau fichier arrive avec une colonne 'new_field' absente du schéma actuel. Que se passe-t-il ?",
+      opts: [
+        "Le pipeline plante avec une SchemaEvolutionException",
+        "La nouvelle colonne est ajoutée au schéma de la table automatiquement",
+        "Les données de 'new_field' sont capturées dans la colonne _rescued_data en JSON",
+        "La ligne entière est ignorée et loguée comme erreur"
+      ],
+      ans: 2,
+      exp: "En mode 'rescue', Auto Loader maintient le schéma existant et place toutes les données ne correspondant pas au schéma (colonnes inconnues, types incompatibles) dans la colonne _rescued_data sous forme de JSON. Le pipeline continue de tourner sans interruption."
+    },
+    {
+      q: "Quelle est la différence entre une STREAMING TABLE et une MATERIALIZED VIEW dans Lakeflow Spark Declarative Pipelines ?",
+      opts: [
+        "Les deux sont identiques, le choix dépend de la préférence personnelle",
+        "STREAMING TABLE s'appuie sur une source externe et se rafraîchit incrémentalement. MATERIALIZED VIEW peut recomputer complètement depuis ses tables sources",
+        "MATERIALIZED VIEW est pour la couche Bronze uniquement, STREAMING TABLE pour Silver et Gold",
+        "STREAMING TABLE supporte uniquement SQL, MATERIALIZED VIEW uniquement Python"
+      ],
+      ans: 1,
+      exp: "Une STREAMING TABLE est conçue pour l'ingestion depuis des sources externes (cloud files, Kafka…) et ne fait que de l'incrémental. Une MATERIALIZED VIEW se définit sur d'autres tables du pipeline et peut être recalculée complètement ou incrémentalement selon la requête. C'est la distinction fondamentale du pipeline Lakeflow."
+    },
+    {
+      q: "Dans APPLY CHANGES INTO, à quoi sert la clause SEQUENCE BY ?",
+      opts: [
+        "Elle définit l'ordre des colonnes dans la table cible",
+        "Elle détermine quel changement appliquer quand plusieurs opérations touchent la même clé — la valeur la plus haute gagne",
+        "Elle partitionne les données par ordre d'arrivée pour optimiser les performances",
+        "Elle est optionnelle et n'affecte le résultat que si des doublons existent dans la source"
+      ],
+      ans: 1,
+      exp: "SEQUENCE BY est critique pour la correction du CDC. Elle détermine l'ordre des opérations sur la même clé. Si deux UPDATE arrivent pour customer_id=1, SEQUENCE BY event_timestamp garantit que le plus récent (timestamp le plus élevé) écrase l'ancien, même si les événements arrivent dans le désordre."
+    },
+    {
+      q: "Un data engineer veut charger 3 années de fichiers Parquet historiques depuis S3 en une seule opération, sans plan de continuer à ingérer des nouveaux fichiers. Quelle est la meilleure approche ?",
+      opts: [
+        "Auto Loader avec trigger(once=True)",
+        "Auto Loader avec trigger(availableNow=True)",
+        "COPY INTO depuis le chemin S3",
+        "spark.read.parquet() puis .write.saveAsTable()"
+      ],
+      ans: 2,
+      exp: "COPY INTO est le choix optimal pour un chargement batch historique one-shot. Il est plus simple (pas de checkpoint ni de schema location), idempotent (peut être relancé sans dupliquer), et ne maintient pas de stream ouvert. Auto Loader ajoute une complexité inutile pour un cas sans ingestion continue."
+    },
+    {
+      q: "Dans ce pipeline Lakeflow, que signifie ON VIOLATION DROP ROW ?\n\nCREATE MATERIALIZED VIEW silver_orders\nCONSTRAINT valid_amount EXPECT (amount > 0) ON VIOLATION DROP ROW\nAS SELECT * FROM live.bronze_orders;",
+      opts: [
+        "Si une ligne ne respecte pas la contrainte, tout le pipeline s'arrête",
+        "Les lignes qui ne respectent pas la contrainte sont supprimées silencieusement des données de sortie",
+        "Les lignes invalides sont écrites dans une table d'erreurs séparée",
+        "La contrainte est informative uniquement, aucune action n'est prise sur les données"
+      ],
+      ans: 1,
+      exp: "ON VIOLATION DROP ROW supprime les lignes qui ne respectent pas la contrainte de la table résultante. Les lignes avec amount <= 0 n'apparaîtront pas dans silver_orders. Databricks loggue le nombre de lignes rejetées dans les métriques du pipeline. Les autres options : FAIL UPDATE arrête le pipeline, et sans clause la contrainte est juste informative (mode 'warn')."
+    }
+  ],
+  s3: [
+    {
+      q: "Un ingénieur exécute ce MERGE INTO. Qu'arrive-t-il si une ligne source correspond à plusieurs lignes cibles ?\n\nMERGE INTO customers t USING updates s\nON t.id = s.id\nWHEN MATCHED THEN UPDATE SET *\nWHEN NOT MATCHED THEN INSERT *;",
+      opts: [
+        "Chaque ligne cible correspondante est mise à jour séparément",
+        "L'opération échoue avec une erreur : MERGE ne supporte pas les correspondances multiples",
+        "Seule la première ligne cible correspondante est mise à jour",
+        "Une nouvelle ligne est insérée pour chaque correspondance"
+      ],
+      ans: 1,
+      exp: "Dans Delta Lake (et SQL standard), MERGE INTO échoue si une ligne source correspond à plus d'une ligne cible. C'est une ambiguïté non résoluble : lequel des duplicats faut-il mettre à jour ? Il faut dédupliquer la source avant le MERGE, ou ajouter des colonnes supplémentaires dans la condition ON pour rendre les correspondances univoques."
+    },
+    {
+      q: "Quelle est la différence entre row_number(), rank() et dense_rank() pour le résultat suivant : scores [100, 100, 80] triés DESC ?",
+      opts: [
+        "row_number: 1,2,3 | rank: 1,1,3 | dense_rank: 1,1,2",
+        "row_number: 1,1,2 | rank: 1,2,3 | dense_rank: 1,1,3",
+        "Toutes les trois donnent 1,2,3 avec ORDER BY DESC",
+        "row_number: 1,2,3 | rank: 1,1,2 | dense_rank: 1,2,3"
+      ],
+      ans: 0,
+      exp: "row_number() attribue des rangs strictement distincts (1,2,3) même pour les ex-aequo — le rang dépend de l'ordre interne. rank() attribue le même rang aux ex-aequo mais saute les rangs suivants (1,1,3 — le rang 2 est sauté). dense_rank() attribue le même rang aux ex-aequo sans sauter (1,1,2)."
+    },
+    {
+      q: "Que fait ce code PySpark ?\n\ndf.groupBy('product').pivot('month').sum('revenue')",
+      opts: [
+        "Calcule le total des revenus par produit et par mois sous forme de lignes",
+        "Transforme les données de format long (lignes) en format large (colonnes par mois)",
+        "Regroupe les produits par pivot et calcule la somme glissante",
+        "Erreur : pivot() ne peut pas être chaîné directement après groupBy()"
+      ],
+      ans: 1,
+      exp: "pivot() transforme les valeurs uniques de la colonne 'month' en colonnes séparées. Si les mois sont [Jan, Fev, Mar], le résultat aura des colonnes Jan_sum, Fev_sum, Mar_sum avec les revenus par produit. C'est une transformation de format long vers format large (reshape). Attention : sur une colonne haute cardinalité, spécifier les valeurs explicitement avec .pivot('month', ['Jan','Fev','Mar']) pour éviter les problèmes mémoire."
+    },
+    {
+      q: "Un administrateur exécute `DROP TABLE catalog.schema.orders`. Cette table est une table externe (EXTERNAL TABLE) avec des données sur S3. Qu'arrive-t-il ?",
+      opts: [
+        "Les données S3 ET les métadonnées Unity Catalog sont supprimées",
+        "Seules les métadonnées Unity Catalog sont supprimées, les données S3 restent intactes",
+        "L'opération échoue : on ne peut pas DROP une table externe avec Unity Catalog",
+        "Les données sont archivées dans la corbeille Databricks pendant 30 jours"
+      ],
+      ans: 1,
+      exp: "C'est une distinction critique. Pour une EXTERNAL TABLE : DROP TABLE supprime uniquement les métadonnées (entrée dans Unity Catalog), mais les données physiques sur S3 restent. Pour une MANAGED TABLE : DROP TABLE supprime à la fois les métadonnées ET les données physiques. Toujours vérifier le type de table avant un DROP en production."
+    },
+    {
+      q: "Quelle est la différence entre OPTIMIZE et VACUUM sur une table Delta ?",
+      opts: [
+        "OPTIMIZE compacte les petits fichiers Parquet. VACUUM supprime les anciens fichiers plus référencés par le _delta_log",
+        "OPTIMIZE et VACUUM font la même chose, ce sont des synonymes",
+        "OPTIMIZE supprime les données obsolètes. VACUUM réécrit les fichiers pour améliorer la compression",
+        "OPTIMIZE est automatique dans Databricks. VACUUM doit toujours être déclenché manuellement"
+      ],
+      ans: 0,
+      exp: "OPTIMIZE réécrit de nombreux petits fichiers Parquet en moins de gros fichiers, améliorant les performances de lecture. Il peut inclure ZORDER BY pour ordonner physiquement les données. VACUUM supprime les fichiers Parquet obsolètes (ceux que le _delta_log ne référence plus). Attention : VACUUM avec une rétention < 7 jours détruit la capacité de time travel pour les versions concernées."
+    },
+    {
+      q: "Un data engineer crée une table avec CREATE OR REPLACE TABLE (CRAS), puis réalise qu'il a fait une erreur. Il veut restaurer la version précédente. Peut-il le faire ?",
+      opts: [
+        "Non, CRAS écrase définitivement l'historique Delta Lake",
+        "Oui, CRAS préserve le _delta_log, donc RESTORE TABLE TO VERSION AS OF est possible",
+        "Non, il faut utiliser TRUNCATE + INSERT pour conserver l'historique",
+        "Oui, mais uniquement si VACUUM n'a pas été exécuté depuis la création"
+      ],
+      ans: 1,
+      exp: "C'est l'avantage clé de CRAS par rapport à DROP + CREATE. CRAS est atomique ET préserve le _delta_log (l'historique des transactions). Cela signifie que tu peux utiliser RESTORE TABLE ou SELECT ... VERSION AS OF pour revenir à l'état avant le CRAS. DROP TABLE suivi de CREATE perd cet historique."
+    },
+    {
+      q: "Quelle affirmation sur Liquid Clustering est correcte ?",
+      opts: [
+        "Liquid Clustering utilise des partitions comme le partitionnement Hive classique",
+        "Une fois défini, le Liquid Clustering ne peut pas être modifié sans recréer la table",
+        "Liquid Clustering permet de changer les colonnes de clustering via ALTER TABLE sans recréer la table ni migrer les données",
+        "Liquid Clustering est uniquement disponible sur les tables externes"
+      ],
+      ans: 2,
+      exp: "C'est l'avantage majeur de Liquid Clustering sur le partitionnement classique. Tu peux exécuter ALTER TABLE t CLUSTER BY (new_col) pour changer les colonnes de clustering. Les anciennes données sont progressivement réorganisées lors des prochains OPTIMIZE. Avec le partitionnement Hive classique, changer de stratégie nécessite de recréer et de réécrire toute la table."
+    }
+  ],
+  s4: [
+    {
+      q: "Un job Databricks composé de 5 tâches séquentielles échoue à la tâche 3. Les tâches 1 et 2 ont réussi. Quelle est la bonne action pour reprendre sans gaspiller de compute ?",
+      opts: [
+        "Re-run all : recommencer le job depuis la tâche 1",
+        "Repair Run : relancer depuis la tâche 3 échouée en gardant les résultats des tâches 1 et 2",
+        "Créer un nouveau job avec uniquement les tâches 3, 4 et 5",
+        "Exécuter manuellement les tâches 3, 4 et 5 dans des notebooks séparés"
+      ],
+      ans: 1,
+      exp: "Repair Run est la fonctionnalité conçue pour ce cas. Elle permet de relancer un job à partir de la tâche échouée tout en conservant les résultats des tâches précédentes réussies. C'est plus économique (pas de re-compute des tâches déjà réussies) et préserve la cohérence du run (même run ID pour l'audit)."
+    },
+    {
+      q: "Quelle est la différence principale entre un Databricks Asset Bundle (DAB) et une configuration créée via l'interface utilisateur ?",
+      opts: [
+        "Les DAB sont uniquement disponibles sur Azure Databricks, pas sur AWS",
+        "Les DAB permettent de gérer l'infrastructure comme du code versionné dans Git, reproductible et déployable en CI/CD",
+        "Les DAB sont identiques à l'UI mais plus lents à déployer",
+        "Les DAB ne supportent que les jobs Python, pas les notebooks ni les pipelines Lakeflow"
+      ],
+      ans: 1,
+      exp: "Les DAB sont la solution d'Infrastructure as Code de Databricks. Ils stockent la définition des jobs, pipelines et clusters dans des fichiers YAML versionnés avec Git. Avantages : reproductibilité (dev/staging/prod via variables), code review via PRs, intégration CI/CD native (GitHub Actions, Azure DevOps), pas de configuration manuelle répétée par environnement."
+    },
+    {
+      q: "Dans un fichier databricks.yml de DAB, un ingénieur définit `environment: default: dev`. Comment déployer vers la production ?",
+      opts: [
+        "Modifier manuellement le fichier YAML avant chaque déploiement prod",
+        "databricks bundle deploy --target prod (si la cible prod est définie dans le bundle)",
+        "Créer un fichier YAML séparé pour chaque environnement",
+        "Les DAB ne supportent qu'un seul environnement par bundle"
+      ],
+      ans: 1,
+      exp: "Les DAB supportent plusieurs targets (dev, staging, prod) définies dans le fichier databricks.yml. Chaque target peut surcharger des variables (catalog_name, cluster_size…) sans dupliquer la logique. La commande `databricks bundle deploy --target prod` déploie avec la configuration prod. C'est l'approche multi-environnement recommandée."
+    },
+    {
+      q: "Quel est l'avantage principal du compute Serverless pour les jobs Databricks par rapport aux job clusters classiques ?",
+      opts: [
+        "Le serverless est gratuit pour tous les clients Databricks",
+        "Le serverless offre un démarrage quasi-instantané (secondes vs minutes pour un cluster classique) et élimine la gestion d'infrastructure",
+        "Le serverless est 10x plus rapide pour les traitements Spark",
+        "Le serverless n'est disponible que pour les SQL Warehouses, pas pour les jobs"
+      ],
+      ans: 1,
+      exp: "Les job clusters classiques prennent 2-5 minutes à démarrer (provisionnement des VMs). Le compute serverless démarre en quelques secondes car Databricks pré-provisionne l'infrastructure. De plus, pas besoin de choisir le type de node ni le nombre de workers. Idéal pour les jobs courts et fréquents. Le serverless a un coût différent (pas forcément moins cher en absolu)."
+    },
+    {
+      q: "Comment accéder aux logs d'un pipeline Lakeflow Spark Declarative Pipelines pour investiguer une erreur ?",
+      opts: [
+        "Via DESCRIBE HISTORY pipeline_name",
+        "Via SELECT * FROM event_log('pipeline_id') ou depuis l'UI Pipeline > Events",
+        "Via dbutils.fs.ls('/pipelines/logs/')",
+        "Les pipelines Lakeflow ne génèrent pas de logs accessibles"
+      ],
+      ans: 1,
+      exp: "Chaque pipeline Lakeflow génère automatiquement un event log stocké dans un emplacement géré par Databricks. Tu peux le requêter avec SELECT * FROM event_log('pipeline_id') WHERE level='ERROR' pour voir les erreurs, ou depuis l'interface UI du pipeline dans l'onglet Events. Ces logs contiennent les métriques de qualité (lignes rejetées par des contraintes) et les erreurs d'exécution."
+    },
+    {
+      q: "Un ingénieur veut monitorer un job qui traite des données financières sensibles et doit alerter si le job dépasse 2 heures. Quelle fonctionnalité Databricks utiliser ?",
+      opts: [
+        "Modifier le code du notebook pour ajouter un timer manuel",
+        "Configurer timeout_seconds dans la définition du job ou du DAB + notification par email/webhook",
+        "Utiliser VACUUM pour nettoyer les jobs en dépassement",
+        "Les jobs Databricks ne supportent pas les timeouts"
+      ],
+      ans: 1,
+      exp: "Les Databricks Workflows (Jobs) supportent timeout_seconds au niveau du run et par tâche. Si le timeout est dépassé, le job est automatiquement annulé. Tu peux combiner cela avec des notifications (email, Slack via webhook, PagerDuty) sur les événements job_failed ou run_duration_exceeded. Dans un DAB : timeout_seconds: 7200 dans la définition du job."
+    }
+  ],
+  s5: [
+    {
+      q: "Un utilisateur a le privilège SELECT sur `prod_catalog.finance.transactions` mais reçoit l'erreur 'SCHEMA_NOT_FOUND' quand il tente de requêter la table. Quelle est la cause la plus probable ?",
+      opts: [
+        "La table n'existe pas dans Unity Catalog",
+        "Il manque USE CATALOG sur prod_catalog et/ou USE SCHEMA sur prod_catalog.finance",
+        "SELECT n'est pas un privilège valide dans Unity Catalog",
+        "L'utilisateur doit être Metastore Admin pour accéder à des tables en production"
+      ],
+      ans: 1,
+      exp: "Dans Unity Catalog, la chaîne de permissions est obligatoire à chaque niveau. Même si l'utilisateur a SELECT sur la table, sans USE CATALOG il ne peut pas 'entrer' dans le catalog, et sans USE SCHEMA il ne peut pas accéder au schema. Les trois niveaux doivent être accordés explicitement : USE CATALOG + USE SCHEMA + SELECT."
+    },
+    {
+      q: "Un data engineer exécute GRANT SELECT ON CATALOG prod TO `analysts`. Quelle est la conséquence ?",
+      opts: [
+        "Les analysts peuvent lire uniquement les tables déjà existantes au moment du GRANT",
+        "Les analysts obtiennent SELECT sur toutes les tables actuelles ET futures de prod, mais ont encore besoin de USE CATALOG et USE SCHEMA",
+        "Les analysts obtiennent tous les droits sur le catalog prod (SELECT, MODIFY, CREATE…)",
+        "Ce GRANT est invalide : SELECT ne peut être accordé qu'au niveau table"
+      ],
+      ans: 1,
+      exp: "L'héritage dans Unity Catalog est automatique vers le bas ET s'applique aux objets futurs. GRANT SELECT ON CATALOG prod donne SELECT sur toutes les tables dans tous les schemas du catalog, y compris les tables créées après le GRANT. MAIS : les analysts doivent AUSSI avoir USE CATALOG et USE SCHEMA pour naviguer jusqu'aux tables. SELECT seul sans USE est insuffisant."
+    },
+    {
+      q: "Une entreprise veut partager des données client avec un partenaire externe qui utilise Snowflake. Le partenaire doit toujours voir les données les plus récentes sans qu'on lui envoie des fichiers. Quelle solution Databricks utiliser ?",
+      opts: [
+        "Créer un export automatique en Parquet vers un bucket S3 partagé toutes les heures",
+        "Delta Sharing (D2O) : le partenaire accède en lecture aux données via le protocole Delta Sharing depuis Snowflake",
+        "Lakehouse Federation : créer une connexion Snowflake vers Databricks",
+        "Dupliquer les données dans un compte Databricks dédié au partenaire"
+      ],
+      ans: 1,
+      exp: "Delta Sharing D2O (Databricks to Open) est conçu pour ce cas. Le fournisseur crée un Share dans Unity Catalog et donne un token au partenaire. Snowflake (et d'autres outils) supportent nativement le protocole Delta Sharing. Le partenaire voit toujours les données en temps réel sans copie. Pas de pipeline de synchronisation à maintenir."
+    },
+    {
+      q: "Avec Delta Sharing, un partenaire reçoit accès à une table de 500 Go. Une semaine plus tard, il exécute une requête qui scanne entièrement la table. Qui paye le compute de cette requête ?",
+      opts: [
+        "Le fournisseur (l'entreprise qui partage les données) paye tout",
+        "Le partenaire (le destinataire) paye le compute de ses propres requêtes",
+        "Les coûts sont partagés 50/50 entre fournisseur et destinataire",
+        "Delta Sharing est gratuit, personne ne paye le compute"
+      ],
+      ans: 1,
+      exp: "Le modèle de coût Delta Sharing est clair : le fournisseur paye le STOCKAGE (les données restent sur son infrastructure). Le destinataire paye le COMPUTE pour ses requêtes depuis son propre environnement. C'est un modèle avantageux pour le fournisseur qui ne supporte pas les coûts de query de ses partenaires."
+    },
+    {
+      q: "Un data engineer veut interroger une table dans une base PostgreSQL depuis Databricks, sans l'ingérer dans le lakehouse. Quelle fonctionnalité utiliser ?",
+      opts: [
+        "Auto Loader avec cloudFiles.format='jdbc'",
+        "Lakehouse Federation : créer une connexion et un foreign catalog vers PostgreSQL",
+        "COPY INTO depuis PostgreSQL",
+        "spark.read.jdbc() puis créer une table Delta temporaire"
+      ],
+      ans: 1,
+      exp: "Lakehouse Federation permet de requêter des données dans des systèmes externes (PostgreSQL, MySQL, Snowflake, BigQuery, SQL Server…) directement depuis Databricks via Unity Catalog, sans ingestion. Tu crées une CONNECTION vers la source, puis un FOREIGN CATALOG qui mappe les schemas et tables de la source. Les données ne quittent pas PostgreSQL."
+    },
+    {
+      q: "Quelle commande SQL permet de voir qui a accordé des permissions sur une table spécifique dans Unity Catalog ?",
+      opts: [
+        "DESCRIBE DETAIL catalog.schema.table",
+        "SELECT * FROM system.access.audit WHERE action_name = 'grantPermission'",
+        "SHOW GRANTS ON TABLE catalog.schema.table",
+        "EXPLAIN PRIVILEGES ON TABLE catalog.schema.table"
+      ],
+      ans: 2,
+      exp: "SHOW GRANTS ON TABLE catalog.schema.table liste tous les privilèges actuellement accordés sur cette table, avec le grantee (qui a le droit) et le grantor (qui l'a accordé). Pour l'historique des changements de permissions (audit), il faut interroger system.access.audit. DESCRIBE DETAIL donne des informations techniques sur la table (format, taille, location) mais pas les permissions."
+    }
+  ]
+};
+
+// ============================================================
+// MOCK EXAM — BANQUE DE QUESTIONS COMPLÈTE
+// ============================================================
+const MOCK_BANK = [
+  // --- FONDATIONS ---
+  { section:'Phase 0', q:"Quelle est la différence fondamentale entre un data lake et un data warehouse ?", opts:["Un data lake est plus cher mais plus performant pour les requêtes SQL","Un data lake stocke des données en format ouvert sans gouvernance stricte, un data warehouse offre performance et gouvernance mais en format propriétaire","Un data warehouse peut stocker des données non structurées, un data lake non","Ils sont fonctionnellement identiques, seul le fournisseur cloud diffère"], ans:1, exp:"Le data lake = stockage ouvert, flexible, pas cher, mais sans gouvernance ni performance garantie. Le data warehouse = performant, gouverné, ACID, mais format propriétaire et coûteux. Le lakehouse combine les deux."},
+  { section:'Phase 0', q:"Qu'est-ce que l'architecture Medallion Bronze/Silver/Gold ?", opts:["Un système de classification de la qualité des données en trois niveaux de certification","Un pattern d'organisation des pipelines en trois couches : ingestion brute, transformation, agrégation métier","Une stratégie de partitionnement des tables Delta pour optimiser les performances","Une fonctionnalité de Databricks pour gérer automatiquement la rétention des données"], ans:1, exp:"L'architecture Medallion organise les données en couches : Bronze (raw append-only), Silver (nettoyé/validé), Gold (agrégé pour la BI). Chaque couche ajoute de la qualité et de la valeur."},
+  { section:'Phase 0', q:"Pourquoi le format Parquet est-il préférable au CSV pour les analyses ?", opts:["Parquet est plus lisible par les humains que CSV","Parquet est un format colonnaire : il lit uniquement les colonnes nécessaires à la requête, pas toutes les lignes — beaucoup plus efficace pour les analyses","Parquet supporte les caractères spéciaux et l'encodage UTF-8 que CSV ne supporte pas","Parquet permet de stocker des images et fichiers binaires, contrairement à CSV"], ans:1, exp:"Le format colonnaire Parquet stocke les données colonne par colonne. Une requête SELECT region, SUM(amount) n'a besoin de lire que 2 colonnes, même si la table en a 50. CSV stocke ligne par ligne — toute la ligne doit être lue même si on n'en utilise qu'une partie."},
+  { section:'Phase 0', q:"Qu'arrive-t-il si on exécute RESTORE TABLE orders TO VERSION AS OF 2 ?", opts:["La table est copiée dans une nouvelle table appelée orders_v2","Le contenu de la table revient à l'état de la version 2, la version 2 devient la nouvelle version courante","Seules les lignes ajoutées après la version 2 sont supprimées","RESTORE crée un snapshot read-only qu'on peut interroger sans modifier la table principale"], ans:1, exp:"RESTORE TABLE ramène la table à l'état d'une version précédente. Cette opération crée une nouvelle entrée dans le _delta_log. La table devient comme elle était à la version 2, et la version actuelle devient la version suivante dans l'historique."},
+  { section:'Phase 0', q:"Un utilisateur veut voir toutes les versions d'une table Delta et les opérations effectuées. Quelle commande utiliser ?", opts:["SHOW HISTORY orders","DESCRIBE HISTORY orders","SELECT * FROM orders_history","AUDIT LOG orders"], ans:1, exp:"DESCRIBE HISTORY table_name affiche l'historique complet des transactions Delta : version, timestamp, opération (INSERT, UPDATE, DELETE, MERGE, OPTIMIZE…), user, paramètres. Indispensable pour l'audit et le débogage."},
+  { section:'Phase 0', q:"Quelle est la rétention par défaut de VACUUM dans Delta Lake ?", opts:["24 heures","7 jours (168 heures)","30 jours","Aucune rétention, VACUUM supprime immédiatement tous les fichiers obsolètes"], ans:1, exp:"La rétention par défaut est 7 jours (168h). Cela signifie que le time travel est possible sur les 7 derniers jours. En dessous de cette valeur, Databricks bloque VACUUM par sécurité (configurable)."},
+  // --- SECTION 1 ---
+  { section:'S1 Plateforme', q:"Quel type de cluster est le plus adapté pour développer et tester du code PySpark de façon interactive ?", opts:["Job cluster","SQL Warehouse","All-purpose cluster","Serverless cluster"], ans:2, exp:"L'all-purpose cluster est conçu pour le développement interactif. Il reste actif entre les cellules de notebook, peut être partagé entre collaborateurs, et supporte Python, SQL, Scala, R. Les job clusters sont éphémères et réservés aux jobs automatisés."},
+  { section:'S1 Plateforme', q:"Quelle est la différence clé entre un Job Cluster et un All-Purpose Cluster ?", opts:["Les Job Clusters sont plus puissants et coûtent plus cher","Les Job Clusters sont créés automatiquement au démarrage d'un job et détruits à la fin — idéaux pour la prod. Les All-Purpose restent actifs jusqu'à termination manuelle","Les All-Purpose Clusters ne supportent pas Python, uniquement SQL","Il n'y a aucune différence technique, c'est uniquement une question de naming"], ans:1, exp:"Les Job Clusters sont éphémères et économiques pour la production : tu ne paies que pendant l'exécution. Les All-Purpose Clusters sont persistants pour le développement interactif. En production, toujours utiliser des Job Clusters pour minimiser les coûts."},
+  { section:'S1 Plateforme', q:"Un analyste veut connecter Tableau à Databricks pour des requêtes SQL interactives. Quel type de compute configurer ?", opts:["All-purpose cluster avec auto-termination","Job cluster planifié","SQL Warehouse (classic ou serverless)","Databricks Connect depuis Tableau Desktop"], ans:2, exp:"SQL Warehouse est optimisé pour les workloads SQL analytiques et supporte les protocoles JDBC/ODBC requis par les outils BI comme Tableau, Power BI, Looker. Il gère l'auto-scaling et l'auto-suspend automatiquement."},
+  { section:'S1 Plateforme', q:"Qu'est-ce que dbutils.secrets.get() permet de faire ?", opts:["Chiffrer des données sensibles dans une table Delta","Récupérer des secrets (mots de passe, tokens API) depuis un secret scope sans les exposer en clair dans le code","Générer des clés de chiffrement pour les tables Unity Catalog","Accéder aux variables d'environnement du système d'exploitation du cluster"], ans:1, exp:"dbutils.secrets.get(scope, key) permet d'accéder à des secrets stockés dans Databricks Secret Scopes (ou Azure Key Vault) sans jamais exposer la valeur en clair dans le notebook. La valeur est masquée dans les outputs et logs."},
+  { section:'S1 Plateforme', q:"Quelle magic command permet d'exécuter du code shell dans un notebook Databricks ?", opts:["%bash","%shell","%sh","%terminal"], ans:2, exp:"%sh permet d'exécuter des commandes shell (bash) directement dans une cellule de notebook Databricks. S'exécute sur le driver node. Utilisé pour installer des packages (pip install), manipuler des fichiers système, etc."},
+  { section:'S1 Plateforme', q:"Serverless compute et classic compute : quelle affirmation est correcte ?", opts:["Serverless est gratuit pour tous les clients","Serverless démarre en secondes vs plusieurs minutes pour un cluster classique, et élimine la gestion d'infrastructure","Serverless ne supporte que SQL, pas Python ou Scala","Classic compute est toujours moins cher que serverless"], ans:1, exp:"Le serverless offre un démarrage quasi-instantané (secondes) car Databricks pré-provisionne l'infrastructure. Pas besoin de choisir le type de node ou le nombre de workers. Idéal pour les jobs courts et fréquents. Le coût dépend des cas d'usage — pas toujours moins cher en absolu."},
+  // --- SECTION 2 ---
+  { section:'S2 Ingestion', q:"Un pipeline doit continuellement ingérer des fichiers JSON arrivant sur S3 à des rythmes variables. Quel outil est le plus approprié ?", opts:["COPY INTO exécuté toutes les 15 minutes","Auto Loader avec cloudFiles.format='json'","spark.read.json() avec un scheduler externe","Lakehouse Federation vers S3"], ans:1, exp:"Auto Loader est conçu pour l'ingestion continue depuis le stockage cloud. Il détecte automatiquement les nouveaux fichiers via directory listing ou file notification, gère le checkpoint et s'adapte au volume."},
+  { section:'S2 Ingestion', q:"Quelle option Auto Loader est OBLIGATOIRE en mode streaming ?", opts:["cloudFiles.inferColumnTypes","cloudFiles.schemaLocation","cloudFiles.maxFilesPerTrigger","cloudFiles.useNotifications"], ans:1, exp:"cloudFiles.schemaLocation est obligatoire en streaming. Auto Loader y stocke le schéma inféré pour le réutiliser entre micro-batches. Sans cette option, le pipeline plante au démarrage."},
+  { section:'S2 Ingestion', q:"Quelle est la syntaxe correcte pour créer une Streaming Table dans Lakeflow ?", opts:["CREATE STREAM TABLE bronze_orders AS SELECT...", "CREATE STREAMING TABLE bronze_orders AS SELECT * FROM cloud_files(...)", "CREATE TABLE STREAMING bronze_orders AS SELECT...", "STREAM CREATE TABLE bronze_orders AS SELECT..."], ans:1, exp:"La syntaxe correcte est CREATE STREAMING TABLE suivi du nom de la table et de la clause AS SELECT. Dans Lakeflow Spark Declarative Pipelines, on utilise cloud_files() comme source pour Auto Loader."},
+  { section:'S2 Ingestion', q:"Dans quel scénario COPY INTO est-il préférable à Auto Loader ?", opts:["Quand les fichiers arrivent toutes les secondes","Pour charger un historique de 5 ans de fichiers Parquet en une seule opération","Quand le schéma des fichiers change fréquemment","Pour traiter des fichiers Kafka"], ans:1, exp:"COPY INTO est optimal pour les chargements batch historiques one-shot. Il est plus simple (pas de checkpoint ni de schema location), idempotent (rejouable), et s'arrête une fois le chargement terminé. Auto Loader est pour l'ingestion continue."},
+  { section:'S2 Ingestion', q:"Que fait cloudFiles.schemaEvolutionMode = 'rescue' ?", opts:["Arrête le pipeline quand une nouvelle colonne est détectée","Ajoute automatiquement les nouvelles colonnes au schéma de la table","Capture les colonnes inconnues dans la colonne _rescued_data en JSON sans modifier le schéma","Ignore les nouvelles colonnes silencieusement"], ans:2, exp:"En mode rescue, le schéma existant est préservé. Toute donnée qui ne correspond pas au schéma (nouvelles colonnes, types incompatibles) est sérialisée en JSON dans _rescued_data. Le pipeline continue sans interruption."},
+  { section:'S2 Ingestion', q:"Quelle est la différence entre trigger(availableNow=True) et trigger(processingTime='5 minutes') ?", opts:["Aucune différence, ce sont des synonymes","availableNow traite tout d'un coup puis s'arrête. processingTime maintient un stream actif avec des micro-batches périodiques","availableNow est plus rapide que processingTime","processingTime ne fonctionne qu'avec COPY INTO"], ans:1, exp:"availableNow=True : traite tous les fichiers disponibles en un seul batch et arrête le stream (comportement batch-like). processingTime='5 minutes' : maintient le stream actif et crée un micro-batch toutes les 5 minutes."},
+  { section:'S2 Ingestion', q:"Dans APPLY CHANGES INTO, à quoi sert SEQUENCE BY ?", opts:["Ordonne les colonnes dans la table résultante","Détermine l'ordre des opérations CDC sur la même clé — la valeur la plus haute gagne","Partitionne les données pour optimiser l'ingestion","Est une clause optionnelle sans impact sur le résultat"], ans:1, exp:"SEQUENCE BY est critique pour la correction CDC. Si deux UPDATE arrivent pour la même clé dans le désordre, SEQUENCE BY (généralement un timestamp) garantit que le plus récent est appliqué en dernier. Sans SEQUENCE BY, le résultat serait non-déterministe."},
+  { section:'S2 Ingestion', q:"Quelle est la différence entre SCD Type 1 et SCD Type 2 dans APPLY CHANGES INTO ?", opts:["SCD1 écrase les anciennes valeurs. SCD2 conserve l'historique en créant de nouvelles lignes","SCD1 est pour les faits, SCD2 pour les dimensions","SCD1 utilise DELETE, SCD2 utilise UPDATE","Il n'y a pas de différence en pratique"], ans:0, exp:"SCD Type 1 (défaut) : quand un enregistrement est mis à jour, l'ancienne valeur est écrasée. SCD Type 2 (STORED AS SCD TYPE 2) : chaque changement crée une nouvelle ligne avec __start_version, __end_version, __current. Utilise Type 2 quand tu as besoin d'analyser l'évolution historique."},
+  { section:'S2 Ingestion', q:"Qu'est-ce que CONSTRAINT valid_amount EXPECT (amount > 0) ON VIOLATION DROP ROW fait dans Lakeflow ?", opts:["Arrête tout le pipeline si une ligne invalide est détectée","Supprime les lignes avec amount <= 0 de la table résultante et les logue dans les métriques","Convertit les valeurs négatives en valeurs absolues automatiquement","La contrainte est informative uniquement, aucune action n'est prise"], ans:1, exp:"ON VIOLATION DROP ROW supprime les lignes qui ne respectent pas la contrainte de la sortie. Les lignes invalides disparaissent des données. Databricks loggue le nombre de lignes rejetées dans les métriques du pipeline. Autres options : FAIL UPDATE (arrête le pipeline), pas de clause (informative/warn)."},
+  { section:'S2 Ingestion', q:"Comment référencer une table d'un autre pipeline Lakeflow dans une MATERIALIZED VIEW ?", opts:["SELECT * FROM database.schema.table","SELECT * FROM live.other_table (préfixe live.)","SELECT * FROM STREAM(other_table)","Les tables d'un autre pipeline ne sont pas accessibles"], ans:1, exp:"Dans Lakeflow Spark Declarative Pipelines, les tables du même pipeline sont référencées avec le préfixe live. (ex: live.bronze_orders). Pour une STREAMING TABLE qui lit depuis une autre streaming table du même pipeline, on utilise STREAM(live.other_table)."},
+  // --- SECTION 3 ---
+  { section:'S3 Transformations', q:"Quelle est la syntaxe correcte de MERGE INTO pour faire un upsert ?", opts:["UPSERT INTO target USING source ON condition","MERGE INTO target USING source ON condition WHEN MATCHED THEN UPDATE WHEN NOT MATCHED THEN INSERT","INSERT OR UPDATE INTO target SELECT * FROM source","SYNC target FROM source ON condition"], ans:1, exp:"MERGE INTO est la syntaxe standard SQL pour l'upsert dans Delta Lake. WHEN MATCHED permet UPDATE ou DELETE. WHEN NOT MATCHED permet INSERT. L'opération est atomique."},
+  { section:'S3 Transformations', q:"Que se passe-t-il si MERGE INTO trouve une ligne source qui correspond à plusieurs lignes cibles ?", opts:["Seule la première correspondance est mise à jour","Toutes les lignes correspondantes sont mises à jour","L'opération échoue avec une erreur de correspondances multiples","Les lignes correspondantes sont fusionnées en une seule"], ans:2, exp:"MERGE INTO échoue si une ligne source match plusieurs lignes cibles. C'est une ambiguïté non résoluble. Solution : dédupliquer la source avant le MERGE ou enrichir la condition ON pour garantir une correspondance 1-pour-1."},
+  { section:'S3 Transformations', q:"Quelle est la différence entre INSERT INTO et INSERT OVERWRITE ?", opts:["Aucune différence pratique","INSERT INTO ajoute des lignes (append). INSERT OVERWRITE remplace tout le contenu de la table","INSERT INTO remplace les doublons. INSERT OVERWRITE ajoute de nouvelles lignes","INSERT OVERWRITE est uniquement pour les tables partitionnées"], ans:1, exp:"INSERT INTO = append (ajout de lignes). INSERT OVERWRITE = remplacement du contenu. Pour les tables partitionnées, INSERT OVERWRITE peut cibler des partitions spécifiques. INSERT INTO ne peut jamais supprimer de données existantes."},
+  { section:'S3 Transformations', q:"Quelle est la différence entre row_number(), rank() et dense_rank() pour les scores [100, 100, 80] ?", opts:["row_number:1,2,3 | rank:1,1,3 | dense_rank:1,1,2","Toutes donnent 1,2,3","row_number:1,1,2 | rank:1,2,3 | dense_rank:1,1,3","row_number:1,2,3 | rank:1,1,2 | dense_rank:1,2,3"], ans:0, exp:"row_number() : rangs distincts même pour ex-aequo (1,2,3). rank() : même rang pour ex-aequo + gap (1,1,3 — rang 2 sauté). dense_rank() : même rang pour ex-aequo sans gap (1,1,2)."},
+  { section:'S3 Transformations', q:"Que fait df.groupBy('product').pivot('month').sum('revenue') ?", opts:["Calcule le revenu total par produit et mois en lignes","Transforme les données de format long en format large (une colonne par mois)","Calcule un pivot glissant sur 3 mois","Erreur : pivot() ne peut pas suivre directement groupBy()"], ans:1, exp:"pivot() transforme les valeurs uniques d'une colonne en colonnes séparées. Format long (product, month, revenue) → format large (product, jan_rev, feb_rev, mar_rev). Pour les hautes cardinalités, spécifier les valeurs explicitement : .pivot('month', ['Jan','Feb','Mar'])."},
+  { section:'S3 Transformations', q:"Quelle est la différence entre CREATE OR REPLACE TABLE (CRAS) et DROP TABLE + CREATE TABLE ?", opts:["CRAS est plus lent mais plus sûr","CRAS est atomique et préserve l'historique Delta. DROP+CREATE perd l'historique et n'est pas atomique","DROP+CREATE préserve les permissions existantes, CRAS les réinitialise","Il n'y a aucune différence fonctionnelle"], ans:1, exp:"CRAS (CREATE OR REPLACE TABLE) est atomique (tout-ou-rien) et préserve le _delta_log, permettant le time travel sur les versions précédentes. DROP+CREATE est non-atomique (fenêtre où la table n'existe pas) et détruit l'historique."},
+  { section:'S3 Transformations', q:"Que fait OPTIMIZE orders ZORDER BY (customer_id, region) ?", opts:["Crée un index sur customer_id et region","Recompacte les fichiers Parquet ET organise physiquement les données pour que les lignes avec les mêmes valeurs de customer_id/region soient proches","Partitionne la table par customer_id et region","Supprime les doublons sur ces colonnes"], ans:1, exp:"OPTIMIZE compacte les petits fichiers en gros fichiers. ZORDER BY réorganise physiquement les données dans ces fichiers pour que les valeurs similaires soient co-localisées. Résultat : les requêtes filtrant sur ces colonnes lisent beaucoup moins de fichiers (data skipping). ZORDER ≠ partitionnement."},
+  { section:'S3 Transformations', q:"Quelle est la différence entre une Managed Table et une External Table dans Unity Catalog ?", opts:["Managed = Unity Catalog gère le stockage, DROP TABLE supprime données+métadonnées. External = tu gères le stockage, DROP TABLE supprime uniquement les métadonnées","Managed Tables sont plus performantes que les External Tables","External Tables ne supportent pas les transactions ACID","Managed Tables ne peuvent pas être partagées entre workspaces"], ans:0, exp:"Managed Table : Unity Catalog gère l'emplacement de stockage. DROP TABLE supprime tout (données + métadonnées). External Table : tu spécifies LOCATION 's3://...'. DROP TABLE supprime uniquement les métadonnées Unity Catalog — les données physiques sur S3 restent intactes."},
+  { section:'S3 Transformations', q:"Quelle est la différence entre countDistinct() et count() dans PySpark ?", opts:["count() compte les lignes non-null, countDistinct() compte les valeurs uniques non-null","count() est toujours plus lent que countDistinct()","Ils sont synonymes","count() ne fonctionne pas avec agg(), uniquement avec groupBy()"], ans:0, exp:"count('col') compte le nombre de lignes où la colonne est non-null. countDistinct('col') compte le nombre de valeurs uniques non-null. Erreur courante : utiliser count() quand on veut compter des clients uniques — cela compte toutes les commandes, pas les clients distincts."},
+  { section:'S3 Transformations', q:"Qu'est-ce que Liquid Clustering et en quoi diffère-t-il du partitionnement Hive classique ?", opts:["C'est la même chose, juste un nom moderne","Liquid Clustering permet de changer les colonnes de clustering via ALTER TABLE sans recréer la table. Le partitionnement Hive est figé à la création et nécessite une réécriture complète pour changer","Liquid Clustering est uniquement pour les tables externes","Le partitionnement Hive est plus performant que Liquid Clustering"], ans:1, exp:"Liquid Clustering est plus flexible que le partitionnement classique. Tu peux exécuter ALTER TABLE t CLUSTER BY (new_col) et les données sont progressivement réorganisées lors des OPTIMIZE suivants. Avec Hive partitioning, changer la stratégie = recréer et réécrire toute la table."},
+  { section:'S3 Transformations', q:"Une table Delta a des millions de petits fichiers Parquet suite à de nombreux petits inserts. Quelle commande améliore les performances de lecture ?", opts:["VACUUM orders","REPAIR TABLE orders","OPTIMIZE orders","ANALYZE TABLE orders"], ans:2, exp:"OPTIMIZE compacte les nombreux petits fichiers en moins de gros fichiers. Les requêtes de lecture deviennent beaucoup plus rapides car Spark ouvre moins de fichiers et peut mieux exploiter le predicate pushdown. VACUUM supprime les vieux fichiers mais ne compacte pas."},
+  // --- SECTION 4 ---
+  { section:'S4 Production', q:"Un job de 8 tâches séquentielles échoue à la tâche 5. Quelle action choisir pour reprendre sans re-exécuter les tâches déjà réussies ?", opts:["Re-Run All depuis le début","Repair Run : reprend depuis la tâche 5 échouée","Créer un nouveau job avec les tâches 5 à 8","Exécuter les tâches 5 à 8 manuellement en notebook"], ans:1, exp:"Repair Run est la fonctionnalité conçue pour ce cas exact. Elle relance le job à partir de la tâche échouée tout en réutilisant les résultats des tâches précédentes réussies. Même run ID pour l'audit, économique car pas de re-compute des tâches déjà réussies."},
+  { section:'S4 Production', q:"Qu'est-ce qu'un Databricks Asset Bundle (DAB) ?", opts:["Un bundle de packages Python pour Databricks","Une solution Infrastructure as Code qui définit jobs, clusters et pipelines en YAML versionnable dans Git","Un package d'assets visuels pour l'interface Databricks","Un format de compression des notebooks Databricks"], ans:1, exp:"Les DAB permettent de gérer l'infrastructure Databricks comme du code : définir jobs, pipelines, clusters en YAML, versionner avec Git, déployer via CI/CD, et gérer plusieurs environnements (dev/staging/prod) via des variables."},
+  { section:'S4 Production', q:"Comment déployer un DAB vers l'environnement de production ?", opts:["Modifier manuellement le YAML et l'uploader via l'UI","databricks bundle deploy --target prod","Copier les fichiers YAML dans le workspace Databricks","git push origin production (Databricks détecte automatiquement)"], ans:1, exp:"La commande `databricks bundle deploy --target prod` déploie le bundle avec la configuration de la target prod définie dans databricks.yml. Les variables sont résolues selon la target (catalog prod, cluster sizing prod, etc.)."},
+  { section:'S4 Production', q:"Quel avantage principal apporte le compute Serverless pour les jobs Databricks ?", opts:["Gratuit pour les jobs de moins de 5 minutes","Démarrage quasi-instantané (secondes vs minutes) et zéro gestion d'infrastructure","10x plus rapide grâce à des optimisations spéciales","Disponible uniquement pour SQL, pas pour Python"], ans:1, exp:"Le serverless démarre en quelques secondes car Databricks pré-provisionne l'infrastructure. Aucune configuration de cluster requise. Idéal pour les jobs courts et fréquents. Facturation à la seconde à l'usage."},
+  { section:'S4 Production', q:"Comment monitorer les erreurs d'un pipeline Lakeflow via SQL ?", opts:["SELECT * FROM system.pipelines.errors","SELECT * FROM event_log('pipeline_id') WHERE level='ERROR'","DESCRIBE PIPELINE errors pipeline_id","SELECT * FROM delta_log WHERE type='error'"], ans:1, exp:"event_log('pipeline_id') retourne l'event log du pipeline Lakeflow. Filtrer sur level='ERROR' pour les erreurs. L'event log contient aussi les métriques de qualité (lignes rejetées par contraintes), les temps d'exécution, et les mises à jour de tables."},
+  { section:'S4 Production', q:"Quelle est la bonne pratique pour gérer des variables d'environnement (dev vs prod) dans un DAB ?", opts:["Créer un fichier YAML séparé pour chaque environnement","Utiliser les variables DAB et les targets (dev, staging, prod) dans databricks.yml avec des valeurs par défaut","Hardcoder les valeurs prod directement dans le YAML","Utiliser des variables d'environnement shell du système CI/CD"], ans:1, exp:"Les DAB supportent les variables (variables section) avec des valeurs par défaut et des overrides par target. Exemple : catalog_name par défaut = dev_catalog, target prod = prod_catalog. Une seule base de code, configurations différentes par environnement."},
+  { section:'S4 Production', q:"Qu'est-ce que le Spark UI permet de diagnostiquer ?", opts:["Les permissions Unity Catalog sur les tables","Les stages lents, le skew de données, les shuffles excessifs, et la consommation mémoire des jobs Spark","L'état des pipelines Lakeflow en cours d'exécution","Les audit logs d'accès aux tables Delta"], ans:1, exp:"Le Spark UI (accessible depuis le cluster dans l'interface Databricks) montre le détail des stages, tasks, et shuffles d'un job Spark. Diagnostics possibles : stages lents (bottleneck), données skewed (certains executors surchargés), spill to disk (OOM imminent), shuffles excessifs."},
+  // --- SECTION 5 ---
+  { section:'S5 Gouvernance', q:"Un utilisateur a SELECT sur prod.finance.invoices mais ne peut pas accéder à la table. Quelle est la cause ?", opts:["La table n'existe pas","SELECT ne permet que la lecture des métadonnées, pas des données","Il manque USE CATALOG sur prod et/ou USE SCHEMA sur prod.finance","Il faut être Metastore Admin pour accéder aux tables en prod"], ans:2, exp:"La chaîne de permissions Unity Catalog est obligatoire à chaque niveau : USE CATALOG + USE SCHEMA + SELECT. Sans USE CATALOG, l'utilisateur ne peut pas 'entrer' dans le catalog. Sans USE SCHEMA, il ne peut pas voir le schema. SELECT seul est insuffisant."},
+  { section:'S5 Gouvernance', q:"Quelle est la différence entre SHOW GRANTS ON TABLE et SELECT * FROM system.access.audit ?", opts:["Ils retournent les mêmes informations","SHOW GRANTS montre les permissions actuelles. system.access.audit montre l'historique des accès et changements de permissions","SHOW GRANTS est uniquement pour les admins. system.access.audit est accessible à tous","system.access.audit n'existe pas dans Unity Catalog"], ans:1, exp:"SHOW GRANTS ON TABLE retourne la liste des permissions actuellement en vigueur sur l'objet (qui peut faire quoi). system.access.audit est l'audit log historique : qui a accédé à quoi, quand, et quels changements de permissions ont été effectués."},
+  { section:'S5 Gouvernance', q:"Qu'est-ce que Delta Sharing D2O ?", opts:["Partage de données entre deux workspaces Databricks","Partage de données avec des destinataires externes qui n'utilisent pas Databricks, via le protocole Delta Sharing ouvert","Duplication de données vers un bucket S3 externe","Partage de notebooks entre collaborateurs"], ans:1, exp:"Delta Sharing D2O (Databricks to Open) permet de partager des données en lecture avec des destinataires n'ayant pas Databricks (Tableau, pandas, Spark, Snowflake…) via un bearer token. Les données restent chez le fournisseur. D2D est le partage entre deux environnements Databricks via Unity Catalog."},
+  { section:'S5 Gouvernance', q:"Avec Delta Sharing, qui paye le stockage et qui paye le compute des requêtes ?", opts:["Le destinataire paye tout","Le fournisseur paye le stockage, le destinataire paye le compute de ses requêtes","Les coûts sont partagés 50/50","Personne ne paye, Delta Sharing est gratuit"], ans:1, exp:"Modèle de coût Delta Sharing : le fournisseur (provider) garde les données sur son infrastructure et paye le stockage. Le destinataire (recipient) paye le compute pour exécuter ses propres requêtes depuis son environnement. Avantageux pour le fournisseur."},
+  { section:'S5 Gouvernance', q:"Qu'est-ce que Lakehouse Federation ?", opts:["Un système de réplication des données entre plusieurs lakehouses","Une fonctionnalité qui permet de requêter des systèmes externes (PostgreSQL, MySQL, Snowflake…) depuis Databricks via Unity Catalog, sans ingérer les données","Un système de federation de clusters pour partager le compute","Un format d'export vers des systèmes externes"], ans:1, exp:"Lakehouse Federation permet de créer une CONNECTION vers une source externe et un FOREIGN CATALOG qui mappe ses tables. Tu peux ensuite requêter ces tables depuis Databricks comme si elles étaient dans Unity Catalog, sans copie des données."},
+  { section:'S5 Gouvernance', q:"Que signifie l'héritage de permissions dans Unity Catalog ?", opts:["Les permissions expirées sont héritées par les nouvelles tables","GRANT SELECT ON CATALOG s'applique à toutes les tables actuelles ET futures du catalog, sans avoir à re-GRANT table par table","L'héritage s'applique uniquement aux tables créées avant le GRANT","L'héritage ne fonctionne qu'au niveau Schema, pas au niveau Catalog"], ans:1, exp:"Dans Unity Catalog, les permissions s'héritent vers le bas dans la hiérarchie. GRANT SELECT ON CATALOG donne SELECT sur tous les schemas et tables actuels ET futurs. GRANT SELECT ON SCHEMA donne SELECT sur toutes les tables actuelles et futures du schema. Cela simplifie la gestion des permissions à grande échelle."},
+  { section:'S5 Gouvernance', q:"Quelle est la différence entre Account Admin, Workspace Admin et Metastore Admin ?", opts:["Ce sont trois noms pour le même rôle","Account Admin gère le compte Databricks global. Workspace Admin gère un workspace spécifique. Metastore Admin gère tous les objets Unity Catalog dans le metastore","Workspace Admin a plus de droits que Account Admin","Metastore Admin peut créer des workspaces, les autres non"], ans:1, exp:"Account Admin : gestion globale du compte (facturation, workspaces, users). Workspace Admin : gestion d'un workspace (clusters, jobs, accès des users au workspace). Metastore Admin : contrôle total sur Unity Catalog (catalogs, schemas, tables, permissions, lineage). Ces rôles sont complémentaires."},
+  // --- QUESTIONS AVANCÉES TRANSVERSALES ---
+  { section:'Avancé', q:"Un pipeline ingère des données clients en streaming. De nouvelles colonnes apparaissent dans les fichiers source. Quelle configuration Auto Loader garantit la continuité du pipeline tout en capturant les données nouvelles ?", opts:["cloudFiles.schemaEvolutionMode = 'failOnNewColumns'","cloudFiles.schemaEvolutionMode = 'rescue' avec inspection de _rescued_data","cloudFiles.schemaEvolutionMode = 'none'","Ne pas spécifier schemaEvolutionMode (le pipeline plante sur les nouvelles colonnes par défaut)"], ans:1, exp:"Le mode 'rescue' est le plus défensif pour la production : le schéma existant est préservé (pas de modification de table inattendue), et les données des nouvelles colonnes sont capturées dans _rescued_data. Tu peux ensuite inspecter cette colonne pour décider comment gérer les évolutions de schéma."},
+  { section:'Avancé', q:"Quelle est la bonne approche pour exposer des données sensibles à deux équipes avec des niveaux d'accès différents dans Unity Catalog ?", opts:["Dupliquer les tables avec les données filtrées pour chaque équipe","Créer des Dynamic Views qui filtrent les données selon le groupe d'appartenance de l'utilisateur, puis accorder SELECT sur la view et non la table","Donner SELECT à tout le monde et faire confiance aux requêtes","Utiliser des partitions séparées par équipe"], ans:1, exp:"Les Dynamic Views utilisent current_user() ou is_account_group_member() pour filtrer dynamiquement les lignes ou masquer les colonnes selon l'identité de l'utilisateur. L'équipe A voit uniquement ses données, l'équipe B les siennes — via la même view, sans dupliquer les données."},
+  { section:'Avancé', q:"Un job Databricks Workflow prend 4h alors qu'il devrait prendre 1h. Comment investiguer la cause de performance ?", opts:["Relancer le job avec un cluster plus grand","Examiner le Spark UI pour identifier les stages lents, le skew de données ou les shuffles excessifs","Augmenter le nombre de partitions spark.sql.shuffle.partitions","Activer le serverless compute"], ans:1, exp:"Le Spark UI est l'outil de diagnostic des performances Spark. Il montre : les stages et leur durée, la distribution des tasks (pour détecter le skew), la quantité de données shufflées, et si des tasks spillent sur disque. C'est là qu'on identifie le vrai bottleneck avant de prendre des mesures."},
+  { section:'Avancé', q:"Quelle est la différence entre une table temporaire et une vue globale temporaire dans Databricks ?", opts:["Aucune différence","Les vues temporaires (createOrReplaceTempView) sont scopées à la session courante. Les vues globales (createGlobalTempView) persistent dans global_temp et sont accessibles depuis d'autres notebooks sur le même cluster","Les vues temporaires sont persistées sur disque, les globales sont uniquement en mémoire","Les vues globales sont accessibles depuis tous les clusters, les temporaires uniquement depuis le notebook courant"], ans:1, exp:"createOrReplaceTempView('name') : accessible uniquement dans la session Spark courante (notebook/job actuel). createGlobalTempView('name') : accessible depuis n'importe quel notebook attaché au même cluster via global_temp.name. Ni l'une ni l'autre ne crée de métadonnées dans Unity Catalog."},
+  { section:'Avancé', q:"Un data engineer veut s'assurer que son pipeline de production ne peut pas être modifié accidentellement par un collègue. Quelle approche recommander ?", opts:["Mettre un mot de passe sur le notebook","Utiliser des Databricks Asset Bundles avec CI/CD : tout changement passe par une pull request avec review","Copier les notebooks dans un dossier personnel","Activer le mode lecture seule dans les paramètres du workspace"], ans:1, exp:"Les DAB avec CI/CD sont la bonne pratique pour les pipelines de production. Tout changement est versionné dans Git, passe par une pull request avec code review, des tests automatisés, et un déploiement contrôlé. Impossible de modifier la prod directement depuis l'UI."},
+  { section:'Avancé', q:"Quelle est la différence entre OPTIMIZE et Predictive Optimization ?", opts:["Aucune différence technique","OPTIMIZE est déclenché manuellement ou via un job. Predictive Optimization est automatique — Databricks analyse l'usage et déclenche OPTIMIZE/VACUUM quand nécessaire sans intervention manuelle","OPTIMIZE fonctionne sur toutes les tables. Predictive Optimization uniquement sur les tables Gold","Predictive Optimization n'est disponible que sur les tables External"], ans:1, exp:"OPTIMIZE doit être planifié et exécuté explicitement. Predictive Optimization (feature Unity Catalog) analyse automatiquement l'usage des tables et déclenche OPTIMIZE et VACUUM de façon proactive. Moins de maintenance opérationnelle, meilleures performances sans intervention."},
+  { section:'Avancé', q:"Un ingénieur veut partager des données avec un partenaire externe qui utilise Power BI. Les données doivent être toujours à jour. Quelle solution évite toute copie de données ?", opts:["Export CSV quotidien vers un SharePoint","Delta Sharing D2O : le partenaire configure son tenant Power BI pour accéder via le protocole Delta Sharing","Réplication des tables vers un Snowflake partagé","Lakeflow Connect vers le système du partenaire"], ans:1, exp:"Delta Sharing D2O permet au partenaire Power BI d'accéder aux données en temps réel via un bearer token et le connecteur Delta Sharing de Power BI. Pas de copie, pas d'export, les données source restent chez le fournisseur Databricks."}
+];
+
+// ============================================================
+// MOCK EXAM STATE
+// ============================================================
+let mockQuestions = [];
+let mockSelected = {};
+let mockTimerInterval = null;
+let mockTimeLeft = 90 * 60;
+let mockTrainingMode = false;
+let mockSubmitted = false;
+
+function startMock(training = false) {
+  mockTrainingMode = training;
+  mockSubmitted = false;
+  mockSelected = {};
+  // Shuffle and pick 45
+  const shuffled = [...MOCK_BANK].sort(() => Math.random() - 0.5);
+  mockQuestions = shuffled.slice(0, 45);
+  mockTimeLeft = 90 * 60;
+
+  document.getElementById('mock-start').style.display = 'none';
+  document.getElementById('mock-results').style.display = 'none';
+  document.getElementById('mock-corrections').style.display = 'none';
+  document.getElementById('mock-exam').style.display = 'block';
+
+  renderMockDots();
+  renderMockQuestion(0);
+
+  if (!training) {
+    clearInterval(mockTimerInterval);
+    mockTimerInterval = setInterval(tickTimer, 1000);
+  } else {
+    document.getElementById('mock-timer').textContent = 'Sans timer';
+    document.getElementById('mock-timer').style.color = 'var(--muted)';
+  }
+}
+
+function tickTimer() {
+  mockTimeLeft--;
+  const m = Math.floor(mockTimeLeft / 60).toString().padStart(2,'0');
+  const s = (mockTimeLeft % 60).toString().padStart(2,'0');
+  const el = document.getElementById('mock-timer');
+  el.textContent = m + ':' + s;
+  if (mockTimeLeft <= 300) el.style.color = '#ef4444';
+  else if (mockTimeLeft <= 600) el.style.color = '#f59e0b';
+  if (mockTimeLeft <= 0) {
+    clearInterval(mockTimerInterval);
+    submitMock();
+  }
+}
+
+let currentMockQ = 0;
+
+function renderMockDots() {
+  const container = document.getElementById('mock-dots');
+  container.innerHTML = mockQuestions.map((_, i) => {
+    const answered = mockSelected[i] !== undefined;
+    const bg = answered ? '#ff4d1c' : 'var(--border)';
+    return `<div onclick="goMockQ(${i})" style="width:14px;height:14px;border-radius:2px;background:${bg};cursor:pointer;transition:background 0.2s" id="dot-${i}" title="Q${i+1}"></div>`;
+  }).join('');
+}
+
+function updateDot(i) {
+  const dot = document.getElementById('dot-' + i);
+  if (!dot) return;
+  if (mockSubmitted) {
+    const correct = mockSelected[i] === mockQuestions[i].ans;
+    dot.style.background = correct ? '#10b981' : '#ef4444';
+  } else {
+    dot.style.background = mockSelected[i] !== undefined ? '#ff4d1c' : 'var(--border)';
+  }
+}
+
+function renderMockQuestion(idx) {
+  currentMockQ = idx;
+  document.getElementById('mock-current-num').textContent = idx + 1;
+  const answered = Object.keys(mockSelected).length;
+  document.getElementById('mock-answered-count').textContent = answered + ' répondue' + (answered > 1 ? 's' : '');
+
+  const q = mockQuestions[idx];
+  const letters = ['A','B','C','D'];
+  const lines = q.q.split('\n');
+  const qText = lines[0];
+  const codeBlock = lines.length > 1 ? `<div class="q-code">${lines.slice(1).join('\n')}</div>` : '';
+
+  const opts = q.opts.map((o, oi) => {
+    let cls = 'option';
+    if (mockSubmitted) {
+      if (oi === q.ans) cls += ' correct';
+      else if (oi === mockSelected[idx] && mockSelected[idx] !== q.ans) cls += ' wrong';
+    } else if (mockSelected[idx] === oi) {
+      cls += ' selected';
+    }
+    return `<div class="${cls}" id="mopt-${idx}-${oi}" onclick="selectMockOption(${idx},${oi})">
+      <span class="option-letter">${letters[oi]}</span><span>${o}</span>
+    </div>`;
+  }).join('');
+
+  const sectionTag = `<div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-bottom:6px">${q.section}</div>`;
+  const expBlock = mockSubmitted ? `<div class="explanation ${mockSelected[idx] === q.ans ? 'correct-exp' : 'wrong-exp'}" style="display:block;margin-top:12px">
+    <strong>${mockSelected[idx] === q.ans ? 'Correct ✓' : 'Incorrect — Bonne réponse : ' + letters[q.ans]}</strong> — ${q.exp}
+  </div>` : '';
+
+  document.getElementById('mock-question-area').innerHTML = `
+    <div class="question-block" style="border:none;margin:0;padding:0">
+      ${sectionTag}
+      <div class="q-num">Question ${idx+1} / ${mockQuestions.length}</div>
+      <div class="q-text">${qText}</div>
+      ${codeBlock}
+      <div class="options">${opts}</div>
+      ${expBlock}
+    </div>`;
+
+  document.getElementById('mock-prev').disabled = idx === 0;
+  document.getElementById('mock-next').disabled = idx === mockQuestions.length - 1;
+}
+
+function selectMockOption(idx, oi) {
+  if (mockSubmitted) return;
+  mockSelected[idx] = oi;
+  updateDot(idx);
+  // Update answered count
+  const answered = Object.keys(mockSelected).length;
+  document.getElementById('mock-answered-count').textContent = answered + ' répondue' + (answered > 1 ? 's' : '');
+  // Re-render options highlight
+  const letters = ['A','B','C','D'];
+  mockQuestions[idx].opts.forEach((_, optIdx) => {
+    const el = document.getElementById(`mopt-${idx}-${optIdx}`);
+    if (!el) return;
+    el.className = 'option' + (optIdx === oi ? ' selected' : '');
+  });
+}
+
+function goMockQ(idx) {
+  renderMockQuestion(idx);
+}
+
+function mockNav(dir) {
+  const next = currentMockQ + dir;
+  if (next >= 0 && next < mockQuestions.length) renderMockQuestion(next);
+}
+
+function confirmSubmitMock() {
+  const answered = Object.keys(mockSelected).length;
+  const remaining = mockQuestions.length - answered;
+  if (remaining > 0 && !confirm(`Tu as ${remaining} question(s) sans réponse. Soumettre quand même ?`)) return;
+  submitMock();
+}
+
+function submitMock() {
+  clearInterval(mockTimerInterval);
+  mockSubmitted = true;
+
+  let correct = 0;
+  mockQuestions.forEach((q, i) => {
+    if (mockSelected[i] === q.ans) correct++;
+    updateDot(i);
+  });
+
+  const total = mockQuestions.length;
+  const pct = Math.round(correct / total * 100);
+  const passed = pct >= 70;
+  const color = passed ? '#10b981' : pct >= 55 ? '#f59e0b' : '#ef4444';
+  const msg = pct >= 85 ? '🎯 Excellent ! Tu es prêt pour la certification.' :
+              pct >= 70 ? '✅ Reçu ! Continue à consolider les points faibles.' :
+              pct >= 55 ? '⚠️ Proche du seuil, encore un peu de travail.' :
+              '❌ Des lacunes importantes à combler. Révise les sections faibles.';
+
+  // Score by section
+  const sectionScores = {};
+  mockQuestions.forEach((q, i) => {
+    if (!sectionScores[q.section]) sectionScores[q.section] = {correct:0,total:0};
+    sectionScores[q.section].total++;
+    if (mockSelected[i] === q.ans) sectionScores[q.section].correct++;
+  });
+
+  const sectionHTML = Object.entries(sectionScores).map(([sec, sc]) => {
+    const p = Math.round(sc.correct/sc.total*100);
+    const c = p >= 70 ? '#10b981' : p >= 50 ? '#f59e0b' : '#ef4444';
+    return `<div style="display:flex;align-items:center;gap:10px;font-size:13px;margin-bottom:8px">
+      <div style="min-width:130px;color:var(--muted)">${sec}</div>
+      <div style="flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${p}%;background:${c};border-radius:3px"></div>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:${c};min-width:60px">${sc.correct}/${sc.total} (${p}%)</div>
+    </div>`;
+  }).join('');
+
+  const bars = mockQuestions.map((q, i) => {
+    const ok = mockSelected[i] === q.ans;
+    return `<div style="width:10px;height:10px;border-radius:1px;background:${ok?'#10b981':'#ef4444'};title='Q${i+1}'"></div>`;
+  }).join('');
+
+  document.getElementById('mock-exam').style.display = 'none';
+  document.getElementById('mock-results').style.display = 'block';
+  document.getElementById('mock-final-pct').innerHTML = `<span style="color:${color}">${pct}%</span>`;
+  document.getElementById('mock-final-score').textContent = `${correct} / ${total} correctes${!passed?' — Score requis : 70%':''}`;
+  document.getElementById('mock-final-msg').innerHTML = `<span style="color:${color}">${msg}</span>`;
+  document.getElementById('mock-result-bars').innerHTML = bars;
+
+  // Append section breakdown
+  document.getElementById('mock-corrections').innerHTML = `
+    <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)">Corrections détaillées</div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:24px">
+      <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:14px">Score par section</div>
+      ${sectionHTML}
+    </div>
+    <div id="mock-corrections-list"></div>`;
+}
+
+function showMockCorrections() {
+  const corrEl = document.getElementById('mock-corrections');
+  corrEl.style.display = 'block';
+  const list = document.getElementById('mock-corrections-list');
+  if (list.innerHTML) return; // already rendered
+  const letters = ['A','B','C','D'];
+  list.innerHTML = mockQuestions.map((q, i) => {
+    const userAns = mockSelected[i];
+    const correct = userAns === q.ans;
+    const lines = q.q.split('\n');
+    const codeBlock = lines.length > 1 ? `<div class="q-code">${lines.slice(1).join('\n')}</div>` : '';
+    return `<div class="question-block">
+      <div style="font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-bottom:4px">${q.section}</div>
+      <div class="q-num">Question ${i+1}</div>
+      <div class="q-text">${lines[0]}</div>
+      ${codeBlock}
+      <div class="options" style="pointer-events:none">
+        ${q.opts.map((o,oi)=>`<div class="option ${oi===q.ans?'correct':oi===userAns&&!correct?'wrong':''}">
+          <span class="option-letter">${letters[oi]}</span><span>${o}</span>
+        </div>`).join('')}
+      </div>
+      <div class="explanation ${correct?'correct-exp':'wrong-exp'}" style="display:block;margin-top:10px">
+        <strong>${correct?'Correct ✓':'Incorrect — Bonne réponse : '+letters[q.ans]}</strong> — ${q.exp}
+      </div>
+    </div>`;
+  }).join('');
+  corrEl.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function resetMock() {
+  clearInterval(mockTimerInterval);
+  mockSubmitted = false;
+  mockSelected = {};
+  mockQuestions = [];
+  document.getElementById('mock-start').style.display = 'block';
+  document.getElementById('mock-exam').style.display = 'none';
+  document.getElementById('mock-results').style.display = 'none';
+  document.getElementById('mock-timer').style.color = '';
+}
+
+// Update pool size on load
+window.addEventListener('load', () => {
+  const el = document.getElementById('mock-pool-size');
+  if (el) el.textContent = MOCK_BANK.length;
+});
+const scores = {};
+let completedQuizzes = 0;
+
+function renderSection(sid) {
+  const container = document.getElementById('questions-' + sid);
+  if (!container) return;
+  container.innerHTML = '';
+  QUIZ_DATA[sid].forEach((q, qi) => {
+    const letters = ['A','B','C','D'];
+    const opts = q.opts.map((o, oi) => `
+      <div class="option" id="opt-${sid}-${qi}-${oi}" onclick="selectOption('${sid}',${qi},${oi})">
+        <span class="option-letter">${letters[oi]}</span><span>${o}</span>
+      </div>`).join('');
+    const codeBlock = q.q.includes('\n') ?
+      `<div class="q-code">${q.q.split('\n').slice(1).join('\n')}</div>` : '';
+    const qText = q.q.includes('\n') ? q.q.split('\n')[0] : q.q;
+    container.innerHTML += `
+      <div class="question-block" id="qblock-${sid}-${qi}">
+        <div class="q-num">Question ${qi+1} / ${QUIZ_DATA[sid].length}</div>
+        <div class="q-text">${qText}</div>
+        ${codeBlock}
+        <div class="options" id="options-${sid}-${qi}">${opts}</div>
+        <div class="explanation" id="exp-${sid}-${qi}"></div>
+      </div>`;
+  });
+  const count = document.getElementById('score-' + sid);
+  if (count) count.textContent = '0/' + QUIZ_DATA[sid].length;
+}
+
+function renderQuizzes() {
+  Object.keys(QUIZ_DATA).forEach(sid => renderSection(sid));
+}
+
+const selected = {};
+
+function selectOption(sid, qi, oi) {
+  const key = `${sid}-${qi}`;
+  const quiz = QUIZ_DATA[sid];
+  if (!quiz) return;
+  // Check if already submitted
+  const submitted = document.getElementById(`opt-${sid}-${qi}-${quiz[qi].ans}`);
+  if (submitted && (submitted.classList.contains('correct') || submitted.classList.contains('wrong'))) return;
+  // Deselect previous
+  if (selected[key] !== undefined) {
+    document.getElementById(`opt-${sid}-${qi}-${selected[key]}`).classList.remove('selected');
+  }
+  selected[key] = oi;
+  document.getElementById(`opt-${sid}-${qi}-${oi}`).classList.add('selected');
+}
+
+function submitQuiz(sid) {
+  const quiz = QUIZ_DATA[sid];
+  let correct = 0;
+  quiz.forEach((q, qi) => {
+    const key = `${sid}-${qi}`;
+    const userAns = selected[key];
+    const correctAns = q.ans;
+    // Mark options
+    quiz[qi].opts.forEach((_, oi) => {
+      const el = document.getElementById(`opt-${sid}-${qi}-${oi}`);
+      el.classList.remove('selected');
+      if (oi === correctAns) el.classList.add('correct');
+      else if (oi === userAns && userAns !== correctAns) el.classList.add('wrong');
+    });
+    // Show explanation
+    const expEl = document.getElementById(`exp-${sid}-${qi}`);
+    if (userAns === correctAns) {
+      correct++;
+      expEl.className = 'explanation correct-exp';
+      expEl.innerHTML = `<strong>Correct ✓</strong> — ${q.exp}`;
+    } else {
+      expEl.className = 'explanation wrong-exp';
+      const ansLetter = ['A','B','C','D'][correctAns];
+      expEl.innerHTML = `<strong>Incorrect — Bonne réponse : ${ansLetter}</strong> — ${q.exp}`;
+    }
+    expEl.style.display = 'block';
+  });
+
+  scores[sid] = { correct, total: quiz.length };
+  const pct = Math.round(correct / quiz.length * 100);
+
+  // Update score display
+  document.getElementById('score-' + sid).textContent = `${correct}/${quiz.length}`;
+
+  // Show result
+  const resultEl = document.getElementById('result-' + sid);
+  const color = pct >= 70 ? '#10b981' : pct >= 50 ? '#f59e0b' : '#ef4444';
+  const msg = pct >= 80 ? 'Excellent !' : pct >= 60 ? 'Bien, continue !' : 'À retravailler';
+  const bars = quiz.map((q, qi) => {
+    const isCorrect = selected[`${sid}-${qi}`] === q.ans;
+    return `<div class="result-bar" style="background:${isCorrect ? '#10b981' : '#ef4444'}"></div>`;
+  }).join('');
+  resultEl.innerHTML = `
+    <div class="result-score" style="color:${color}">${pct}%</div>
+    <div class="result-label">${correct}/${quiz.length} correctes — ${msg}</div>
+    <div class="result-bars">${bars}</div>`;
+  resultEl.style.display = 'block';
+
+  // Update badge
+  const badge = document.getElementById('badge-' + sid);
+  if (badge) {
+    badge.textContent = `${pct}%`;
+    badge.className = `score-badge ${pct >= 70 ? 'good' : 'bad'}`;
+    badge.style.display = 'inline-block';
+  }
+  updateProgress();
+}
+
+function resetQuiz(sid) {
+  const quiz = QUIZ_DATA[sid];
+  quiz.forEach((_, qi) => { delete selected[`${sid}-${qi}`]; });
+  delete scores[sid];
+  renderSection(sid);
+  document.getElementById('result-' + sid).style.display = 'none';
+  const badge = document.getElementById('badge-' + sid);
+  if (badge) badge.style.display = 'none';
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = Object.keys(QUIZ_DATA).length;
+  const done = Object.keys(scores).length;
+  const pct = Math.round(done / total * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = pct + '%';
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const links = document.querySelectorAll('.nav-link');
+  links.forEach(l => {
+    const onclick = l.getAttribute('onclick');
+    if (onclick && onclick.includes("'" + id + "'")) l.classList.add('active');
+  });
+  window.scrollTo(0, 0);
+  if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+}
+
+function scrollToQuiz(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleMenu() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+renderQuizzes();
+</script>
+</body>
+</html>
