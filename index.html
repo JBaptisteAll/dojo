@@ -13,6 +13,7 @@
       background: #08080f;
       color: #edf2f4;
       min-height: 100vh;
+      padding: 40px 0;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -126,6 +127,16 @@
     }
     .card.playbook .card-title { color: #60a5fa; }
     .card.playbook .card-arrow { color: #60a5fa; }
+
+    .card.python {
+      border-color: rgba(255,212,59,.3);
+    }
+    .card.python:hover {
+      border-color: rgba(255,212,59,.7);
+      box-shadow: 0 8px 32px rgba(255,212,59,.15);
+    }
+    .card.python .card-title { color: #ffd43b; }
+    .card.python .card-arrow { color: #ffd43b; }
   </style>
 </head>
 <body>
@@ -149,6 +160,13 @@
     <div class="card-title">Databricks Study</div>
     <div class="card-desc">Guide de révision complet pour la certification Data Engineer Associate.</div>
     <div class="card-arrow">Réviser →</div>
+  </a>
+
+  <a href="python.html" class="card python">
+    <div class="card-icon">🐍</div>
+    <div class="card-title">Python, de zéro à héros</div>
+    <div class="card-desc">Cours interactif complet : 26 modules, 229 exercices corrigés, progression synchronisée entre appareils.</div>
+    <div class="card-arrow">Coder →</div>
   </a>
 
   <a href="https://jbaptisteall.github.io/Data_Playbook/index.html" class="card playbook" target="_blank" rel="noopener">
