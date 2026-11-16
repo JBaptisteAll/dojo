@@ -137,6 +137,20 @@
     }
     .card.python .card-title { color: #ffd43b; }
     .card.python .card-arrow { color: #ffd43b; }
+
+    .card.azure {
+      border-color: rgba(34,211,238,.3);
+    }
+    .card.azure:hover {
+      border-color: rgba(34,211,238,.7);
+      box-shadow: 0 8px 32px rgba(34,211,238,.15);
+    }
+    .card.azure .card-title { color: #22d3ee; }
+    .card.azure .card-arrow { color: #22d3ee; }
+
+    /* carte d'une page pas encore disponible */
+    .card.soon { cursor: default; opacity: .6; }
+    .card.soon:hover { transform: none; box-shadow: none; }
   </style>
 </head>
 <body>
@@ -167,6 +181,13 @@
     <div class="card-title">Python, de zéro à héros</div>
     <div class="card-desc">Cours interactif complet : 26 modules, 229 exercices corrigés, progression synchronisée entre appareils.</div>
     <div class="card-arrow">Coder →</div>
+  </a>
+
+  <a href="azure.html" class="card azure">
+    <div class="card-icon">☁️</div>
+    <div class="card-title">Azure Prépa</div>
+    <div class="card-desc">Préparation AZ-900 et AZ-104 : cours, travaux dirigés, 1 042 questions, examens blancs et flashcards.</div>
+    <div class="card-arrow">Réviser →</div>
   </a>
 
   <a href="https://jbaptisteall.github.io/Data_Playbook/index.html" class="card playbook" target="_blank" rel="noopener">
