@@ -308,13 +308,14 @@ function drawKanji() {
     box.innerHTML = n || d.sessions ? `<div class="meta">${nf(n)} kanji maîtrisé(s) · ${d.sessions || 0} session(s). Ouvre la formation pour mettre le détail à jour.</div>${srcLine(b.src)}` : "";
     return;
   }
-  if (!s.seen && !s.sessions) return box.replaceChildren();
+  const kana = (s.kana || []).filter(x => x.v);
+  if (!s.seen && !s.sessions && !kana.length) return box.replaceChildren();
   /* les révisions dues dépendent du jour : on les recalcule à partir du détail quand il est disponible */
   const day = Math.floor(Date.now() / 864e5);
   const due = d.srs ? Object.values(d.srs).filter(r => r[1] <= day).length : s.due;
   const open = (s.levels || []).filter(l => l.u).map(l => "N" + l.lv).join(", ");
   box.innerHTML = bar("Kanji maîtrisés", pct(s.mastered, s.total), `${nf(s.mastered)} / ${nf(s.total)}`)
-    + `<div class="meta">${due ? `<b style="color:#edf2f4">${nf(due)}</b> à revoir aujourd'hui` : "Rien à revoir aujourd'hui"} · ${nf(s.seen)} déjà vus${open ? `<br>Niveaux ouverts : ${open}` : ""}</div>` + srcLine(b.src);
+    + `<div class="meta">${due ? `<b style="color:#edf2f4">${nf(due)}</b> à revoir aujourd'hui` : "Rien à revoir aujourd'hui"} · ${nf(s.seen)} déjà vus${open ? `<br>Niveaux ouverts : ${open}` : ""}${kana.length ? `<br>Kana maîtrisés : ${(s.kana || []).map(x => (x.s === "h" ? "hiragana " : "katakana ") + x.m + "/" + x.t).join(" · ")}` : ""}</div>` + srcLine(b.src);
 }
 function draw() { drawPython(); drawAzure(); drawKanji(); }
 

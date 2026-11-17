@@ -82,6 +82,35 @@
     .sync-line { margin-top: 14px; font-size: .72rem; color: var(--dim); text-align: center; }
     .due-hint { margin: -6px 0 14px; font-size: .78rem; color: var(--muted); text-align: center; }
     .due-hint b { color: var(--n3); }
+
+    /* ---------- kana ---------- */
+    .kana-body { width: 100%; }
+    .kana-stats { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; font-size: .76rem; color: var(--muted); margin: 4px 0 14px; }
+    .kana-stats b { color: var(--text); }
+    .kana-groups { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 16px; }
+    .kana-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 99px; border: 1px solid var(--border); background: var(--card); color: var(--muted); font-size: .78rem; cursor: pointer; user-select: none; }
+    .kana-chip input { accent-color: var(--primary); margin: 0; }
+    .kana-chip:has(input:checked) { color: var(--text); border-color: var(--primary); }
+    .kana-sec { font-size: .66rem; color: var(--muted); text-transform: uppercase; letter-spacing: .16em; margin: 18px 0 8px; }
+    .kana-grid { display: grid; gap: 6px; }
+    .kana-grid.c5 { grid-template-columns: repeat(5, 1fr); }
+    .kana-grid.c3 { grid-template-columns: repeat(3, 1fr); }
+    .kana-cell { position: relative; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 8px 4px 6px; text-align: center; }
+    .kana-cell.empty { background: transparent; border-color: transparent; }
+    .kana-cell .kc { font-family: 'Noto Serif JP', serif; font-size: 1.6rem; line-height: 1.2; color: var(--text); }
+    .kana-cell .kr { font-size: .7rem; color: var(--muted); }
+    .kana-cell.seen { border-color: rgba(255,209,102,.5); }
+    .kana-cell.mastered { border-color: rgba(6,214,160,.6); }
+    .kana-cell.mastered .kr { color: var(--success); }
+    .kana-legend { display: flex; gap: 14px; justify-content: center; font-size: .7rem; color: var(--muted); margin-top: 14px; }
+    .kana-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; border: 1px solid; margin-right: 5px; vertical-align: -1px; }
+    .kana-big { font-family: 'Noto Serif JP', serif; font-size: 5.5rem; line-height: 1.1; color: var(--text); }
+    .kana-roma-big { font-size: 2.6rem; font-weight: 700; letter-spacing: .04em; color: var(--text); }
+    .choice-btn .choice-kana { font-family: 'Noto Serif JP', serif; font-size: 1.9rem; }
+    .kana-result { text-align: center; margin: 6px 0 18px; }
+    .kana-result .big { font-size: 2.4rem; font-weight: 700; }
+    .kana-actions { display: flex; gap: 10px; margin-top: 8px; }
+    .kana-actions .btn { flex: 1; }
     .stats-bar {
       display: flex;
       width: 100%;
@@ -238,6 +267,8 @@
       max-width: 340px;
     }
     .card-reading { font-size: .82rem; color: var(--muted); margin-top: 12px; min-height: 20px; letter-spacing: .04em; }
+    .rd-kana { display: block; font-family: 'Noto Serif JP', serif; font-size: 1.15rem; color: var(--text); letter-spacing: .06em; }
+    .rd-romaji { display: block; font-size: .74rem; color: var(--muted); margin-top: 3px; }
 
     /* ── CHOICES ── */
     .choices-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-bottom: 20px; }
@@ -505,6 +536,16 @@
   <button class="btn btn-primary" onclick="startSession()">▶ Commencer la session (10 kanji)</button>
 
   <div class="sep"></div>
+  <button class="num-entry-btn" onclick="showKana()">
+    <div class="num-entry-kanji">かな</div>
+    <div class="num-entry-text">
+      <div class="num-entry-title">Hiragana et katakana</div>
+      <div class="num-entry-desc" id="kana-entry-desc">Tableau des kana, quiz et révisions espacées</div>
+    </div>
+    <span style="color:var(--dim);font-size:1.2rem">›</span>
+  </button>
+
+  <div class="sep"></div>
   <button class="num-entry-btn" onclick="showNumbers()">
     <div class="num-entry-kanji">数字</div>
     <div class="num-entry-text">
@@ -578,6 +619,28 @@
 </div>
 
 
+
+<!-- ═══════════════════════════════
+     SCREEN: KANA
+════════════════════════════════ -->
+<div class="screen" id="screen-kana">
+  <div class="sess-header">
+    <button class="btn btn-ghost btn-sm" onclick="goHome()">← Retour</button>
+    <div class="sess-info">かな · Kana</div>
+    <div class="sess-score" id="kana-counter"></div>
+  </div>
+  <div class="mode-wrap">
+    <button class="mode-tab active" id="kana-tab-h" onclick="setKanaScript('h')"><span class="mode-kanji">ひらがな</span> Hiragana</button>
+    <button class="mode-tab" id="kana-tab-k" onclick="setKanaScript('k')"><span class="mode-kanji">カタカナ</span> Katakana</button>
+  </div>
+  <div class="mode-wrap">
+    <button class="mode-tab active" id="kana-tab-table" onclick="setKanaView('table')">Tableau</button>
+    <button class="mode-tab" id="kana-tab-quiz" onclick="setKanaView('quiz')">Quiz</button>
+  </div>
+  <div id="kana-body" class="kana-body"></div>
+</div>
+
+
 <!-- ═══════════════════════════════
      SCREEN: NUMBERS
 ════════════════════════════════ -->
@@ -639,414 +702,416 @@
 <script>
 // ──────────────────────────────────────────────────────
 //  KANJI DATA
-//  Format: { k: kanji, m: sens (fr), r: lecture (romaji) }
+//  Format: { k: kanji, m: sens (fr), r: lecture (romaji), kn: lectures en kana }
+//  kn : on'yomi en katakana, kun'yomi en hiragana, terminaison entre parenthèses.
+//  Lectures vérifiées dans KANJIDIC2 (Electronic Dictionary Research and Development Group, licence CC BY-SA 4.0).
 // ──────────────────────────────────────────────────────
 const DB = {
   5: [
     // Nombres
-    {k:"一",m:"un",r:"ichi / hito-"},
-    {k:"二",m:"deux",r:"ni / futa-"},
-    {k:"三",m:"trois",r:"san / mi-"},
-    {k:"四",m:"quatre",r:"shi / yon"},
-    {k:"五",m:"cinq",r:"go / itsu-"},
-    {k:"六",m:"six",r:"roku / mu-"},
-    {k:"七",m:"sept",r:"shichi / nana"},
-    {k:"八",m:"huit",r:"hachi / ya-"},
-    {k:"九",m:"neuf",r:"kyuu / kokono-"},
-    {k:"十",m:"dix",r:"juu / too"},
-    {k:"百",m:"cent",r:"hyaku"},
-    {k:"千",m:"mille",r:"sen / chi"},
-    {k:"万",m:"dix mille",r:"man / ban"},
-    {k:"円",m:"yen / cercle",r:"en"},
+    {k:"一",m:"un",r:"ichi / hito-",kn:"イチ / ひと(つ)"},
+    {k:"二",m:"deux",r:"ni / futa-",kn:"ニ / ふた(つ)"},
+    {k:"三",m:"trois",r:"san / mi-",kn:"サン / み(つ)"},
+    {k:"四",m:"quatre",r:"shi / yon",kn:"シ / よん"},
+    {k:"五",m:"cinq",r:"go / itsu-",kn:"ゴ / いつ(つ)"},
+    {k:"六",m:"six",r:"roku / mu-",kn:"ロク / む(つ)"},
+    {k:"七",m:"sept",r:"shichi / nana",kn:"シチ / なな"},
+    {k:"八",m:"huit",r:"hachi / ya-",kn:"ハチ / や(つ)"},
+    {k:"九",m:"neuf",r:"kyuu / kokono-",kn:"キュウ / ここの(つ)"},
+    {k:"十",m:"dix",r:"juu / too",kn:"ジュウ / とお"},
+    {k:"百",m:"cent",r:"hyaku",kn:"ヒャク"},
+    {k:"千",m:"mille",r:"sen / chi",kn:"セン / ち"},
+    {k:"万",m:"dix mille",r:"man / ban",kn:"マン / バン"},
+    {k:"円",m:"yen / cercle",r:"en",kn:"エン"},
     // Temps
-    {k:"日",m:"jour / soleil",r:"nichi / hi"},
-    {k:"月",m:"mois / lune",r:"gatsu / tsuki"},
-    {k:"年",m:"année",r:"nen / toshi"},
-    {k:"時",m:"heure / moment",r:"ji / toki"},
-    {k:"間",m:"intervalle / entre",r:"kan / aida"},
-    {k:"分",m:"minute / part",r:"fun / bu"},
-    {k:"半",m:"moitié / demi",r:"han"},
-    {k:"前",m:"avant / devant",r:"zen / mae"},
-    {k:"後",m:"après / derrière",r:"go / ato"},
-    {k:"午",m:"(la période du) midi",r:"go"},
-    {k:"朝",m:"matin",r:"chou / asa"},
-    {k:"昼",m:"milieu de journée / midi",r:"chuu / hiru"},
-    {k:"夜",m:"nuit",r:"ya / yoru"},
-    {k:"毎",m:"chaque / tous les",r:"mai"},
-    {k:"週",m:"semaine",r:"shuu"},
+    {k:"日",m:"jour / soleil",r:"nichi / hi",kn:"ニチ / ひ"},
+    {k:"月",m:"mois / lune",r:"gatsu / tsuki",kn:"ガツ / つき"},
+    {k:"年",m:"année",r:"nen / toshi",kn:"ネン / とし"},
+    {k:"時",m:"heure / moment",r:"ji / toki",kn:"ジ / とき"},
+    {k:"間",m:"intervalle / entre",r:"kan / aida",kn:"カン / あいだ"},
+    {k:"分",m:"minute / part",r:"fun / bu",kn:"フン / ブ"},
+    {k:"半",m:"moitié / demi",r:"han",kn:"ハン"},
+    {k:"前",m:"avant / devant",r:"zen / mae",kn:"ゼン / まえ"},
+    {k:"後",m:"après / derrière",r:"go / ato",kn:"ゴ / あと"},
+    {k:"午",m:"(la période du) midi",r:"go",kn:"ゴ"},
+    {k:"朝",m:"matin",r:"chou / asa",kn:"チョウ / あさ"},
+    {k:"昼",m:"milieu de journée / midi",r:"chuu / hiru",kn:"チュウ / ひる"},
+    {k:"夜",m:"nuit",r:"ya / yoru",kn:"ヤ / よる"},
+    {k:"毎",m:"chaque / tous les",r:"mai",kn:"マイ"},
+    {k:"週",m:"semaine",r:"shuu",kn:"シュウ"},
     // Éléments / jours
-    {k:"火",m:"feu / mardi",r:"ka / hi"},
-    {k:"水",m:"eau / mercredi",r:"sui / mizu"},
-    {k:"木",m:"arbre / jeudi",r:"moku / ki"},
-    {k:"金",m:"or / argent / vendredi",r:"kin / kane"},
-    {k:"土",m:"terre / sol / samedi",r:"do / tsuchi"},
-    {k:"曜",m:"jour de la semaine",r:"you"},
+    {k:"火",m:"feu / mardi",r:"ka / hi",kn:"カ / ひ"},
+    {k:"水",m:"eau / mercredi",r:"sui / mizu",kn:"スイ / みず"},
+    {k:"木",m:"arbre / jeudi",r:"moku / ki",kn:"モク / き"},
+    {k:"金",m:"or / argent / vendredi",r:"kin / kane",kn:"キン / かね"},
+    {k:"土",m:"terre / sol / samedi",r:"do / tsuchi",kn:"ド / つち"},
+    {k:"曜",m:"jour de la semaine",r:"you",kn:"ヨウ"},
     // Nature / lieux
-    {k:"山",m:"montagne",r:"san / yama"},
-    {k:"川",m:"rivière / fleuve",r:"sen / kawa"},
-    {k:"田",m:"rizière / champ",r:"den / ta"},
+    {k:"山",m:"montagne",r:"san / yama",kn:"サン / やま"},
+    {k:"川",m:"rivière / fleuve",r:"sen / kawa",kn:"セン / かわ"},
+    {k:"田",m:"rizière / champ",r:"den / ta",kn:"デン / た"},
     // Positions / tailles
-    {k:"上",m:"haut / dessus",r:"jou / ue"},
-    {k:"下",m:"bas / dessous",r:"ka / shita"},
-    {k:"中",m:"milieu / intérieur",r:"chuu / naka"},
-    {k:"大",m:"grand",r:"dai / oo-"},
-    {k:"小",m:"petit",r:"shou / chii-"},
-    {k:"右",m:"droite",r:"u / migi"},
-    {k:"左",m:"gauche",r:"sa / hidari"},
-    {k:"北",m:"nord",r:"hoku / kita"},
-    {k:"南",m:"sud",r:"nan / minami"},
-    {k:"東",m:"est",r:"tou / higashi"},
-    {k:"西",m:"ouest",r:"sei / nishi"},
+    {k:"上",m:"haut / dessus",r:"jou / ue",kn:"ジョウ / うえ"},
+    {k:"下",m:"bas / dessous",r:"ka / shita",kn:"カ / した"},
+    {k:"中",m:"milieu / intérieur",r:"chuu / naka",kn:"チュウ / なか"},
+    {k:"大",m:"grand",r:"dai / oo-",kn:"ダイ / おお(きい)"},
+    {k:"小",m:"petit",r:"shou / chii-",kn:"ショウ / ちい(さい)"},
+    {k:"右",m:"droite",r:"u / migi",kn:"ウ / みぎ"},
+    {k:"左",m:"gauche",r:"sa / hidari",kn:"サ / ひだり"},
+    {k:"北",m:"nord",r:"hoku / kita",kn:"ホク / きた"},
+    {k:"南",m:"sud",r:"nan / minami",kn:"ナン / みなみ"},
+    {k:"東",m:"est",r:"tou / higashi",kn:"トウ / ひがし"},
+    {k:"西",m:"ouest",r:"sei / nishi",kn:"セイ / にし"},
     // Corps / personnes
-    {k:"人",m:"personne / humain",r:"jin / hito"},
-    {k:"口",m:"bouche",r:"kou / kuchi"},
-    {k:"目",m:"œil",r:"moku / me"},
-    {k:"耳",m:"oreille",r:"ji / mimi"},
-    {k:"手",m:"main",r:"shu / te"},
-    {k:"足",m:"pied / jambe",r:"soku / ashi"},
+    {k:"人",m:"personne / humain",r:"jin / hito",kn:"ジン / ひと"},
+    {k:"口",m:"bouche",r:"kou / kuchi",kn:"コウ / くち"},
+    {k:"目",m:"œil",r:"moku / me",kn:"モク / め"},
+    {k:"耳",m:"oreille",r:"ji / mimi",kn:"ジ / みみ"},
+    {k:"手",m:"main",r:"shu / te",kn:"シュ / て"},
+    {k:"足",m:"pied / jambe",r:"soku / ashi",kn:"ソク / あし"},
     // Famille
-    {k:"父",m:"père",r:"fu / chichi"},
-    {k:"母",m:"mère",r:"bo / haha"},
-    {k:"子",m:"enfant",r:"shi / ko"},
-    {k:"友",m:"ami(e)",r:"yuu / tomo"},
-    {k:"男",m:"homme",r:"dan / otoko"},
-    {k:"女",m:"femme",r:"jo / onna"},
+    {k:"父",m:"père",r:"fu / chichi",kn:"フ / ちち"},
+    {k:"母",m:"mère",r:"bo / haha",kn:"ボ / はは"},
+    {k:"子",m:"enfant",r:"shi / ko",kn:"シ / こ"},
+    {k:"友",m:"ami(e)",r:"yuu / tomo",kn:"ユウ / とも"},
+    {k:"男",m:"homme",r:"dan / otoko",kn:"ダン / おとこ"},
+    {k:"女",m:"femme",r:"jo / onna",kn:"ジョ / おんな"},
     // Société
-    {k:"国",m:"pays / nation",r:"koku / kuni"},
-    {k:"外",m:"extérieur / dehors",r:"gai / soto"},
+    {k:"国",m:"pays / nation",r:"koku / kuni",kn:"コク / くに"},
+    {k:"外",m:"extérieur / dehors",r:"gai / soto",kn:"ガイ / そと"},
     // École
-    {k:"学",m:"étudier / apprentissage",r:"gaku / mana-"},
-    {k:"校",m:"école",r:"kou"},
-    {k:"先",m:"avant / précédent",r:"sen / saki"},
-    {k:"生",m:"vie / naître",r:"sei / i-"},
+    {k:"学",m:"étudier / apprentissage",r:"gaku / mana-",kn:"ガク / まな(ぶ)"},
+    {k:"校",m:"école",r:"kou",kn:"コウ"},
+    {k:"先",m:"avant / précédent",r:"sen / saki",kn:"セン / さき"},
+    {k:"生",m:"vie / naître",r:"sei / i-",kn:"セイ / い(きる)"},
     // Verbes courants
-    {k:"何",m:"quoi / que / combien",r:"ka / nani"},
-    {k:"今",m:"maintenant / présent",r:"kon / ima"},
-    {k:"来",m:"venir",r:"rai / ku-"},
-    {k:"行",m:"aller",r:"kou / i-"},
-    {k:"食",m:"manger / nourriture",r:"shoku / ta-"},
-    {k:"飲",m:"boire",r:"in / no-"},
-    {k:"見",m:"voir / regarder",r:"ken / mi-"},
-    {k:"聞",m:"entendre / demander",r:"bun / ki-"},
-    {k:"書",m:"écrire",r:"sho / ka-"},
-    {k:"読",m:"lire",r:"doku / yo-"},
-    {k:"話",m:"parler / histoire",r:"wa / hana-"},
-    {k:"言",m:"dire / parole",r:"gen / i-"},
-    {k:"買",m:"acheter",r:"bai / ka-"},
+    {k:"何",m:"quoi / que / combien",r:"ka / nani",kn:"カ / なに"},
+    {k:"今",m:"maintenant / présent",r:"kon / ima",kn:"コン / いま"},
+    {k:"来",m:"venir",r:"rai / ku-",kn:"ライ / く(る)"},
+    {k:"行",m:"aller",r:"kou / i-",kn:"コウ / い(く)"},
+    {k:"食",m:"manger / nourriture",r:"shoku / ta-",kn:"ショク / た(べる)"},
+    {k:"飲",m:"boire",r:"in / no-",kn:"イン / の(む)"},
+    {k:"見",m:"voir / regarder",r:"ken / mi-",kn:"ケン / み(る)"},
+    {k:"聞",m:"entendre / demander",r:"bun / ki-",kn:"ブン / き(く)"},
+    {k:"書",m:"écrire",r:"sho / ka-",kn:"ショ / か(く)"},
+    {k:"読",m:"lire",r:"doku / yo-",kn:"ドク / よ(む)"},
+    {k:"話",m:"parler / histoire",r:"wa / hana-",kn:"ワ / はな(す)"},
+    {k:"言",m:"dire / parole",r:"gen / i-",kn:"ゲン / い(う)"},
+    {k:"買",m:"acheter",r:"bai / ka-",kn:"バイ / か(う)"},
     // Couleurs
-    {k:"白",m:"blanc",r:"haku / shiro"},
-    {k:"黒",m:"noir",r:"koku / kuro"},
-    {k:"赤",m:"rouge",r:"seki / aka"},
-    {k:"青",m:"bleu / vert",r:"sei / ao"},
+    {k:"白",m:"blanc",r:"haku / shiro",kn:"ハク / しろ"},
+    {k:"黒",m:"noir",r:"koku / kuro",kn:"コク / くろ"},
+    {k:"赤",m:"rouge",r:"seki / aka",kn:"セキ / あか"},
+    {k:"青",m:"bleu / vert",r:"sei / ao",kn:"セイ / あお"},
     // Adjectifs
-    {k:"高",m:"haut / cher",r:"kou / taka-"},
-    {k:"安",m:"bon marché / calme",r:"an / yasu-"},
-    {k:"新",m:"nouveau / récent",r:"shin / atara-"},
-    {k:"古",m:"ancien / vieux",r:"ko / furu-"},
-    {k:"長",m:"long / chef",r:"chou / naga-"},
+    {k:"高",m:"haut / cher",r:"kou / taka-",kn:"コウ / たか(い)"},
+    {k:"安",m:"bon marché / calme",r:"an / yasu-",kn:"アン / やす(い)"},
+    {k:"新",m:"nouveau / récent",r:"shin / atara-",kn:"シン / あたら(しい)"},
+    {k:"古",m:"ancien / vieux",r:"ko / furu-",kn:"コ / ふる(い)"},
+    {k:"長",m:"long / chef",r:"chou / naga-",kn:"チョウ / なが(い)"},
     // Langue / texte
-    {k:"語",m:"langue / mot",r:"go / kata-"},
-    {k:"字",m:"caractère / lettre",r:"ji"},
-    {k:"文",m:"texte / phrase",r:"bun / fumi"},
-    {k:"本",m:"livre / origine",r:"hon / moto"},
+    {k:"語",m:"langue / mot",r:"go / kata-",kn:"ゴ / かた(る)"},
+    {k:"字",m:"caractère / lettre",r:"ji",kn:"ジ"},
+    {k:"文",m:"texte / phrase",r:"bun / fumi",kn:"ブン / ふみ"},
+    {k:"本",m:"livre / origine",r:"hon / moto",kn:"ホン / もと"},
   ],
 
   4: [
-    {k:"会",m:"rencontrer / réunion",r:"kai / a-"},
-    {k:"社",m:"société / entreprise",r:"sha"},
-    {k:"家",m:"maison / famille",r:"ka / ie"},
-    {k:"電",m:"électricité",r:"den"},
-    {k:"車",m:"voiture / roue",r:"sha / kuruma"},
-    {k:"駅",m:"gare",r:"eki"},
-    {k:"道",m:"route / chemin / voie",r:"dou / michi"},
-    {k:"地",m:"terre / lieu",r:"chi / ji"},
-    {k:"図",m:"carte / dessin / plan",r:"zu"},
-    {k:"室",m:"chambre / pièce / salle",r:"shitsu"},
-    {k:"員",m:"membre / personnel",r:"in"},
-    {k:"店",m:"magasin / boutique",r:"ten / mise"},
-    {k:"物",m:"chose / objet",r:"mono / butsu"},
-    {k:"用",m:"utiliser / usage",r:"you / mochi-"},
-    {k:"思",m:"penser / croire",r:"shi / omo-"},
-    {k:"知",m:"savoir / connaître",r:"chi / shi-"},
-    {k:"考",m:"réfléchir / penser",r:"kou / kanga-"},
-    {k:"教",m:"enseigner / religion",r:"kyou / oshi-"},
-    {k:"習",m:"apprendre / pratiquer",r:"shuu / nara-"},
-    {k:"音",m:"son / bruit",r:"on / oto"},
-    {k:"楽",m:"musique / plaisir / facile",r:"gaku / raku / tano-"},
-    {k:"歌",m:"chanter / chanson",r:"ka / uta"},
-    {k:"強",m:"fort / puissant",r:"kyou / tsuyo-"},
-    {k:"弱",m:"faible / fragile",r:"jaku / yowa-"},
-    {k:"早",m:"tôt / rapide",r:"sou / haya-"},
-    {k:"同",m:"même / pareil",r:"dou / ona-"},
-    {k:"正",m:"correct / juste",r:"sei / tada-"},
-    {k:"動",m:"mouvement / bouger",r:"dou / ugo-"},
-    {k:"止",m:"arrêter / cesser",r:"shi / to-"},
-    {k:"始",m:"commencer / débuter",r:"shi / haji-"},
-    {k:"終",m:"finir / terminer",r:"shuu / o-"},
-    {k:"開",m:"ouvrir",r:"kai / a-"},
-    {k:"閉",m:"fermer / clore",r:"hei / shi-"},
-    {k:"入",m:"entrer / introduire",r:"nyuu / i- / hai-"},
-    {k:"出",m:"sortir / produire",r:"shutsu / de-"},
-    {k:"起",m:"se lever / survenir",r:"ki / o-"},
-    {k:"待",m:"attendre / patienter",r:"tai / ma-"},
-    {k:"使",m:"utiliser / employer",r:"shi / tsuka-"},
-    {k:"働",m:"travailler",r:"dou / hata-"},
-    {k:"帰",m:"rentrer / retourner",r:"ki / kae-"},
-    {k:"急",m:"urgent / soudain",r:"kyuu / iso-"},
-    {k:"近",m:"proche / voisin",r:"kin / chika-"},
-    {k:"遠",m:"loin / distant",r:"en / too-"},
-    {k:"多",m:"beaucoup / nombreux",r:"ta / oo-"},
-    {k:"少",m:"peu / rare",r:"shou / suku-"},
-    {k:"広",m:"large / spacieux",r:"kou / hiro-"},
-    {k:"明",m:"clair / brillant",r:"mei / aka- / haru-"},
-    {k:"暗",m:"sombre / obscur",r:"an / kura-"},
-    {k:"重",m:"lourd / important",r:"juu / omo-"},
-    {k:"軽",m:"léger / simple",r:"kei / karu-"},
-    {k:"方",m:"direction / méthode",r:"hou / kata"},
-    {k:"送",m:"envoyer / expédier",r:"sou / oku-"},
-    {k:"受",m:"recevoir / accepter",r:"ju / u-"},
-    {k:"取",m:"prendre / obtenir",r:"shu / to-"},
-    {k:"持",m:"tenir / posséder",r:"ji / mo-"},
-    {k:"忘",m:"oublier",r:"bou / wasu-"},
-    {k:"覚",m:"se souvenir / apprendre / s'éveiller",r:"kaku / obo- / sa-"},
-    {k:"転",m:"rouler / tomber / changer",r:"ten / koro-"},
-    {k:"走",m:"courir",r:"sou / hashi-"},
-    {k:"泳",m:"nager",r:"ei / oyo-"},
-    {k:"乗",m:"monter / prendre (transport)",r:"jou / no-"},
-    {k:"降",m:"descendre / tomber (pluie)",r:"kou / o- / fu-"},
-    {k:"歩",m:"marcher / pas",r:"ho / aru-"},
-    {k:"引",m:"tirer / attirer",r:"in / hi-"},
-    {k:"押",m:"pousser / presser",r:"ou / o-"},
-    {k:"洗",m:"laver / nettoyer",r:"sen / ara-"},
-    {k:"切",m:"couper / important",r:"setsu / ki-"},
-    {k:"集",m:"rassembler / collecter",r:"shuu / atsu-"},
-    {k:"気",m:"esprit / énergie / humeur",r:"ki / ke"},
-    {k:"体",m:"corps / physique",r:"tai / kara-"},
-    {k:"心",m:"cœur / esprit / âme",r:"shin / kokoro"},
-    {k:"病",m:"maladie / tomber malade",r:"byou / ya-"},
-    {k:"医",m:"médecin / médecine",r:"i"},
-    {k:"薬",m:"médicament / remède",r:"yaku / kusuri"},
-    {k:"頭",m:"tête / esprit",r:"tou / atama"},
-    {k:"顔",m:"visage / face",r:"gan / kao"},
-    {k:"声",m:"voix / son",r:"sei / koe"},
-    {k:"空",m:"ciel / vide",r:"kuu / sora"},
-    {k:"海",m:"mer / océan",r:"kai / umi"},
-    {k:"花",m:"fleur",r:"ka / hana"},
-    {k:"雨",m:"pluie",r:"u / ame"},
-    {k:"雪",m:"neige",r:"setsu / yuki"},
-    {k:"風",m:"vent / style",r:"fuu / kaze"},
-    {k:"天",m:"ciel / paradis",r:"ten / ama-"},
-    {k:"星",m:"étoile / astre",r:"sei / hoshi"},
-    {k:"光",m:"lumière / briller",r:"kou / hikari"},
-    {k:"色",m:"couleur / teinte",r:"shoku / iro"},
-    {k:"形",m:"forme / figure",r:"kei / katachi"},
-    {k:"数",m:"nombre / compter",r:"suu / kazu"},
-    {k:"力",m:"force / puissance",r:"ryoku / chikara"},
-    {k:"点",m:"point / score",r:"ten"},
-    {k:"線",m:"ligne / trait / fil",r:"sen"},
-    {k:"面",m:"face / surface / aspect",r:"men / omote"},
-    {k:"次",m:"suivant / prochain",r:"ji / tsugi"},
-    {k:"度",m:"degré / fois",r:"do / tabi"},
-    {k:"回",m:"tour / fois / retour",r:"kai / mawa-"},
-    {k:"変",m:"changer / étrange",r:"hen / ka-"},
-    {k:"意",m:"intention / sens",r:"i"},
-    {k:"感",m:"sentiment / ressentir",r:"kan"},
-    {k:"情",m:"sentiment / situation",r:"jou / nasa-"},
-    {k:"愛",m:"amour / aimer",r:"ai"},
-    {k:"好",m:"aimer / bien",r:"kou / su- / yo-"},
+    {k:"会",m:"rencontrer / réunion",r:"kai / a-",kn:"カイ / あ(う)"},
+    {k:"社",m:"société / entreprise",r:"sha",kn:"シャ"},
+    {k:"家",m:"maison / famille",r:"ka / ie",kn:"カ / いえ"},
+    {k:"電",m:"électricité",r:"den",kn:"デン"},
+    {k:"車",m:"voiture / roue",r:"sha / kuruma",kn:"シャ / くるま"},
+    {k:"駅",m:"gare",r:"eki",kn:"エキ"},
+    {k:"道",m:"route / chemin / voie",r:"dou / michi",kn:"ドウ / みち"},
+    {k:"地",m:"terre / lieu",r:"chi / ji",kn:"チ / ジ"},
+    {k:"図",m:"carte / dessin / plan",r:"zu",kn:"ズ"},
+    {k:"室",m:"chambre / pièce / salle",r:"shitsu",kn:"シツ"},
+    {k:"員",m:"membre / personnel",r:"in",kn:"イン"},
+    {k:"店",m:"magasin / boutique",r:"ten / mise",kn:"テン / みせ"},
+    {k:"物",m:"chose / objet",r:"mono / butsu",kn:"もの / ブツ"},
+    {k:"用",m:"utiliser / usage",r:"you / mochi-",kn:"ヨウ / もち(いる)"},
+    {k:"思",m:"penser / croire",r:"shi / omo-",kn:"シ / おも(う)"},
+    {k:"知",m:"savoir / connaître",r:"chi / shi-",kn:"チ / し(る)"},
+    {k:"考",m:"réfléchir / penser",r:"kou / kanga-",kn:"コウ / かんが(える)"},
+    {k:"教",m:"enseigner / religion",r:"kyou / oshi-",kn:"キョウ / おし(える)"},
+    {k:"習",m:"apprendre / pratiquer",r:"shuu / nara-",kn:"シュウ / なら(う)"},
+    {k:"音",m:"son / bruit",r:"on / oto",kn:"オン / おと"},
+    {k:"楽",m:"musique / plaisir / facile",r:"gaku / raku / tano-",kn:"ガク / ラク / たの(しい)"},
+    {k:"歌",m:"chanter / chanson",r:"ka / uta",kn:"カ / うた"},
+    {k:"強",m:"fort / puissant",r:"kyou / tsuyo-",kn:"キョウ / つよ(い)"},
+    {k:"弱",m:"faible / fragile",r:"jaku / yowa-",kn:"ジャク / よわ(い)"},
+    {k:"早",m:"tôt / rapide",r:"sou / haya-",kn:"ソウ / はや(い)"},
+    {k:"同",m:"même / pareil",r:"dou / ona-",kn:"ドウ / おな(じ)"},
+    {k:"正",m:"correct / juste",r:"sei / tada-",kn:"セイ / ただ(しい)"},
+    {k:"動",m:"mouvement / bouger",r:"dou / ugo-",kn:"ドウ / うご(く)"},
+    {k:"止",m:"arrêter / cesser",r:"shi / to-",kn:"シ / と(まる)"},
+    {k:"始",m:"commencer / débuter",r:"shi / haji-",kn:"シ / はじ(める)"},
+    {k:"終",m:"finir / terminer",r:"shuu / o-",kn:"シュウ / お(わる)"},
+    {k:"開",m:"ouvrir",r:"kai / a-",kn:"カイ / あ(く)"},
+    {k:"閉",m:"fermer / clore",r:"hei / shi-",kn:"ヘイ / し(める)"},
+    {k:"入",m:"entrer / introduire",r:"nyuu / i- / hai-",kn:"ニュウ / い(る) / はい(る)"},
+    {k:"出",m:"sortir / produire",r:"shutsu / de-",kn:"シュツ / で(る)"},
+    {k:"起",m:"se lever / survenir",r:"ki / o-",kn:"キ / お(きる)"},
+    {k:"待",m:"attendre / patienter",r:"tai / ma-",kn:"タイ / ま(つ)"},
+    {k:"使",m:"utiliser / employer",r:"shi / tsuka-",kn:"シ / つか(う)"},
+    {k:"働",m:"travailler",r:"dou / hatara-",kn:"ドウ / はたら(く)"},
+    {k:"帰",m:"rentrer / retourner",r:"ki / kae-",kn:"キ / かえ(る)"},
+    {k:"急",m:"urgent / soudain",r:"kyuu / iso-",kn:"キュウ / いそ(ぐ)"},
+    {k:"近",m:"proche / voisin",r:"kin / chika-",kn:"キン / ちか(い)"},
+    {k:"遠",m:"loin / distant",r:"en / too-",kn:"エン / とお(い)"},
+    {k:"多",m:"beaucoup / nombreux",r:"ta / oo-",kn:"タ / おお(い)"},
+    {k:"少",m:"peu / rare",r:"shou / suku-",kn:"ショウ / すく(ない)"},
+    {k:"広",m:"large / spacieux",r:"kou / hiro-",kn:"コウ / ひろ(い)"},
+    {k:"明",m:"clair / brillant",r:"mei / aka- / a-",kn:"メイ / あか(るい) / あ(ける)"},
+    {k:"暗",m:"sombre / obscur",r:"an / kura-",kn:"アン / くら(い)"},
+    {k:"重",m:"lourd / important",r:"juu / omo-",kn:"ジュウ / おも(い)"},
+    {k:"軽",m:"léger / simple",r:"kei / karu-",kn:"ケイ / かる(い)"},
+    {k:"方",m:"direction / méthode",r:"hou / kata",kn:"ホウ / かた"},
+    {k:"送",m:"envoyer / expédier",r:"sou / oku-",kn:"ソウ / おく(る)"},
+    {k:"受",m:"recevoir / accepter",r:"ju / u-",kn:"ジュ / う(ける)"},
+    {k:"取",m:"prendre / obtenir",r:"shu / to-",kn:"シュ / と(る)"},
+    {k:"持",m:"tenir / posséder",r:"ji / mo-",kn:"ジ / も(つ)"},
+    {k:"忘",m:"oublier",r:"bou / wasu-",kn:"ボウ / わす(れる)"},
+    {k:"覚",m:"se souvenir / apprendre / s'éveiller",r:"kaku / obo- / sa-",kn:"カク / おぼ(える) / さ(ます)"},
+    {k:"転",m:"rouler / tomber / changer",r:"ten / koro-",kn:"テン / ころ(がる)"},
+    {k:"走",m:"courir",r:"sou / hashi-",kn:"ソウ / はし(る)"},
+    {k:"泳",m:"nager",r:"ei / oyo-",kn:"エイ / およ(ぐ)"},
+    {k:"乗",m:"monter / prendre (transport)",r:"jou / no-",kn:"ジョウ / の(る)"},
+    {k:"降",m:"descendre / tomber (pluie)",r:"kou / o- / fu-",kn:"コウ / お(りる) / ふ(る)"},
+    {k:"歩",m:"marcher / pas",r:"ho / aru-",kn:"ホ / ある(く)"},
+    {k:"引",m:"tirer / attirer",r:"in / hi-",kn:"イン / ひ(く)"},
+    {k:"押",m:"pousser / presser",r:"ou / o-",kn:"オウ / お(す)"},
+    {k:"洗",m:"laver / nettoyer",r:"sen / ara-",kn:"セン / あら(う)"},
+    {k:"切",m:"couper / important",r:"setsu / ki-",kn:"セツ / き(る)"},
+    {k:"集",m:"rassembler / collecter",r:"shuu / atsu-",kn:"シュウ / あつ(まる)"},
+    {k:"気",m:"esprit / énergie / humeur",r:"ki / ke",kn:"キ / ケ"},
+    {k:"体",m:"corps / physique",r:"tai / karada",kn:"タイ / からだ"},
+    {k:"心",m:"cœur / esprit / âme",r:"shin / kokoro",kn:"シン / こころ"},
+    {k:"病",m:"maladie / tomber malade",r:"byou / ya-",kn:"ビョウ / や(む)"},
+    {k:"医",m:"médecin / médecine",r:"i",kn:"イ"},
+    {k:"薬",m:"médicament / remède",r:"yaku / kusuri",kn:"ヤク / くすり"},
+    {k:"頭",m:"tête / esprit",r:"tou / atama",kn:"トウ / あたま"},
+    {k:"顔",m:"visage / face",r:"gan / kao",kn:"ガン / かお"},
+    {k:"声",m:"voix / son",r:"sei / koe",kn:"セイ / こえ"},
+    {k:"空",m:"ciel / vide",r:"kuu / sora",kn:"クウ / そら"},
+    {k:"海",m:"mer / océan",r:"kai / umi",kn:"カイ / うみ"},
+    {k:"花",m:"fleur",r:"ka / hana",kn:"カ / はな"},
+    {k:"雨",m:"pluie",r:"u / ame",kn:"ウ / あめ"},
+    {k:"雪",m:"neige",r:"setsu / yuki",kn:"セツ / ゆき"},
+    {k:"風",m:"vent / style",r:"fuu / kaze",kn:"フウ / かぜ"},
+    {k:"天",m:"ciel / paradis",r:"ten / ama-",kn:"テン / あま-"},
+    {k:"星",m:"étoile / astre",r:"sei / hoshi",kn:"セイ / ほし"},
+    {k:"光",m:"lumière / briller",r:"kou / hikari",kn:"コウ / ひかり"},
+    {k:"色",m:"couleur / teinte",r:"shoku / iro",kn:"ショク / いろ"},
+    {k:"形",m:"forme / figure",r:"kei / katachi",kn:"ケイ / かたち"},
+    {k:"数",m:"nombre / compter",r:"suu / kazu",kn:"スウ / かず"},
+    {k:"力",m:"force / puissance",r:"ryoku / chikara",kn:"リョク / ちから"},
+    {k:"点",m:"point / score",r:"ten",kn:"テン"},
+    {k:"線",m:"ligne / trait / fil",r:"sen",kn:"セン"},
+    {k:"面",m:"face / surface / aspect",r:"men / omote",kn:"メン / おもて"},
+    {k:"次",m:"suivant / prochain",r:"ji / tsugi",kn:"ジ / つぎ"},
+    {k:"度",m:"degré / fois",r:"do / tabi",kn:"ド / たび"},
+    {k:"回",m:"tour / fois / retour",r:"kai / mawa-",kn:"カイ / まわ(る)"},
+    {k:"変",m:"changer / étrange",r:"hen / ka-",kn:"ヘン / か(わる)"},
+    {k:"意",m:"intention / sens",r:"i",kn:"イ"},
+    {k:"感",m:"sentiment / ressentir",r:"kan",kn:"カン"},
+    {k:"情",m:"sentiment / situation",r:"jou / nasa-",kn:"ジョウ / なさ(け)"},
+    {k:"愛",m:"amour / aimer",r:"ai",kn:"アイ"},
+    {k:"好",m:"aimer / bien",r:"kou / su- / yo-",kn:"コウ / す(く) / よ(い)"},
   ],
 
   3: [
-    {k:"業",m:"métier / industrie / karma",r:"gyou / waza"},
-    {k:"場",m:"lieu / endroit / scène",r:"jou / ba"},
-    {k:"研",m:"rechercher / aiguiser",r:"ken"},
-    {k:"究",m:"recherche approfondie",r:"kyuu / kiwa-"},
-    {k:"科",m:"département / branche / science",r:"ka"},
-    {k:"技",m:"technique / compétence",r:"gi / waza"},
-    {k:"術",m:"art / technique / méthode",r:"jutsu"},
-    {k:"代",m:"génération / ère / substituer",r:"dai / ka-"},
-    {k:"表",m:"surface / tableau / exprimer",r:"hyou / omote"},
-    {k:"実",m:"réel / fruit / résultat",r:"jitsu / mi"},
-    {k:"現",m:"présent / réel / apparaître",r:"gen / arawa-"},
-    {k:"問",m:"question / problème",r:"mon / to-"},
-    {k:"題",m:"sujet / titre / problème",r:"dai"},
-    {k:"答",m:"réponse / répondre",r:"tou / kota-"},
-    {k:"質",m:"qualité / nature",r:"shitsu / shichi"},
-    {k:"量",m:"quantité / mesurer",r:"ryou / haka-"},
-    {k:"記",m:"noter / se souvenir",r:"ki / shiru-"},
-    {k:"事",m:"affaire / chose / fait",r:"ji / koto"},
-    {k:"者",m:"personne / individu",r:"sha / mono"},
-    {k:"所",m:"endroit / lieu / bureau",r:"sho / tokoro"},
-    {k:"部",m:"partie / département",r:"bu"},
-    {k:"作",m:"créer / fabriquer / œuvre",r:"saku / tsuku-"},
-    {k:"品",m:"article / qualité / objet",r:"hin / shina"},
-    {k:"特",m:"spécial / particulier",r:"toku"},
-    {k:"別",m:"différent / autre / séparer",r:"betsu / wa-"},
-    {k:"定",m:"décider / fixer / certain",r:"tei / sada-"},
-    {k:"決",m:"décider / résoudre",r:"ketsu / ki-"},
-    {k:"合",m:"correspondre / se réunir",r:"gou / a-"},
-    {k:"関",m:"concerner / barrière / lien",r:"kan / seki"},
-    {k:"続",m:"continuer / suivre",r:"zoku / tsuzu-"},
-    {k:"加",m:"ajouter / augmenter",r:"ka / kuwa-"},
-    {k:"増",m:"augmenter / croître",r:"zou / fu-"},
-    {k:"減",m:"diminuer / réduire",r:"gen / he-"},
-    {k:"進",m:"avancer / progresser",r:"shin / susu-"},
-    {k:"退",m:"reculer / se retirer",r:"tai / shizo-"},
-    {k:"失",m:"perdre / manquer",r:"shitsu / ushina-"},
-    {k:"得",m:"obtenir / profiter",r:"toku / e-"},
-    {k:"経",m:"passer par / gérer",r:"kei / he-"},
-    {k:"験",m:"expérience / examen",r:"ken"},
-    {k:"成",m:"devenir / réussir / achever",r:"sei / na-"},
-    {k:"達",m:"atteindre / (pluriel)",r:"tatsu / tachi"},
-    {k:"苦",m:"souffrance / amer / difficile",r:"ku / kuru- / niga-"},
-    {k:"悲",m:"tristesse / triste",r:"hi / kana-"},
-    {k:"喜",m:"joie / se réjouir",r:"ki / yoroko-"},
-    {k:"怒",m:"colère / se mettre en colère",r:"do / oko-"},
-    {k:"恐",m:"peur / crainte / terrible",r:"kyou / oso-"},
-    {k:"注",m:"verser / faire attention",r:"chuu / sosogu"},
-    {k:"識",m:"connaissance / conscience",r:"shiki"},
-    {k:"想",m:"idée / imaginer",r:"sou / omo-"},
-    {k:"念",m:"pensée / désir / prière",r:"nen / omo-"},
-    {k:"必",m:"nécessairement / inévitable",r:"hitsu / kana-"},
-    {k:"要",m:"besoin / important",r:"you / i-"},
-    {k:"払",m:"payer / balayer",r:"futsu / hara-"},
-    {k:"借",m:"emprunter / louer",r:"sha / kari-"},
-    {k:"貸",m:"prêter / louer (à qqn)",r:"tai / ka-"},
-    {k:"売",m:"vendre",r:"bai / u-"},
-    {k:"選",m:"choisir / sélectionner",r:"sen / era-"},
-    {k:"約",m:"accord / environ",r:"yaku"},
-    {k:"礼",m:"politesse / cérémonie",r:"rei"},
-    {k:"祭",m:"festival / fête",r:"sai / matsu-"},
-    {k:"式",m:"cérémonie / style / formule",r:"shiki"},
-    {k:"法",m:"loi / méthode",r:"hou / nori"},
-    {k:"規",m:"règle / norme",r:"ki"},
-    {k:"政",m:"politique / gouvernement",r:"sei / matsu-"},
-    {k:"治",m:"gouverner / guérir",r:"chi / ji / osa-"},
-    {k:"全",m:"complet / entier / sûr",r:"zen / matta-"},
-    {k:"真",m:"vrai / réel",r:"shin / ma"},
-    {k:"確",m:"certain / sûr / confirmer",r:"kaku / tashi-"},
-    {k:"共",m:"ensemble / partagé",r:"kyou / tomo"},
-    {k:"以",m:"avec / par / depuis",r:"i"},
-    {k:"対",m:"face à / contre / paire",r:"tai / tsui"},
-    {k:"相",m:"aspect / mutuel / ministre",r:"sou / ai"},
-    {k:"様",m:"aspect / façon / Monsieur",r:"you / sama"},
-    {k:"的",m:"cible / -ique / -al",r:"teki / mato"},
-    {k:"化",m:"transformer / -isation",r:"ka / ke / ba-"},
-    {k:"活",m:"activité / vivre",r:"katsu / i-"},
-    {k:"列",m:"rangée / file / liste",r:"retsu"},
-    {k:"並",m:"s'aligner / ordinaire",r:"hei / nara-"},
-    {k:"交",m:"croiser / alterner / ami",r:"kou / kawa-"},
-    {k:"通",m:"passer par / communication",r:"tsuu / too-"},
+    {k:"業",m:"métier / industrie / karma",r:"gyou / waza",kn:"ギョウ / わざ"},
+    {k:"場",m:"lieu / endroit / scène",r:"jou / ba",kn:"ジョウ / ば"},
+    {k:"研",m:"rechercher / aiguiser",r:"ken",kn:"ケン"},
+    {k:"究",m:"recherche approfondie",r:"kyuu / kiwa-",kn:"キュウ / きわ(める)"},
+    {k:"科",m:"département / branche / science",r:"ka",kn:"カ"},
+    {k:"技",m:"technique / compétence",r:"gi / waza",kn:"ギ / わざ"},
+    {k:"術",m:"art / technique / méthode",r:"jutsu",kn:"ジュツ"},
+    {k:"代",m:"génération / ère / substituer",r:"dai / ka-",kn:"ダイ / か(わる)"},
+    {k:"表",m:"surface / tableau / exprimer",r:"hyou / omote",kn:"ヒョウ / おもて"},
+    {k:"実",m:"réel / fruit / résultat",r:"jitsu / mi",kn:"ジツ / み"},
+    {k:"現",m:"présent / réel / apparaître",r:"gen / arawa-",kn:"ゲン / あらわ(れる)"},
+    {k:"問",m:"question / problème",r:"mon / to-",kn:"モン / と(う)"},
+    {k:"題",m:"sujet / titre / problème",r:"dai",kn:"ダイ"},
+    {k:"答",m:"réponse / répondre",r:"tou / kota-",kn:"トウ / こた(える)"},
+    {k:"質",m:"qualité / nature",r:"shitsu / shichi",kn:"シツ / シチ"},
+    {k:"量",m:"quantité / mesurer",r:"ryou / haka-",kn:"リョウ / はか(る)"},
+    {k:"記",m:"noter / se souvenir",r:"ki / shiru-",kn:"キ / しる(す)"},
+    {k:"事",m:"affaire / chose / fait",r:"ji / koto",kn:"ジ / こと"},
+    {k:"者",m:"personne / individu",r:"sha / mono",kn:"シャ / もの"},
+    {k:"所",m:"endroit / lieu / bureau",r:"sho / tokoro",kn:"ショ / ところ"},
+    {k:"部",m:"partie / département",r:"bu",kn:"ブ"},
+    {k:"作",m:"créer / fabriquer / œuvre",r:"saku / tsuku-",kn:"サク / つく(る)"},
+    {k:"品",m:"article / qualité / objet",r:"hin / shina",kn:"ヒン / しな"},
+    {k:"特",m:"spécial / particulier",r:"toku",kn:"トク"},
+    {k:"別",m:"différent / autre / séparer",r:"betsu / wa-",kn:"ベツ / わ(ける)"},
+    {k:"定",m:"décider / fixer / certain",r:"tei / sada-",kn:"テイ / さだ(める)"},
+    {k:"決",m:"décider / résoudre",r:"ketsu / ki-",kn:"ケツ / き(める)"},
+    {k:"合",m:"correspondre / se réunir",r:"gou / a-",kn:"ゴウ / あ(う)"},
+    {k:"関",m:"concerner / barrière / lien",r:"kan / seki",kn:"カン / せき"},
+    {k:"続",m:"continuer / suivre",r:"zoku / tsuzu-",kn:"ゾク / つづ(く)"},
+    {k:"加",m:"ajouter / augmenter",r:"ka / kuwa-",kn:"カ / くわ(える)"},
+    {k:"増",m:"augmenter / croître",r:"zou / fu-",kn:"ゾウ / ふ(える)"},
+    {k:"減",m:"diminuer / réduire",r:"gen / he-",kn:"ゲン / へ(る)"},
+    {k:"進",m:"avancer / progresser",r:"shin / susu-",kn:"シン / すす(む)"},
+    {k:"退",m:"reculer / se retirer",r:"tai / shirizo-",kn:"タイ / しりぞ(く)"},
+    {k:"失",m:"perdre / manquer",r:"shitsu / ushina-",kn:"シツ / うしな(う)"},
+    {k:"得",m:"obtenir / profiter",r:"toku / e-",kn:"トク / え(る)"},
+    {k:"経",m:"passer par / gérer",r:"kei / he-",kn:"ケイ / へ(る)"},
+    {k:"験",m:"expérience / examen",r:"ken",kn:"ケン"},
+    {k:"成",m:"devenir / réussir / achever",r:"sei / na-",kn:"セイ / な(る)"},
+    {k:"達",m:"atteindre / (pluriel)",r:"tatsu / tachi",kn:"タツ / たち"},
+    {k:"苦",m:"souffrance / amer / difficile",r:"ku / kuru- / niga-",kn:"ク / くる(しい) / にが(い)"},
+    {k:"悲",m:"tristesse / triste",r:"hi / kana-",kn:"ヒ / かな(しい)"},
+    {k:"喜",m:"joie / se réjouir",r:"ki / yoroko-",kn:"キ / よろこ(ぶ)"},
+    {k:"怒",m:"colère / se mettre en colère",r:"do / oko-",kn:"ド / おこ(る)"},
+    {k:"恐",m:"peur / crainte / terrible",r:"kyou / oso-",kn:"キョウ / おそ(れる)"},
+    {k:"注",m:"verser / faire attention",r:"chuu / sosogu",kn:"チュウ / そそ(ぐ)"},
+    {k:"識",m:"connaissance / conscience",r:"shiki",kn:"シキ"},
+    {k:"想",m:"idée / imaginer",r:"sou / omo-",kn:"ソウ / おも(う)"},
+    {k:"念",m:"pensée / désir / prière",r:"nen",kn:"ネン"},
+    {k:"必",m:"nécessairement / inévitable",r:"hitsu / kanara-",kn:"ヒツ / かなら(ず)"},
+    {k:"要",m:"besoin / important",r:"you / i-",kn:"ヨウ / い(る)"},
+    {k:"払",m:"payer / balayer",r:"futsu / hara-",kn:"フツ / はら(う)"},
+    {k:"借",m:"emprunter / louer",r:"shaku / ka-",kn:"シャク / か(りる)"},
+    {k:"貸",m:"prêter / louer (à qqn)",r:"tai / ka-",kn:"タイ / か(す)"},
+    {k:"売",m:"vendre",r:"bai / u-",kn:"バイ / う(る)"},
+    {k:"選",m:"choisir / sélectionner",r:"sen / era-",kn:"セン / えら(ぶ)"},
+    {k:"約",m:"accord / environ",r:"yaku",kn:"ヤク"},
+    {k:"礼",m:"politesse / cérémonie",r:"rei",kn:"レイ"},
+    {k:"祭",m:"festival / fête",r:"sai / matsu-",kn:"サイ / まつ(る)"},
+    {k:"式",m:"cérémonie / style / formule",r:"shiki",kn:"シキ"},
+    {k:"法",m:"loi / méthode",r:"hou / nori",kn:"ホウ / のり"},
+    {k:"規",m:"règle / norme",r:"ki",kn:"キ"},
+    {k:"政",m:"politique / gouvernement",r:"sei / shou",kn:"セイ / ショウ"},
+    {k:"治",m:"gouverner / guérir",r:"chi / ji / osa-",kn:"チ / ジ / おさ(める)"},
+    {k:"全",m:"complet / entier / sûr",r:"zen / matta-",kn:"ゼン / まった(く)"},
+    {k:"真",m:"vrai / réel",r:"shin / ma",kn:"シン / ま"},
+    {k:"確",m:"certain / sûr / confirmer",r:"kaku / tashi-",kn:"カク / たし(か)"},
+    {k:"共",m:"ensemble / partagé",r:"kyou / tomo",kn:"キョウ / とも"},
+    {k:"以",m:"avec / par / depuis",r:"i",kn:"イ"},
+    {k:"対",m:"face à / contre / paire",r:"tai / tsui",kn:"タイ / ツイ"},
+    {k:"相",m:"aspect / mutuel / ministre",r:"sou / ai",kn:"ソウ / あい"},
+    {k:"様",m:"aspect / façon / Monsieur",r:"you / sama",kn:"ヨウ / さま"},
+    {k:"的",m:"cible / -ique / -al",r:"teki / mato",kn:"テキ / まと"},
+    {k:"化",m:"transformer / -isation",r:"ka / ke / ba-",kn:"カ / ケ / ば(ける)"},
+    {k:"活",m:"activité / vivre",r:"katsu / i-",kn:"カツ / い(きる)"},
+    {k:"列",m:"rangée / file / liste",r:"retsu",kn:"レツ"},
+    {k:"並",m:"s'aligner / ordinaire",r:"hei / nara-",kn:"ヘイ / なら(べる)"},
+    {k:"交",m:"croiser / alterner / ami",r:"kou / kawa-",kn:"コウ / かわ(す)"},
+    {k:"通",m:"passer par / communication",r:"tsuu / too-",kn:"ツウ / とお(る)"},
   ],
 
   2: [
-    {k:"概",m:"idée générale / aperçu",r:"gai"},
-    {k:"象",m:"phénomène / éléphant / image",r:"shou / zou"},
-    {k:"徴",m:"signe / caractéristique",r:"chou / shirushi"},
-    {k:"索",m:"chercher / corde",r:"saku"},
-    {k:"探",m:"chercher / explorer",r:"tan / saga-"},
-    {k:"査",m:"inspecter / enquêter",r:"sa"},
-    {k:"調",m:"ajuster / enquêter / ton",r:"chou / shira-"},
-    {k:"検",m:"inspecter / examiner",r:"ken"},
-    {k:"証",m:"preuve / certifier",r:"shou / akashi"},
-    {k:"判",m:"jugement / décider",r:"han / ban"},
-    {k:"断",m:"couper / décider / refuser",r:"dan / kota-"},
-    {k:"論",m:"théorie / argumenter",r:"ron"},
-    {k:"議",m:"délibérer / discussion",r:"gi"},
-    {k:"批",m:"critiquer / approuver",r:"hi"},
-    {k:"評",m:"évaluer / critique",r:"hyou"},
-    {k:"存",m:"exister / penser / conserver",r:"son / zon"},
-    {k:"在",m:"être / exister / présent",r:"zai / a-"},
-    {k:"有",m:"avoir / exister / posséder",r:"yuu / a-"},
-    {k:"無",m:"néant / ne pas avoir",r:"mu / bu / na-"},
-    {k:"限",m:"limite / restreindre",r:"gen / kagi-"},
-    {k:"超",m:"dépasser / extrêmement",r:"chou / ko-"},
-    {k:"域",m:"zone / territoire / domaine",r:"iki"},
-    {k:"範",m:"modèle / norme / portée",r:"han"},
-    {k:"境",m:"frontière / limite / condition",r:"kyou / sakai"},
-    {k:"状",m:"état / forme / situation",r:"jou"},
-    {k:"態",m:"état / posture / attitude",r:"tai / waza"},
-    {k:"観",m:"voir / perspective / point de vue",r:"kan / mi-"},
-    {k:"角",m:"angle / coin / corne",r:"kaku / kado / tsuno"},
-    {k:"側",m:"côté / flanc",r:"soku / kawa"},
-    {k:"基",m:"base / fondation / standard",r:"ki / moto"},
-    {k:"準",m:"niveau / standard",r:"jun"},
-    {k:"均",m:"égal / uniforme",r:"kin / hira"},
-    {k:"制",m:"système / contrôler",r:"sei"},
-    {k:"率",m:"taux / proportion",r:"ritsu / sotsu"},
-    {k:"値",m:"valeur / prix / chiffre",r:"chi / ne"},
-    {k:"額",m:"montant / somme / front",r:"gaku / hitai"},
-    {k:"費",m:"dépense / frais / consommer",r:"hi / tsui-"},
-    {k:"益",m:"profit / bénéfice / utilité",r:"eki / yaku"},
-    {k:"損",m:"perte / dommage / nuire",r:"son / soko-"},
-    {k:"資",m:"ressources / capital",r:"shi"},
-    {k:"産",m:"produire / naissance / biens",r:"san / u-"},
-    {k:"収",m:"percevoir / collecter",r:"shuu / osa-"},
-    {k:"支",m:"supporter / branche / payer",r:"shi / sasa-"},
-    {k:"税",m:"impôt / taxe",r:"zei"},
-    {k:"価",m:"prix / valeur",r:"ka / atai"},
-    {k:"供",m:"fournir / offrir / compagnon",r:"kyou / tomo"},
-    {k:"需",m:"besoin / demande",r:"ju"},
-    {k:"給",m:"fournir / salaire",r:"kyuu"},
-    {k:"輸",m:"transporter / exporter",r:"yu"},
-    {k:"貿",m:"commerce / échanges",r:"bou"},
-    {k:"企",m:"planifier / entreprise",r:"ki / kuwada-"},
-    {k:"画",m:"image / tracer / planifier",r:"kaku / ga"},
-    {k:"策",m:"plan / stratégie / mesure",r:"saku"},
-    {k:"略",m:"abréviation / plan / omettre",r:"ryaku"},
-    {k:"拡",m:"étendre / élargir",r:"kaku / hiro-"},
-    {k:"縮",m:"réduire / contracter",r:"shuku / chiji-"},
-    {k:"推",m:"pousser / recommander / déduire",r:"sui / o-"},
-    {k:"測",m:"mesurer / évaluer",r:"soku / haka-"},
-    {k:"精",m:"précis / esprit / raffiner",r:"sei / shoo"},
-    {k:"密",m:"dense / secret / intime",r:"mitsu"},
-    {k:"厳",m:"strict / sévère / solennel",r:"gen / gon / ogo-"},
-    {k:"激",m:"violent / intense / s'agiter",r:"geki / hage-"},
-    {k:"穏",m:"calme / tranquille / stable",r:"on / odaya-"},
-    {k:"柔",m:"souple / doux / flexible",r:"juu / nyuu / yawa-"},
+    {k:"概",m:"idée générale / aperçu",r:"gai",kn:"ガイ"},
+    {k:"象",m:"phénomène / éléphant / image",r:"shou / zou",kn:"ショウ / ゾウ"},
+    {k:"徴",m:"signe / caractéristique",r:"chou / shirushi",kn:"チョウ / しるし"},
+    {k:"索",m:"chercher / corde",r:"saku",kn:"サク"},
+    {k:"探",m:"chercher / explorer",r:"tan / saga-",kn:"タン / さが(す)"},
+    {k:"査",m:"inspecter / enquêter",r:"sa",kn:"サ"},
+    {k:"調",m:"ajuster / enquêter / ton",r:"chou / shira-",kn:"チョウ / しら(べる)"},
+    {k:"検",m:"inspecter / examiner",r:"ken",kn:"ケン"},
+    {k:"証",m:"preuve / certifier",r:"shou / akashi",kn:"ショウ / あかし"},
+    {k:"判",m:"jugement / décider",r:"han / ban",kn:"ハン / バン"},
+    {k:"断",m:"couper / décider / refuser",r:"dan / kotowa- / ta-",kn:"ダン / ことわ(る) / た(つ)"},
+    {k:"論",m:"théorie / argumenter",r:"ron",kn:"ロン"},
+    {k:"議",m:"délibérer / discussion",r:"gi",kn:"ギ"},
+    {k:"批",m:"critiquer / approuver",r:"hi",kn:"ヒ"},
+    {k:"評",m:"évaluer / critique",r:"hyou",kn:"ヒョウ"},
+    {k:"存",m:"exister / penser / conserver",r:"son / zon",kn:"ソン / ゾン"},
+    {k:"在",m:"être / exister / présent",r:"zai / a-",kn:"ザイ / あ(る)"},
+    {k:"有",m:"avoir / exister / posséder",r:"yuu / a-",kn:"ユウ / あ(る)"},
+    {k:"無",m:"néant / ne pas avoir",r:"mu / bu / na-",kn:"ム / ブ / な(い)"},
+    {k:"限",m:"limite / restreindre",r:"gen / kagi-",kn:"ゲン / かぎ(る)"},
+    {k:"超",m:"dépasser / extrêmement",r:"chou / ko-",kn:"チョウ / こ(える)"},
+    {k:"域",m:"zone / territoire / domaine",r:"iki",kn:"イキ"},
+    {k:"範",m:"modèle / norme / portée",r:"han",kn:"ハン"},
+    {k:"境",m:"frontière / limite / condition",r:"kyou / sakai",kn:"キョウ / さかい"},
+    {k:"状",m:"état / forme / situation",r:"jou",kn:"ジョウ"},
+    {k:"態",m:"état / posture / attitude",r:"tai / waza",kn:"タイ / わざ(と)"},
+    {k:"観",m:"voir / perspective / point de vue",r:"kan / mi-",kn:"カン / み(る)"},
+    {k:"角",m:"angle / coin / corne",r:"kaku / kado / tsuno",kn:"カク / かど / つの"},
+    {k:"側",m:"côté / flanc",r:"soku / kawa",kn:"ソク / かわ"},
+    {k:"基",m:"base / fondation / standard",r:"ki / moto",kn:"キ / もと"},
+    {k:"準",m:"niveau / standard",r:"jun",kn:"ジュン"},
+    {k:"均",m:"égal / uniforme",r:"kin",kn:"キン"},
+    {k:"制",m:"système / contrôler",r:"sei",kn:"セイ"},
+    {k:"率",m:"taux / proportion",r:"ritsu / sotsu",kn:"リツ / ソツ"},
+    {k:"値",m:"valeur / prix / chiffre",r:"chi / ne",kn:"チ / ね"},
+    {k:"額",m:"montant / somme / front",r:"gaku / hitai",kn:"ガク / ひたい"},
+    {k:"費",m:"dépense / frais / consommer",r:"hi / tsui-",kn:"ヒ / つい(やす)"},
+    {k:"益",m:"profit / bénéfice / utilité",r:"eki / yaku",kn:"エキ / ヤク"},
+    {k:"損",m:"perte / dommage / nuire",r:"son / soko-",kn:"ソン / そこ(なう)"},
+    {k:"資",m:"ressources / capital",r:"shi",kn:"シ"},
+    {k:"産",m:"produire / naissance / biens",r:"san / u-",kn:"サン / う(む)"},
+    {k:"収",m:"percevoir / collecter",r:"shuu / osa-",kn:"シュウ / おさ(める)"},
+    {k:"支",m:"supporter / branche / payer",r:"shi / sasa-",kn:"シ / ささ(える)"},
+    {k:"税",m:"impôt / taxe",r:"zei",kn:"ゼイ"},
+    {k:"価",m:"prix / valeur",r:"ka / atai",kn:"カ / あたい"},
+    {k:"供",m:"fournir / offrir / compagnon",r:"kyou / tomo",kn:"キョウ / とも"},
+    {k:"需",m:"besoin / demande",r:"ju",kn:"ジュ"},
+    {k:"給",m:"fournir / salaire",r:"kyuu",kn:"キュウ"},
+    {k:"輸",m:"transporter / exporter",r:"yu",kn:"ユ"},
+    {k:"貿",m:"commerce / échanges",r:"bou",kn:"ボウ"},
+    {k:"企",m:"planifier / entreprise",r:"ki / kuwada-",kn:"キ / くわだ(てる)"},
+    {k:"画",m:"image / tracer / planifier",r:"kaku / ga",kn:"カク / ガ"},
+    {k:"策",m:"plan / stratégie / mesure",r:"saku",kn:"サク"},
+    {k:"略",m:"abréviation / plan / omettre",r:"ryaku",kn:"リャク"},
+    {k:"拡",m:"étendre / élargir",r:"kaku / hiro-",kn:"カク / ひろ(がる)"},
+    {k:"縮",m:"réduire / contracter",r:"shuku / chiji-",kn:"シュク / ちぢ(む)"},
+    {k:"推",m:"pousser / recommander / déduire",r:"sui / o-",kn:"スイ / お(す)"},
+    {k:"測",m:"mesurer / évaluer",r:"soku / haka-",kn:"ソク / はか(る)"},
+    {k:"精",m:"précis / esprit / raffiner",r:"sei / shou",kn:"セイ / ショウ"},
+    {k:"密",m:"dense / secret / intime",r:"mitsu",kn:"ミツ"},
+    {k:"厳",m:"strict / sévère / solennel",r:"gen / kibi- / ogoso-",kn:"ゲン / きび(しい) / おごそ(か)"},
+    {k:"激",m:"violent / intense / s'agiter",r:"geki / hage-",kn:"ゲキ / はげ(しい)"},
+    {k:"穏",m:"calme / tranquille / stable",r:"on / oda-",kn:"オン / おだ(やか)"},
+    {k:"柔",m:"souple / doux / flexible",r:"juu / nyuu / yawa-",kn:"ジュウ / ニュウ / やわ(らか)"},
   ],
 
   1: [
-    {k:"契",m:"contrat / accord / promettre",r:"kei / chigi-"},
-    {k:"締",m:"conclure / fermer / serrer",r:"tei / shi-"},
-    {k:"違",m:"différent / erroné / violer",r:"i / chiga-"},
-    {k:"抗",m:"résister / s'opposer",r:"kou"},
-    {k:"崩",m:"s'effondrer / ruine",r:"hou / kuzu-"},
-    {k:"壊",m:"détruire / s'effondrer",r:"kai / kowa-"},
-    {k:"廃",m:"abandonner / ruine / désuet",r:"hai / suta-"},
-    {k:"滅",m:"extinction / disparaître",r:"metsu"},
-    {k:"衰",m:"déclin / s'affaiblir",r:"sui / otoro-"},
-    {k:"繁",m:"prospère / florissant",r:"han / shige-"},
-    {k:"栄",m:"gloire / prospérer",r:"ei / saka-"},
-    {k:"興",m:"prospérité / enthousiasme",r:"kou / kyou / oko-"},
-    {k:"盛",m:"prospère / plein / servir",r:"sei / saka- / mo-"},
-    {k:"勢",m:"puissance / force / tendance",r:"sei / ikio-"},
-    {k:"威",m:"autorité / dignité / prestige",r:"i"},
-    {k:"権",m:"pouvoir / droit / autorité",r:"ken / gon"},
-    {k:"覇",m:"hégémonie / suprématie",r:"ha"},
-    {k:"猛",m:"féroce / violent / farouche",r:"mou / take-"},
-    {k:"烈",m:"intense / ardent / violent",r:"retsu / hage-"},
-    {k:"燃",m:"brûler / s'enflammer",r:"nen / mo-"},
-    {k:"炎",m:"flamme / inflammation",r:"en / honoo"},
-    {k:"輝",m:"briller / rayonner",r:"ki / kagaya-"},
-    {k:"閃",m:"éclair / idée soudaine",r:"sen / hirameite"},
-    {k:"霊",m:"esprit / âme / divin",r:"rei / tama"},
-    {k:"魂",m:"âme / esprit",r:"kon / tama"},
-    {k:"魅",m:"fasciner / charme",r:"mi"},
-    {k:"妖",m:"mystérieux / démon",r:"you / ayashi"},
-    {k:"幽",m:"obscur / profond / fantôme",r:"yuu"},
-    {k:"玄",m:"profond / mystérieux",r:"gen / kuro"},
-    {k:"邪",m:"malveillant / pervers",r:"ja / yokoshima"},
-    {k:"禍",m:"catastrophe / malheur",r:"ka / wazawai"},
-    {k:"克",m:"vaincre / surmonter",r:"koku"},
-    {k:"奪",m:"arracher / saisir de force",r:"datsu / uba-"},
-    {k:"脅",m:"menacer / contraindre",r:"kyou / odo-"},
-    {k:"紛",m:"confusion / dispute / ressembler",r:"fun / magi-"},
-    {k:"絡",m:"s'enchevêtrer / contacter",r:"raku / kara-"},
-    {k:"繰",m:"dérouler / répéter",r:"kuri-"},
-    {k:"執",m:"saisir / s'attacher / rédiger",r:"shitsu / shuu / tori-"},
-    {k:"諦",m:"renoncer / résignation / vérité",r:"tei / akirame-"},
-    {k:"悟",m:"comprendre / réaliser / éveil",r:"go / sato-"},
+    {k:"契",m:"contrat / accord / promettre",r:"kei / chigi-",kn:"ケイ / ちぎ(る)"},
+    {k:"締",m:"conclure / fermer / serrer",r:"tei / shi-",kn:"テイ / し(まる)"},
+    {k:"違",m:"différent / erroné / violer",r:"i / chiga-",kn:"イ / ちが(う)"},
+    {k:"抗",m:"résister / s'opposer",r:"kou",kn:"コウ"},
+    {k:"崩",m:"s'effondrer / ruine",r:"hou / kuzu-",kn:"ホウ / くず(れる)"},
+    {k:"壊",m:"détruire / s'effondrer",r:"kai / kowa-",kn:"カイ / こわ(す)"},
+    {k:"廃",m:"abandonner / ruine / désuet",r:"hai / suta-",kn:"ハイ / すた(れる)"},
+    {k:"滅",m:"extinction / disparaître",r:"metsu",kn:"メツ"},
+    {k:"衰",m:"déclin / s'affaiblir",r:"sui / otoro-",kn:"スイ / おとろ(える)"},
+    {k:"繁",m:"prospère / florissant",r:"han / shige-",kn:"ハン / しげ(る)"},
+    {k:"栄",m:"gloire / prospérer",r:"ei / saka-",kn:"エイ / さか(える)"},
+    {k:"興",m:"prospérité / enthousiasme",r:"kou / kyou / oko-",kn:"コウ / キョウ / おこ(る)"},
+    {k:"盛",m:"prospère / plein / servir",r:"sei / saka- / mo-",kn:"セイ / さか(る) / も(る)"},
+    {k:"勢",m:"puissance / force / tendance",r:"sei / ikio-",kn:"セイ / いきお(い)"},
+    {k:"威",m:"autorité / dignité / prestige",r:"i",kn:"イ"},
+    {k:"権",m:"pouvoir / droit / autorité",r:"ken / gon",kn:"ケン / ゴン"},
+    {k:"覇",m:"hégémonie / suprématie",r:"ha",kn:"ハ"},
+    {k:"猛",m:"féroce / violent / farouche",r:"mou",kn:"モウ"},
+    {k:"烈",m:"intense / ardent / violent",r:"retsu / hage-",kn:"レツ / はげ(しい)"},
+    {k:"燃",m:"brûler / s'enflammer",r:"nen / mo-",kn:"ネン / も(える)"},
+    {k:"炎",m:"flamme / inflammation",r:"en / honoo",kn:"エン / ほのお"},
+    {k:"輝",m:"briller / rayonner",r:"ki / kagaya-",kn:"キ / かがや(く)"},
+    {k:"閃",m:"éclair / idée soudaine",r:"sen / hirame-",kn:"セン / ひらめ(く)"},
+    {k:"霊",m:"esprit / âme / divin",r:"rei / tama",kn:"レイ / たま"},
+    {k:"魂",m:"âme / esprit",r:"kon / tama",kn:"コン / たま"},
+    {k:"魅",m:"fasciner / charme",r:"mi",kn:"ミ"},
+    {k:"妖",m:"mystérieux / démon",r:"you / aya-",kn:"ヨウ / あや(しい)"},
+    {k:"幽",m:"obscur / profond / fantôme",r:"yuu",kn:"ユウ"},
+    {k:"玄",m:"profond / mystérieux",r:"gen / kuro",kn:"ゲン / くろ"},
+    {k:"邪",m:"malveillant / pervers",r:"ja / yokoshima",kn:"ジャ / よこし(ま)"},
+    {k:"禍",m:"catastrophe / malheur",r:"ka / wazawai",kn:"カ / わざわい"},
+    {k:"克",m:"vaincre / surmonter",r:"koku",kn:"コク"},
+    {k:"奪",m:"arracher / saisir de force",r:"datsu / uba-",kn:"ダツ / うば(う)"},
+    {k:"脅",m:"menacer / contraindre",r:"kyou / odo-",kn:"キョウ / おど(す)"},
+    {k:"紛",m:"confusion / dispute / ressembler",r:"fun / magi-",kn:"フン / まぎ(れる)"},
+    {k:"絡",m:"s'enchevêtrer / contacter",r:"raku / kara-",kn:"ラク / から(む)"},
+    {k:"繰",m:"dérouler / répéter",r:"ku-",kn:"く(る)"},
+    {k:"執",m:"saisir / s'attacher / rédiger",r:"shitsu / shuu / to-",kn:"シツ / シュウ / と(る)"},
+    {k:"諦",m:"renoncer / résignation / vérité",r:"tei / akira-",kn:"テイ / あきら(める)"},
+    {k:"悟",m:"comprendre / réaliser / éveil",r:"go / sato-",kn:"ゴ / さと(る)"},
   ]
 };
 
@@ -1129,13 +1194,14 @@ const MASTER_BOX = 3;
 const KEY = "kanji_v2";
 const today = () => Math.floor(Date.now() / 864e5);
 
-function blankState() { return { v: 3, srs: {}, unlocked: new Set([5]), streak: 0, sessions: 0, level: 5, ts: 0, rz: 0 }; }
+function blankState() { return { v: 3, srs: {}, kana: {}, unlocked: new Set([5]), streak: 0, sessions: 0, level: 5, ts: 0, rz: 0 }; }
 function fromRaw(raw) {
   const st = blankState();
   if (!raw || typeof raw !== "object") return st;
   st.unlocked = new Set(raw.unlocked && raw.unlocked.length ? raw.unlocked : [5]);
   st.streak = raw.streak || 0; st.sessions = raw.sessions || 0; st.level = raw.level || 5;
   st.ts = raw.ts || 0; st.rz = raw.rz || 0;
+  if (raw.kana && typeof raw.kana === "object") st.kana = raw.kana;
   if (raw.srs && typeof raw.srs === "object") st.srs = raw.srs;
   else if (Array.isArray(raw.mastered)) {
     /* ancienne version : les kanji « maîtrisés » entrent en boîte 3, avec des révisions étalées sur la semaine */
@@ -1143,7 +1209,7 @@ function fromRaw(raw) {
   }
   return st;
 }
-function toRaw(st) { return { v: 3, srs: st.srs, unlocked: [...st.unlocked].sort(), streak: st.streak, sessions: st.sessions, level: st.level, ts: st.ts, rz: st.rz }; }
+function toRaw(st) { return { v: 3, srs: st.srs, kana: st.kana, unlocked: [...st.unlocked].sort(), streak: st.streak, sessions: st.sessions, level: st.level, ts: st.ts, rz: st.rz }; }
 function loadState() { try { return fromRaw(JSON.parse(localStorage.getItem(KEY) || "null")); } catch (e) { return blankState(); } }
 
 const isMastered = k => !!(ST.srs[k] && ST.srs[k][0] >= MASTER_BOX);
@@ -1157,15 +1223,51 @@ function record(k, ok) {
   ST.srs[k] = r;
 }
 
+
+// ──────────────────────────────────────────────────────
+//  KANA : hiragana et katakana
+//  Trois groupes : les 46 de base, les 25 avec (han)dakuten, les 33 combinaisons (yōon).
+//  Les katakana se déduisent des hiragana (même ordre dans Unicode).
+// ──────────────────────────────────────────────────────
+const KANA_ROWS = {
+  base: [["あa","いi","うu","えe","おo"],["かka","きki","くku","けke","こko"],["さsa","しshi","すsu","せse","そso"],["たta","ちchi","つtsu","てte","とto"],
+         ["なna","にni","ぬnu","ねne","のno"],["はha","ひhi","ふfu","へhe","ほho"],["まma","みmi","むmu","めme","もmo"],["やya","","ゆyu","","よyo"],
+         ["らra","りri","るru","れre","ろro"],["わwa","","","","をwo"],["んn","","","",""]],
+  daku: [["がga","ぎgi","ぐgu","げge","ごgo"],["ざza","じji","ずzu","ぜze","ぞzo"],["だda","ぢji","づzu","でde","どdo"],["ばba","びbi","ぶbu","べbe","ぼbo"],["ぱpa","ぴpi","ぷpu","ぺpe","ぽpo"]],
+  yoon: [["きゃkya","きゅkyu","きょkyo"],["しゃsha","しゅshu","しょsho"],["ちゃcha","ちゅchu","ちょcho"],["にゃnya","にゅnyu","にょnyo"],["ひゃhya","ひゅhyu","ひょhyo"],
+         ["みゃmya","みゅmyu","みょmyo"],["りゃrya","りゅryu","りょryo"],["ぎゃgya","ぎゅgyu","ぎょgyo"],["じゃja","じゅju","じょjo"],["びゃbya","びゅbyu","びょbyo"],["ぴゃpya","ぴゅpyu","ぴょpyo"]],
+};
+const KANA_GROUPS = { base: "De base", daku: "Avec (han)dakuten", yoon: "Combinaisons" };
+const toKata = h => [...h].map(c => c >= "ぁ" && c <= "ゖ" ? String.fromCharCode(c.charCodeAt(0) + 0x60) : c).join("");
+const splitKana = cell => { const m = cell.match(/^([^\x00-\x7f]+)([a-z]+)$/); return m ? { k: m[1], r: m[2] } : null; };
+function kanaList(script, group) {
+  return KANA_ROWS[group].flat().map(splitKana).filter(Boolean)
+    .map(x => ({ id: script + ":" + (script === "k" ? toKata(x.k) : x.k), k: script === "k" ? toKata(x.k) : x.k, r: x.r, g: group, s: script }));
+}
+const KANA_ALL = ["h", "k"].flatMap(sc => Object.keys(KANA_ROWS).flatMap(g => kanaList(sc, g)));
+const KANA_BY = Object.fromEntries(KANA_ALL.map(x => [x.id, x]));
+
+const kanaRec = id => ST.kana[id];
+const kanaMastered = id => !!(ST.kana[id] && ST.kana[id][0] >= MASTER_BOX);
+const kanaDue = id => !!(ST.kana[id] && ST.kana[id][1] <= today());
+function recordKana(id, ok) {
+  const r = ST.kana[id] ? ST.kana[id].slice() : [0, 0, 0, 0, 0];
+  r[2]++; if (ok) r[3]++;
+  if (ok) { r[0] = Math.min(r[0] + 1, 5); r[1] = today() + GAP[r[0] - 1]; } else { r[0] = 0; r[1] = today(); }
+  r[4] = Date.now(); ST.kana[id] = r;
+}
+
 /* résumé lu par l'accueil du Dojo */
 function summary() {
   const levels = LV_ORDER.map(lv => ({ lv, m: DB[lv].filter(d => isMastered(d.k)).length, t: DB[lv].length, u: ST.unlocked.has(lv) }));
   const all = Object.values(DB).flat();
   return { total: all.length, mastered: all.filter(d => isMastered(d.k)).length, seen: all.filter(d => ST.srs[d.k]).length,
-           due: all.filter(d => isDue(d.k)).length, day: today(), streak: ST.streak, sessions: ST.sessions, levels };
+           due: all.filter(d => isDue(d.k)).length, day: today(), streak: ST.streak, sessions: ST.sessions, levels,
+           kana: ["h", "k"].map(sc => { const l = KANA_ALL.filter(x => x.s === sc); return { s: sc, m: l.filter(x => kanaMastered(x.id)).length, t: l.length, v: l.filter(x => ST.kana[x.id]).length }; }),
+           kanaDue: KANA_ALL.filter(x => kanaDue(x.id)).length };
 }
 let snap = "";
-const content = () => JSON.stringify([ST.srs, [...ST.unlocked].sort(), ST.streak, ST.sessions, ST.level, ST.rz]);
+const content = () => JSON.stringify([ST.srs, ST.kana, [...ST.unlocked].sort(), ST.streak, ST.sessions, ST.level, ST.rz]);
 function saveState() {
   const c = content(); if (c !== snap) { snap = c; ST.ts = Date.now(); }
   const raw = toRaw(ST); try { raw.sum = summary(); } catch (e) {}
@@ -1194,6 +1296,9 @@ function renderHome() {
   document.getElementById("s-total").textContent    = sm.due;
   const dueLv = DB[ST.level].filter(d => isDue(d.k)).length;
   document.getElementById("due-hint").innerHTML = dueLv ? `<b>${dueLv}</b> kanji de ce niveau à revoir aujourd'hui : ils passent en priorité.` : "";
+  const ks = summary().kana;
+  document.getElementById("kana-entry-desc").textContent = ks.some(x => x.v)
+    ? `Hiragana ${ks[0].m}/${ks[0].t} · katakana ${ks[1].m}/${ks[1].t} maîtrisés` : "Tableau des kana, quiz et révisions espacées";
   Sync.line();
 
   const grid = document.getElementById("levels-grid");
@@ -1250,6 +1355,8 @@ function resetConfirm() {
 // ──────────────────────────────────────────────────────
 //  SESSION
 // ──────────────────────────────────────────────────────
+function readingHTML(d) { return `<span class="rd-kana">${d.kn}</span><span class="rd-romaji">${d.r}</span>`; }
+
 function startSession() {
   const lv      = ST.level;
   const all     = DB[lv];
@@ -1297,7 +1404,7 @@ function renderCard() {
     lbl.textContent  = "Quel est le kanji correspondant ?";
     main.className   = "meaning-big";
     main.textContent = card.m;
-    rdg.textContent  = `Lecture : ${card.r}`;
+    rdg.innerHTML    = readingHTML(card);
   }
 
   // Build 4 choices
@@ -1358,7 +1465,7 @@ function handleAnswer(btn, chosen, correct) {
 
   // Always show reading after answer
   const rdg = document.getElementById("card-reading");
-  rdg.textContent = `Lecture : ${correct.r}`;
+  rdg.innerHTML = readingHTML(correct);
   if (curMode === "mk") {
     document.getElementById("card-main").textContent = correct.m;
   }
@@ -1435,7 +1542,7 @@ function showResults(score, total, mistakes, unlocked) {
         <div class="mistake-k">${m.k}</div>
         <div class="mistake-info">
           <div class="mistake-m">${m.m}</div>
-          <div class="mistake-r">Lecture : ${m.r}</div>
+          <div class="mistake-r">${m.kn} · ${m.r}</div>
         </div>
       </div>
     `).join("");
@@ -1451,6 +1558,18 @@ function showResults(score, total, mistakes, unlocked) {
 // ──────────────────────────────────────────────────────
 document.addEventListener("keydown", e => {
   const screen = document.querySelector(".screen.active")?.id;
+
+  if (screen === "screen-kana" && kanaUI.quiz && !kanaUI.quiz.done) {
+    const body = document.getElementById("kana-body");
+    if (!kanaUI.quiz.answered) {
+      const i = { "1": 0, "2": 1, "3": 2, "4": 3 }[e.key];
+      const b = i !== undefined && body.querySelectorAll(".choice-btn")[i];
+      if (b) b.click();
+    } else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault(); const nb = document.getElementById("kana-next"); if (nb) nb.click();
+    }
+    return;
+  }
 
   if (screen === "screen-session") {
     if (!session) return;
@@ -1687,6 +1806,139 @@ function shuffle(arr) {
 }
 
 
+
+// ──────────────────────────────────────────────────────
+//  ÉCRAN KANA : tableau de référence et quiz en répétition espacée
+// ──────────────────────────────────────────────────────
+const kanaUI = { script: "h", view: "table", groups: { base: true, daku: false, yoon: false }, dir: "kr", quiz: null };
+const KQ_SIZE = 20;
+
+function showKana() { kanaUI.quiz = null; show("screen-kana"); renderKana(); }
+function setKanaScript(sc) { kanaUI.script = sc; kanaUI.quiz = null; renderKana(); }
+function setKanaView(v) { kanaUI.view = v; kanaUI.quiz = null; renderKana(); }
+function kanaSelected() { return KANA_ALL.filter(x => x.s === kanaUI.script && kanaUI.groups[x.g]); }
+
+function renderKana() {
+  document.getElementById("kana-tab-h").classList.toggle("active", kanaUI.script === "h");
+  document.getElementById("kana-tab-k").classList.toggle("active", kanaUI.script === "k");
+  document.getElementById("kana-tab-table").classList.toggle("active", kanaUI.view === "table");
+  document.getElementById("kana-tab-quiz").classList.toggle("active", kanaUI.view === "quiz");
+  const body = document.getElementById("kana-body");
+  body.innerHTML = "";
+  const all = KANA_ALL.filter(x => x.s === kanaUI.script);
+  const m = all.filter(x => kanaMastered(x.id)).length, v = all.filter(x => ST.kana[x.id]).length, due = all.filter(x => kanaDue(x.id)).length;
+  document.getElementById("kana-counter").textContent = kanaUI.quiz ? `${Math.min(kanaUI.quiz.i + 1, kanaUI.quiz.cards.length)} / ${kanaUI.quiz.cards.length}` : `${m} / ${all.length}`;
+  if (kanaUI.view === "table") return renderKanaTable(body, m, v, due, all.length);
+  if (kanaUI.quiz) return kanaUI.quiz.done ? renderKanaResult(body) : renderKanaCard(body);
+  renderKanaSetup(body, m, v, due, all.length);
+}
+
+function renderKanaTable(body, m, v, due, total) {
+  body.insertAdjacentHTML("beforeend", `<div class="kana-stats"><span><b>${m}</b> maîtrisés</span>·<span><b>${v}</b> vus sur ${total}</span>·<span><b>${due}</b> à revoir</span></div>`);
+  for (const g of Object.keys(KANA_ROWS)) {
+    body.insertAdjacentHTML("beforeend", `<div class="kana-sec">${KANA_GROUPS[g]}</div>`);
+    const grid = document.createElement("div");
+    grid.className = "kana-grid " + (g === "yoon" ? "c3" : "c5");
+    KANA_ROWS[g].flat().forEach(cell => {
+      const x = splitKana(cell);
+      if (!x) { grid.insertAdjacentHTML("beforeend", '<div class="kana-cell empty"></div>'); return; }
+      const id = kanaUI.script + ":" + (kanaUI.script === "k" ? toKata(x.k) : x.k);
+      const st = kanaMastered(id) ? " mastered" : ST.kana[id] ? " seen" : "";
+      grid.insertAdjacentHTML("beforeend", `<div class="kana-cell${st}"><div class="kc">${KANA_BY[id].k}</div><div class="kr">${x.r}</div></div>`);
+    });
+    body.appendChild(grid);
+  }
+  body.insertAdjacentHTML("beforeend", '<div class="kana-legend"><span><i style="border-color:rgba(255,209,102,.7)"></i>déjà vu</span><span><i style="border-color:var(--success)"></i>maîtrisé</span></div>');
+}
+
+function renderKanaSetup(body, m, v, due, total) {
+  body.insertAdjacentHTML("beforeend", `<div class="kana-stats"><span><b>${m}</b> maîtrisés</span>·<span><b>${v}</b> vus sur ${total}</span>·<span><b>${due}</b> à revoir</span></div>`);
+  const groups = document.createElement("div"); groups.className = "kana-groups";
+  for (const g of Object.keys(KANA_ROWS)) {
+    const n = kanaList(kanaUI.script, g).length;
+    const lab = document.createElement("label"); lab.className = "kana-chip";
+    lab.innerHTML = `<input type="checkbox" ${kanaUI.groups[g] ? "checked" : ""}> ${KANA_GROUPS[g]} (${n})`;
+    lab.querySelector("input").onchange = e => { kanaUI.groups[g] = e.target.checked; renderKana(); };
+    groups.appendChild(lab);
+  }
+  body.appendChild(groups);
+  const dir = document.createElement("div"); dir.className = "mode-wrap";
+  dir.innerHTML = `<button class="mode-tab ${kanaUI.dir === "kr" ? "active" : ""}" data-d="kr">${kanaUI.script === "h" ? "あ" : "ア"} → romaji</button><button class="mode-tab ${kanaUI.dir === "rk" ? "active" : ""}" data-d="rk">romaji → ${kanaUI.script === "h" ? "あ" : "ア"}</button>`;
+  dir.querySelectorAll("button").forEach(b => b.onclick = () => { kanaUI.dir = b.dataset.d; renderKana(); });
+  body.appendChild(dir);
+  const sel = kanaSelected(), dueSel = sel.filter(x => kanaDue(x.id)).length;
+  body.insertAdjacentHTML("beforeend", `<p class="due-hint">${sel.length ? (dueSel ? `<b>${dueSel}</b> kana à revoir dans cette sélection : ils passent en priorité.` : "Les kana jamais vus passent en premier, puis ceux qui reviennent le plus tôt.") : "Coche au moins un groupe."}</p>`);
+  const go = document.createElement("button"); go.className = "btn btn-primary"; go.style.width = "100%";
+  go.textContent = `▶ Commencer (${Math.min(KQ_SIZE, sel.length)} kana)`; go.disabled = !sel.length;
+  go.onclick = startKanaQuiz; body.appendChild(go);
+}
+
+function startKanaQuiz() {
+  const sel = kanaSelected(), t = today();
+  const due = shuffle(sel.filter(x => ST.kana[x.id] && ST.kana[x.id][1] <= t)).sort((a, b) => ST.kana[a.id][0] - ST.kana[b.id][0]);
+  const unseen = shuffle(sel.filter(x => !ST.kana[x.id]));
+  const later = sel.filter(x => ST.kana[x.id] && ST.kana[x.id][1] > t).sort((a, b) => ST.kana[a.id][1] - ST.kana[b.id][1]);
+  const cards = shuffle([...due, ...unseen, ...later].slice(0, Math.min(KQ_SIZE, sel.length)));
+  kanaUI.quiz = { cards, i: 0, score: 0, wrong: [], answered: false, done: false };
+  renderKana();
+}
+
+function renderKanaCard(body) {
+  const q = kanaUI.quiz, card = q.cards[q.i], rk = kanaUI.dir === "rk";
+  body.insertAdjacentHTML("beforeend", `<div class="prog-wrap"><div class="prog-fill" style="width:${q.i / q.cards.length * 100}%"></div></div>
+    <div class="flash-card" id="kana-card"><div class="card-mode-lbl">${rk ? "Quel kana se lit ainsi ?" : "Comment se lit ce kana ?"}</div>
+    <div class="${rk ? "kana-roma-big" : "kana-big"}">${rk ? card.r : card.k}</div><div class="card-reading" id="kana-reading"></div></div>`);
+  /* les distracteurs viennent de la même écriture ; on écarte ceux qui se lisent pareil (じ/ぢ, ず/づ) */
+  const pool = KANA_ALL.filter(x => x.s === card.s && x.r !== card.r && (kanaUI.groups[x.g] || x.g === card.g));
+  const choices = shuffle([card, ...shuffle(pool).slice(0, 3)]);
+  const grid = document.createElement("div"); grid.className = "choices-grid";
+  choices.forEach(ch => {
+    const b = document.createElement("button"); b.className = "choice-btn";
+    if (rk) b.innerHTML = `<span class="choice-kana">${ch.k}</span>`; else b.textContent = ch.r;
+    b.onclick = () => answerKana(b, ch, card, grid);
+    grid.appendChild(b);
+  });
+  body.appendChild(grid);
+  const nb = document.createElement("button"); nb.className = "next-btn"; nb.id = "kana-next";
+  nb.textContent = q.i + 1 < q.cards.length ? "Suivant →" : "Voir les résultats →";
+  nb.onclick = nextKana; body.appendChild(nb);
+  body.insertAdjacentHTML("beforeend", '<div class="kbd-hint">Raccourcis : <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> pour choisir · <kbd>Entrée</kbd> pour suivant</div>');
+  q.answered = false;
+}
+
+function answerKana(btn, chosen, card, grid) {
+  const q = kanaUI.quiz; if (q.answered) return; q.answered = true;
+  const ok = chosen.id === card.id;
+  recordKana(card.id, ok); saveState();
+  const fc = document.getElementById("kana-card");
+  if (ok) { q.score++; fc.classList.add("correct"); btn.classList.add("correct-c"); }
+  else {
+    q.wrong.push(card); fc.classList.add("wrong"); btn.classList.add("wrong-c");
+    grid.querySelectorAll(".choice-btn").forEach(b => { if ((kanaUI.dir === "rk" ? b.textContent : b.textContent) === (kanaUI.dir === "rk" ? card.k : card.r)) b.classList.add("correct-c"); });
+  }
+  document.getElementById("kana-reading").innerHTML = kanaUI.dir === "rk" ? `<span class="rd-romaji">${card.r}</span>` : `<span class="rd-kana">${card.k}</span>`;
+  grid.querySelectorAll(".choice-btn").forEach(b => b.disabled = true);
+  document.getElementById("kana-next").classList.add("visible");
+}
+
+function nextKana() {
+  const q = kanaUI.quiz; q.i++;
+  if (q.i >= q.cards.length) q.done = true;
+  renderKana();
+}
+
+function renderKanaResult(body) {
+  const q = kanaUI.quiz, n = q.cards.length, pct = q.score / n;
+  body.insertAdjacentHTML("beforeend", `<div class="kana-result"><div class="big" style="color:${pct >= .9 ? "var(--success)" : pct >= .7 ? "var(--n3)" : "var(--error)"}">${q.score} / ${n}</div>
+    <div class="res-sub" style="color:var(--muted);font-size:.85rem">${pct >= .9 ? "Excellent." : pct >= .7 ? "Bien : les erreurs reviendront dès la prochaine session." : "Les kana ratés reviendront dès la prochaine session."}</div></div>`);
+  if (q.wrong.length) body.insertAdjacentHTML("beforeend", `<div class="mistakes-section"><div class="mistakes-lbl">À retravailler</div>${q.wrong.map(w => `<div class="mistake-row"><div class="mistake-k">${w.k}</div><div class="mistake-info"><div class="mistake-m">${w.r}</div></div></div>`).join("")}</div>`);
+  const act = document.createElement("div"); act.className = "kana-actions";
+  act.innerHTML = '<button class="btn btn-ghost">Tableau</button><button class="btn btn-primary">↺ Nouvelle session</button>';
+  act.children[0].onclick = () => setKanaView("table");
+  act.children[1].onclick = startKanaQuiz;
+  body.appendChild(act);
+}
+
 // ──────────────────────────────────────────────────────
 //  SYNCHRONISATION ENTRE APPAREILS (Supabase)
 //  La connexion se fait sur l'accueil du Dojo ; cette page suit la session partagée.
@@ -1702,6 +1954,8 @@ function mergeRaw(a, b) {
   const m = blankState();
   m.srs = Object.assign({}, o.srs);
   for (const k in n.srs) { const x = m.srs[k], y = n.srs[k]; if (!x || (y[4] || 0) >= (x[4] || 0)) m.srs[k] = y; }
+  m.kana = Object.assign({}, o.kana);
+  for (const k in n.kana) { const x = m.kana[k], y = n.kana[k]; if (!x || (y[4] || 0) >= (x[4] || 0)) m.kana[k] = y; }
   m.unlocked = new Set([...A.unlocked, ...B.unlocked]);
   m.sessions = Math.max(A.sessions, B.sessions);
   m.streak = n.streak; m.level = n.level; m.rz = n.rz;
@@ -1768,6 +2022,7 @@ const Sync = {
         }
         this.last = Date.now(); this.set("on");
         if (changed && !session && document.getElementById("screen-home").classList.contains("active")) renderHome();
+        if (changed && document.getElementById("screen-kana").classList.contains("active") && !kanaUI.quiz) renderKana();
       } catch (e) { this.set("err"); }
       this.busy = null;
       if (this.again) { this.again = false; this.touch(); }
