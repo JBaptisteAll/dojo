@@ -29,14 +29,7 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background
 a.dojo{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;white-space:nowrap}
 a.dojo:hover{color:var(--accent)}
 .brandrow{display:flex;align-items:center;gap:14px;min-width:0}
-@media (max-width:640px){.brandrow{width:100%}.brandrow .acct{margin-left:auto}.brandrow .brand small{display:none}}
-.acct{font:600 12px var(--f-body);padding:5px 11px;border-radius:99px;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;white-space:nowrap}
-.acct:hover{border-color:var(--accent);color:var(--accent)}
-.acct[data-s="on"]{color:var(--ok);border-color:var(--ok)}
-.acct[data-s="err"]{color:var(--bad);border-color:var(--bad)}
-.acctform{display:grid;gap:4px;max-width:380px}
-.acctform label{font-size:13px;color:var(--muted);margin-top:8px}
-.acctform input{padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+@media (max-width:640px){.brandrow{width:100%}.brandrow .brand small{display:none}}
 header.top .wrap{display:flex;align-items:center;gap:12px 20px;flex-wrap:wrap;padding-block:10px}
 .brand{font-family:var(--f-display);font-weight:700;font-size:18px;letter-spacing:-.01em;display:flex;align-items:baseline;gap:8px}
 .brand small{font-family:var(--f-body);font-weight:500;font-size:12px;color:var(--muted)}
@@ -230,8 +223,7 @@ figure.dg figcaption{font-size:13px;color:var(--muted);margin-top:8px}
 </style>
 <header class="top"><div class="wrap">
 <div class="brandrow"><a class="dojo" href="index.html" aria-label="Retour à l'accueil du Dojo">← Dojo</a>
-<div class="brand">Azure Prépa <small id="bank"></small></div>
-<button type="button" class="acct" id="acct" hidden></button></div>
+<div class="brand">Azure Prépa <small id="bank"></small></div></div>
 <div class="segs">
 <div class="seg cert" id="certSeg" role="tablist" aria-label="Certification">
 <button type="button" role="tab" data-cert="az900" aria-selected="true">AZ-900</button>
@@ -4685,7 +4677,14 @@ let remote=null,pushT=null,pushing=false,dirty=false,syncMsg="Progression enregi
 function setSync(m){syncMsg=m;const e=$("#sync");if(e)e.textContent=m}
 const syncPart=()=>({q:P.q,exams:P.exams,read:P.read,plan:P.plan,fc:P.fc,rz:P.rz||0});
 let snap=JSON.stringify(syncPart());
-function store(){try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}}
+/* résumé lisible par l'accueil du Dojo */
+function summary(){const o={};
+ for(const c of ["az900","az104"]){const qs=ALLQ.filter(q=>q.cert===c);let seenN=0,att=0,cor=0;for(const q of qs){const r=P.q[q.id];if(r){seenN++;att+=r[0];cor+=r[1]}}
+  const ch=[...document.querySelectorAll("#cours .chap")].filter(x=>certOfChap(x.dataset.id)===c&&!["plan","fiche","term"].includes(x.dataset.id));
+  const ex=P.exams.filter(e=>(e.c||"az900")===c);
+  o[c]={seen:seenN,n:qs.length,ok:att?Math.round(100*cor/att):null,best:ex.reduce((m,e)=>Math.max(m,e.s),0)||null,exams:ex.length,read:ch.filter(x=>P.read[x.dataset.id]).length,chaps:ch.length}}
+ return o}
+function store(){try{P.sum=summary()}catch(e){}try{localStorage.setItem(KEY,JSON.stringify(P))}catch(e){}}
 function save(){const c=JSON.stringify(syncPart()),changed=c!==snap;if(changed){snap=c;P.ts=Date.now()}store();
  if(!changed)return;
  if(remote){dirty=true;clearTimeout(pushT);pushT=setTimeout(push,2500)}
@@ -4714,12 +4713,10 @@ const SYNC={url:"https://cezasvhqmmjudlzhsjyu.supabase.co",key:"sb_publishable_1
 const SYNC_APP="azure";
 const canon=v=>v&&typeof v==="object"?(Array.isArray(v)?"["+v.map(canon).join(",")+"]":"{"+Object.keys(v).sort().map(k=>JSON.stringify(k)+":"+canon(v[k])).join(",")+"}"):JSON.stringify(v===undefined?null:v);
 const Sync={on:!!(SYNC.url&&SYNC.key),client:null,user:null,state:"off",err:"",last:null,timer:null,busy:null,again:false,first:true,box:null,
- LABEL:{load:"Compte…",out:"Se connecter",busy:"Synchro…",on:"Synchronisé",err:"Non synchronisé"},
- set(s,err){this.state=s;this.err=err||"";const a=$("#acct");if(a){a.hidden=!this.on;a.dataset.s=s;a.textContent=this.LABEL[s]||"";a.title=this.err||(this.user?this.user.email:"")}
-  setSync(s==="on"?"Synchronisé avec ton compte"+(this.user&&this.user.email?" ("+this.user.email+")":""):s==="busy"?"Synchronisation en cours…":s==="err"?"Non synchronisé : "+this.err:s==="out"?"Progression enregistrée sur cet appareil. Connecte-toi pour la retrouver sur tes autres appareils.":"Progression enregistrée sur cet appareil");
-  this.draw()},
+ /* La connexion se fait sur l'accueil du Dojo ; ici, la page suit simplement la session partagée. */
+ set(s,err){this.state=s;this.err=err||"";
+  setSync(s==="on"?"Synchronisé avec ton compte"+(this.user&&this.user.email?" ("+this.user.email+")":""):s==="busy"?"Synchronisation en cours…":s==="err"?"Non synchronisé : "+this.err:s==="out"?"Progression enregistrée sur cet appareil. Connecte-toi depuis l\'accueil du Dojo pour la retrouver sur tes autres appareils.":"Progression enregistrée sur cet appareil")},
  init(){if(!this.on)return;this.set("load");
-  $("#acct").addEventListener("click",()=>{if(S&&!S.done)return;S=null;P.tab="train";P.view="dash";save();render();const c=$("#acctCard");if(c)c.scrollIntoView({block:"center"})});
   const sc=document.createElement("script");sc.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
   sc.onload=()=>this.start();sc.onerror=()=>this.set("err","la bibliothèque de synchronisation est injoignable. Vérifie ta connexion, puis recharge la page.");document.head.append(sc)},
  async start(){
@@ -4741,7 +4738,7 @@ const Sync={on:!!(SYNC.url&&SYNC.key),client:null,user:null,state:"off",err:"",l
     if(R)merge(R);
     const now=JSON.stringify(syncPart()),changed=now!==before;if(changed){snap=now;P.ts=Date.now()}store();
     const theirs=R?canon({q:R.q||{},exams:R.exams||[],read:R.read||{},plan:R.plan||{},fc:R.fc||{},rz:R.rz||0}):null;
-    if(theirs!==canon(syncPart())){const {error:e2}=await this.client.from("progression").upsert({user_id:uid,app:SYNC_APP,data:Object.assign(syncPart(),{ts:P.ts}),updated_at:new Date().toISOString()});if(e2)throw e2}
+    if(!R||!R.sum||theirs!==canon(syncPart())){const {error:e2}=await this.client.from("progression").upsert({user_id:uid,app:SYNC_APP,data:Object.assign(syncPart(),{ts:P.ts,sum:summary()}),updated_at:new Date().toISOString()});if(e2)throw e2}
     this.last=Date.now();this.set("on");
     if(changed&&!S&&(this.first||(P.tab==="train"&&P.view==="dash")))render();
     this.first=false}
@@ -4752,28 +4749,8 @@ const Sync={on:!!(SYNC.url&&SYNC.key),client:null,user:null,state:"off",err:"",l
   if(c==="42703"||c==="PGRST204")return"la table « progression » n'a pas encore sa colonne « app ». Exécute le script supabase_plusieurs_cours.sql dans Supabase.";
   if(/Invalid login credentials/i.test(m))return"e-mail ou mot de passe incorrect.";
   if(/Email not confirmed/i.test(m))return"ton adresse n'est pas encore confirmée : clique sur le lien reçu par e-mail.";
-  if(/signups? not allowed|signup is disabled/i.test(m))return"les inscriptions sont fermées sur ce projet. Connecte-toi avec ton compte existant.";
-  if(/already registered/i.test(m))return"un compte existe déjà avec cette adresse : utilise « Se connecter ».";
   if(/Failed to fetch|NetworkError|Load failed/i.test(m))return"connexion impossible. Ta progression reste enregistrée ici et partira au retour du réseau.";
   return m||"erreur inconnue."},
- /* carte « Compte » du tableau de bord */
- card(){if(!this.on)return null;this.box=h("div");const c=h("div",{class:"card",id:"acctCard"},h("h3",{text:"Compte et synchronisation"}),this.box);this.draw();return c},
- draw(){const box=this.box;if(!box||!box.isConnected)return;box.replaceChildren();
-  if(this.user){const when=this.last?new Date(this.last).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}):null;
-   box.append(h("p",{class:"sub",style:"margin-bottom:10px",text:"Connecté : "+(this.user.email||"")+". "+(this.state==="err"?"Dernière tentative en échec : "+this.err:this.state==="busy"?"Synchronisation en cours…":when?"Progression synchronisée à "+when+".":"")+" C'est le même compte que sur les autres pages du Dojo."}),
-    h("div",{class:"row"},h("button",{class:"btn",type:"button",onclick:()=>this.run()},"Synchroniser maintenant"),h("button",{class:"btn ghost",type:"button",onclick:async()=>{if(this.timer)await this.run();await this.client.auth.signOut()}},"Se déconnecter")));return}
-  if(this.state==="load"){box.append(h("p",{class:"sub",style:"margin:0",text:"Chargement…"}));return}
-  const email=h("input",{id:"acct-email",type:"email",autocomplete:"username"}),pass=h("input",{id:"acct-pass",type:"password",autocomplete:"current-password"});
-  const msg=h("p",{class:"sub",style:"margin:10px 0 0"+(this.state==="err"?";color:var(--bad)":""),"aria-live":"polite",text:this.state==="err"?"Non synchronisé : "+this.err:""});
-  const go=async create=>{if(!this.client){msg.textContent="La synchronisation n'est pas prête. Recharge la page.";return}
-   if(!email.value.trim()||pass.value.length<6){msg.style.color="var(--bad)";msg.textContent="Saisis ton e-mail et un mot de passe d'au moins 6 caractères.";return}
-   msg.style.color="";msg.textContent="Un instant…";
-   try{const r=create?await this.client.auth.signUp({email:email.value.trim(),password:pass.value}):await this.client.auth.signInWithPassword({email:email.value.trim(),password:pass.value});
-    if(r.error)throw r.error;if(create&&!(r.data&&r.data.session))msg.textContent="Compte créé. Clique sur le lien de confirmation reçu par e-mail, puis reviens te connecter."}
-   catch(e){msg.style.color="var(--bad)";msg.textContent="Connexion refusée : "+this.text(e)}};
-  const form=h("form",{class:"acctform",onsubmit:e=>{e.preventDefault();go(false)}},h("label",{for:"acct-email",text:"E-mail"}),email,h("label",{for:"acct-pass",text:"Mot de passe"}),pass,
-   h("div",{class:"row",style:"margin-top:12px"},h("button",{class:"btn pri",type:"submit"},"Se connecter"),h("button",{class:"btn ghost",type:"button",onclick:()=>go(true)},"Créer un compte")));
-  box.append(h("p",{class:"sub",style:"margin-bottom:6px",text:"Connecte-toi avec le compte du Dojo pour retrouver ta progression sur tous tes appareils. Ce qui est déjà enregistré ici est fusionné avec le compte."}),form,msg)}
 };
 /* ---------- Navigation ---------- */
 const side=$("#side"),main=$("#main");
@@ -4859,8 +4836,6 @@ function viewDash(){
  const wrong=Q.filter(q=>P.q[q.id]&&!P.q[q.id][2]);
  main.append(h("div",{class:"card"},h("h3",{text:"Questions à retravailler"}),h("p",{class:"sub",style:"margin-bottom:10px",text:wrong.length?wrong.length+" questions ratées à leur dernier passage.":"Aucune question ratée en attente."}),
   h("button",{class:"btn pri",type:"button",disabled:!wrong.length,onclick:()=>startQuiz(wrong,20)},"Retravailler mes erreurs")));
- const ac=Sync.card();if(ac)main.append(ac);
- main.append(backupCard());
 }
 /* Sauvegarde manuelle : code à copier d'un appareil à l'autre, en secours de la synchronisation */
 function backupCard(){
@@ -5087,7 +5062,7 @@ const Term=(function(){
 document.querySelectorAll("#tabSeg button").forEach(b=>b.addEventListener("click",()=>{S=null;setTab(b.dataset.tab)}));
 document.querySelectorAll("#certSeg button").forEach(b=>b.addEventListener("click",()=>{S=null;P.cert=b.dataset.cert;save();render();window.scrollTo(0,0)}));
 if(!CERTS.az104)$("#certSeg").hidden=true;
-render();initSync();Sync.init();
+render();store();initSync();Sync.init();
 })();
 
 </script>

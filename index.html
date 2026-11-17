@@ -151,6 +151,43 @@
     /* carte d'une page pas encore disponible */
     .card.soon { cursor: default; opacity: .6; }
     .card.soon:hover { transform: none; box-shadow: none; }
+
+    /* ---------- compte et avancement ---------- */
+    .account { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 18px; font-size: 13px; color: #9ca3af; }
+    .pill { display: inline-flex; align-items: center; gap: 7px; padding: 5px 12px; border-radius: 99px; border: 1px solid #262640; background: #10101c; color: #9ca3af; font: 500 12px 'Inter', sans-serif; }
+    .pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #4b5563; }
+    .pill[data-s="on"] { color: #34d399; border-color: rgba(52,211,153,.4); }
+    .pill[data-s="on"]::before { background: #34d399; }
+    .pill[data-s="busy"]::before { background: #fbbf24; }
+    .pill[data-s="err"] { color: #f87171; border-color: rgba(248,113,113,.4); }
+    .pill[data-s="err"]::before { background: #f87171; }
+    .linkbtn { background: none; border: 1px solid #262640; border-radius: 99px; padding: 5px 12px; color: #edf2f4; font: 500 12px 'Inter', sans-serif; cursor: pointer; }
+    .linkbtn:hover { border-color: #6b7280; }
+    .login { display: none; margin: 18px auto 0; width: min(360px, calc(100vw - 40px)); padding: 20px; background: #10101c; border: 1px solid #1e1e36; border-radius: 14px; text-align: left; }
+    .login.open { display: block; }
+    .login label { display: block; font-size: 12px; color: #9ca3af; margin: 10px 0 4px; }
+    .login input { width: 100%; padding: 10px 12px; border-radius: 8px; border: 1px solid #262640; background: #08080f; color: #edf2f4; font: 14px 'Inter', sans-serif; }
+    .login input:focus { outline: 2px solid #60a5fa; outline-offset: 1px; }
+    .login .row { display: flex; gap: 8px; margin-top: 16px; }
+    .login button[type=submit] { flex: 1; padding: 10px; border: 0; border-radius: 8px; background: #edf2f4; color: #08080f; font: 600 14px 'Inter', sans-serif; cursor: pointer; }
+    .login .msg { min-height: 1.4em; margin-top: 10px; font-size: 13px; color: #9ca3af; }
+    .login .msg.ko { color: #f87171; }
+    .login p.hint { font-size: 12px; color: #6b7280; line-height: 1.5; }
+
+    .prog { width: 100%; margin-top: 20px; padding-top: 16px; border-top: 1px solid #1e1e36; font-size: 12px; color: #9ca3af; }
+    .prog:empty { display: none; }
+    .prog .lab { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+    .prog .lab b { color: #edf2f4; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .prog .track { height: 6px; border-radius: 3px; background: #1e1e36; overflow: hidden; margin-bottom: 10px; }
+    .prog .track i { display: block; height: 100%; border-radius: 3px; background: currentColor; }
+    .prog .meta { line-height: 1.55; }
+    .prog .src { display: block; margin-top: 8px; font-size: 11px; color: #4b5563; }
+    .card.python .prog .track i { background: #ffd43b; }
+    .card.azure .prog .track i { background: #22d3ee; }
+    .card.kanji .prog .track i { background: #e63946; }
+    .card .card-arrow { margin-top: auto; padding-top: 24px; }
+    .card-desc { margin-bottom: 0; }
+    @media (prefers-reduced-motion: reduce) { .card, .card:hover { transition: none; transform: none; } }
   </style>
 </head>
 <body>
@@ -158,6 +195,19 @@
 <header>
   <h1>Dojo</h1>
   <p>Choisissez votre session d'entraînement</p>
+  <div class="account" id="account" hidden>
+    <span class="pill" id="state" data-s="load" role="status">Chargement…</span>
+    <button type="button" class="linkbtn" id="acctBtn" hidden></button>
+  </div>
+  <form class="login" id="login" autocomplete="on">
+    <p class="hint">Un seul compte pour tout le Dojo : une fois connecté ici, tu l'es aussi dans chaque formation.</p>
+    <label for="email">E-mail</label>
+    <input id="email" type="email" autocomplete="username" required>
+    <label for="pass">Mot de passe</label>
+    <input id="pass" type="password" autocomplete="current-password" required minlength="6">
+    <div class="row"><button type="submit">Se connecter</button><button type="button" class="linkbtn" id="cancel">Annuler</button></div>
+    <p class="msg" id="msg" aria-live="polite"></p>
+  </form>
 </header>
 
 <div class="cards">
@@ -166,6 +216,7 @@
     <div class="card-icon">漢字</div>
     <div class="card-title">Kanji Dojo</div>
     <div class="card-desc">Flashcards pour apprendre et mémoriser les kanji japonais par niveaux JLPT.</div>
+    <div class="prog" data-app="kanji"></div>
     <div class="card-arrow">Commencer →</div>
   </a>
 
@@ -180,6 +231,7 @@
     <div class="card-icon">🐍</div>
     <div class="card-title">Python, de zéro à héros</div>
     <div class="card-desc">Cours interactif complet : 26 modules, 229 exercices corrigés, progression synchronisée entre appareils.</div>
+    <div class="prog" data-app="python"></div>
     <div class="card-arrow">Coder →</div>
   </a>
 
@@ -187,6 +239,7 @@
     <div class="card-icon">☁️</div>
     <div class="card-title">Azure Prépa</div>
     <div class="card-desc">Préparation AZ-900 et AZ-104 : cours, travaux dirigés, 1 042 questions, examens blancs et flashcards.</div>
+    <div class="prog" data-app="azure"></div>
     <div class="card-arrow">Réviser →</div>
   </a>
 
@@ -199,5 +252,112 @@
 
 </div>
 
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function () {
+"use strict";
+/* Même projet Supabase que les formations : la connexion faite ici vaut pour toutes les pages du Dojo. */
+const SYNC = { url: "https://cezasvhqmmjudlzhsjyu.supabase.co", key: "sb_publishable_123lbagpIPcVLDAQ7HKO3w_cgebhCvF" };
+const LOCAL = { python: "python-zero-heros-v1", azure: "az900-prepa-v1", kanji: "kanji_v2" };
+const $ = s => document.querySelector(s);
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pct = (a, b) => b ? Math.round(100 * a / b) : 0;
+const nf = n => Number(n).toLocaleString("fr-FR");
+let client = null, user = null, remote = {}, lastSync = null;
+
+function local(app) { try { return JSON.parse(localStorage.getItem(LOCAL[app]) || "null"); } catch (e) { return null; } }
+/* La version la plus récente l'emporte : celle du compte, ou celle de ce navigateur si elle n'est pas encore envoyée */
+function best(app) {
+  const l = local(app), r = remote[app];
+  const lt = l && l.ts || 0, rt = r && r.ts || 0;
+  if (r && (rt >= lt || !l)) return { d: r, src: "compte" };
+  return l ? { d: l, src: "appareil" } : null;
+}
+const bar = (label, val, txt) => `<div class="lab"><span>${esc(label)}</span><b>${esc(txt)}</b></div><div class="track"><i style="width:${Math.max(0, Math.min(100, val))}%"></i></div>`;
+const srcLine = src => `<span class="src">${src === "compte" ? "Progression du compte" : user ? "Sur cet appareil, pas encore envoyée au compte" : "Sur cet appareil"}</span>`;
+
+function drawPython() {
+  const b = best("python"), box = $('.prog[data-app="python"]');
+  if (!b) return box.replaceChildren();
+  const d = b.d, s = d.sum;
+  if (!s) { const n = Object.keys(d.done || {}).length; box.innerHTML = n ? `<div class="meta">${nf(n)} exercice(s) réussi(s). Ouvre la formation pour mettre le détail à jour.</div>${srcLine(b.src)}` : ""; return; }
+  if (!s.done && !s.last) return box.replaceChildren();
+  box.innerHTML = bar("Exercices réussis", pct(s.done, s.total), `${nf(s.done)} / ${nf(s.total)}`)
+    + `<div class="meta">${s.mods} module${s.mods > 1 ? "s" : ""} terminé${s.mods > 1 ? "s" : ""} sur ${s.modsTotal}${s.lastTitle ? `<br>Dernière leçon : ${esc(s.lastTitle)}` : ""}</div>` + srcLine(b.src);
+}
+function drawAzure() {
+  const b = best("azure"), box = $('.prog[data-app="azure"]');
+  if (!b) return box.replaceChildren();
+  const s = b.d.sum;
+  if (!s) { const n = Object.keys(b.d.q || {}).length; box.innerHTML = n ? `<div class="meta">${nf(n)} question(s) déjà vue(s). Ouvre la formation pour mettre le détail à jour.</div>${srcLine(b.src)}` : ""; return; }
+  let html = "";
+  for (const [c, label] of [["az900", "AZ-900"], ["az104", "AZ-104"]]) {
+    const x = s[c]; if (!x || (!x.seen && !x.read && !x.exams)) continue;
+    html += bar(label + " · questions vues", pct(x.seen, x.n), pct(x.seen, x.n) + " %")
+      + `<div class="meta" style="margin:-4px 0 10px">${x.read} chapitre${x.read > 1 ? "s" : ""} sur ${x.chaps}${x.ok != null ? " · " + x.ok + " % de bonnes réponses" : ""}${x.best ? " · meilleur examen " + x.best + "/1000" : ""}</div>`;
+  }
+  box.innerHTML = html ? html + srcLine(b.src) : "";
+}
+function drawKanji() {
+  const d = local("kanji"), box = $('.prog[data-app="kanji"]');
+  if (!d || !(d.mastered && d.mastered.length) && !d.sessions) return box.replaceChildren();
+  box.innerHTML = `<div class="meta">${nf((d.mastered || []).length)} kanji maîtrisé(s) · ${d.sessions || 0} session(s)${d.streak ? " · série de " + d.streak : ""}</div><span class="src">Sur cet appareil (cette formation ne se synchronise pas encore)</span>`;
+}
+function draw() { drawPython(); drawAzure(); drawKanji(); }
+
+/* ---------- compte ---------- */
+function state(s, txt) { const p = $("#state"); p.dataset.s = s; p.textContent = txt; }
+function account() {
+  const btn = $("#acctBtn");
+  btn.hidden = false;
+  if (user) { btn.textContent = "Se déconnecter"; $("#login").classList.remove("open"); }
+  else { btn.textContent = "Se connecter"; state("out", "Non connecté : progression de cet appareil"); }
+}
+async function pull() {
+  if (!user) return;
+  state("busy", "Synchronisation…");
+  const { data, error } = await client.from("progression").select("app,data").eq("user_id", user.id);
+  if (error) { state("err", "Lecture impossible : " + error.message); return; }
+  remote = {}; for (const row of data || []) if (row.data && typeof row.data === "object") remote[row.app] = row.data;
+  lastSync = new Date();
+  state("on", (user.email || "Connecté") + " · à jour à " + lastSync.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }));
+  draw();
+}
+function onSession(session) {
+  const u = session && session.user ? session.user : null;
+  if (u && user && u.id === user.id) return;
+  user = u; remote = {}; account(); draw();
+  if (user) pull();
+}
+async function start() {
+  draw();
+  if (!SYNC.url || !SYNC.key) return;
+  $("#account").hidden = false;
+  if (!window.supabase) { state("err", "Bibliothèque de connexion injoignable"); return; }
+  client = window.supabase.createClient(SYNC.url, SYNC.key);
+  client.auth.onAuthStateChange((ev, session) => setTimeout(() => onSession(session), 0));
+  const { data } = await client.auth.getSession();
+  onSession(data && data.session);
+  if (!user) account();
+  $("#acctBtn").addEventListener("click", async () => {
+    if (user) { await client.auth.signOut(); return; }
+    $("#login").classList.toggle("open"); if ($("#login").classList.contains("open")) $("#email").focus();
+  });
+  $("#cancel").addEventListener("click", () => $("#login").classList.remove("open"));
+  $("#login").addEventListener("submit", async e => {
+    e.preventDefault();
+    const msg = $("#msg"); msg.className = "msg"; msg.textContent = "Un instant…";
+    const { error } = await client.auth.signInWithPassword({ email: $("#email").value.trim(), password: $("#pass").value });
+    if (error) { msg.className = "msg ko"; msg.textContent = /Invalid login/i.test(error.message) ? "E-mail ou mot de passe incorrect." : /fetch|network/i.test(error.message) ? "Connexion impossible : vérifie le réseau." : error.message; }
+    else { msg.textContent = ""; $("#pass").value = ""; }
+  });
+  /* au retour sur l'onglet (par exemple après une séance dans une formation), on relit l'avancement */
+  document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible") { draw(); if (user && (!lastSync || Date.now() - lastSync > 15000)) pull(); } });
+  window.addEventListener("pageshow", e => { if (e.persisted) { draw(); if (user) pull(); } });
+}
+start().catch(e => state("err", String(e && e.message || e)));
+})();
+</script>
 </body>
 </html>

@@ -390,6 +390,8 @@ code,pre,.mono{font-family:var(--mono)}
 .top{position:sticky;top:0;z-index:30;height:var(--bar);display:flex;align-items:center;gap:14px;padding:0 16px;background:var(--surface);border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:baseline;gap:8px;text-decoration:none;color:var(--ink);font-family:var(--display);font-weight:800;font-size:18px;white-space:nowrap}
 .brand .pr{font-family:var(--mono);font-weight:600;color:var(--accent);font-size:15px}
+.dojo{font-size:13px;font-weight:700;color:var(--muted);text-decoration:none;white-space:nowrap}
+.dojo:hover{color:var(--accent)}
 .burger{display:none;border:1px solid var(--line);background:none;border-radius:8px;padding:6px 10px;font-size:14px}
 .gauge{flex:1;display:flex;align-items:center;gap:10px;min-width:0;justify-content:flex-end}
 .gauge .track{flex:0 1 220px;height:8px;border-radius:4px;background:var(--line);overflow:hidden}
@@ -574,17 +576,6 @@ th{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacin
 .save textarea{width:100%;min-height:64px;font-family:var(--mono);font-size:12px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);margin:6px 0;resize:vertical}
 .scrim{display:none}
 /* compte et synchronisation */
-.acct{font-family:var(--mono);font-size:12px;padding:4px 10px;border-radius:99px;border:1px solid var(--line);color:var(--muted);text-decoration:none;white-space:nowrap}
-.acct:hover{border-color:var(--ink);color:var(--ink)}
-.acct[data-s="on"]{color:var(--ok);border-color:var(--ok)}
-.acct[data-s="err"]{color:var(--bad);border-color:var(--bad)}
-.account form{display:grid;gap:4px;max-width:400px}
-.account label{font-size:14px;color:var(--muted);margin-top:10px}
-.account input{padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
-.account .row{margin-top:16px}
-.account .msg{min-height:1.6em;margin:12px 0 0}
-.account .msg.ko{color:var(--bad)}
-.account .msg.ok{color:var(--ok)}
 /* playbook : rappels SQL et checklist */
 pre.sql{border-left-color:var(--accent)}
 pre.sql::before{content:"Rappel SQL";display:block;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
@@ -619,9 +610,9 @@ pre.sql::before{content:"Rappel SQL";display:block;font-family:var(--mono);font-
 <body>
 <header class="top">
   <button class="burger" id="burger" type="button" aria-controls="side" aria-expanded="false">Sommaire</button>
+  <a class="dojo" href="index.html" aria-label="Retour à l'accueil du Dojo">← Dojo</a>
   <a class="brand" href="#accueil"><span class="pr">&gt;&gt;&gt;</span><span>Python<span class="long">, de zéro à héros</span></span></a>
   <div class="gauge" title="Exercices réussis"><div class="track"><div class="fill" id="gfill"></div></div><span class="num" id="gnum"></span></div>
-  <a class="acct" id="acct" href="#compte" hidden></a>
   <div class="status" id="status" data-s="load" role="status"><span class="txt">Python se charge…</span></div>
 </header>
 <div class="shell">
@@ -670,13 +661,14 @@ const store = {
   content() { const d = this.d; return JSON.stringify([d.done, d.code, d.rev, d.itw, d.bilans, d.track, d.start, d.checks, d.sandbox]); },
   mark() { this.snap = this.content(); },
   write() { try { localStorage.setItem(KEY, JSON.stringify(this.d)); } catch (e) {} },
-  save() { const c = this.content(); if (c !== this.snap) { this.snap = c; this.d.ts = Date.now(); } this.write(); sync.touch(); },
+  save() { const c = this.content(); if (c !== this.snap) { this.snap = c; this.d.ts = Date.now(); } try { this.d.sum = pySummary(); } catch (e) {} this.write(); sync.touch(); },
 };
 store.load();
 /* ---------- compte et synchronisation entre appareils (facultatif) ----------
    Renseigne ici l'adresse de ton projet Supabase et sa clé publique (anon / publishable).
    Tant que ces deux valeurs sont vides, l'app fonctionne comme avant : progression dans ce navigateur uniquement. */
 const SYNC = { url: "https://cezasvhqmmjudlzhsjyu.supabase.co", key: "sb_publishable_123lbagpIPcVLDAQ7HKO3w_cgebhCvF" };
+const SYNC_APP = "python";   // identifiant de ce cours dans la table « progression » (une ligne par utilisateur et par cours)
 
 const canon = v => v && typeof v === "object" ? (Array.isArray(v) ? "[" + v.map(canon).join(",") + "]" : "{" + Object.keys(v).sort().map(k => JSON.stringify(k) + ":" + canon(v[k])).join(",") + "}") : JSON.stringify(v === undefined ? null : v);
 function mergeState(a, b) {
@@ -694,14 +686,9 @@ function mergeState(a, b) {
   return m;
 }
 const sync = {
-  on: !!(SYNC.url && SYNC.key), client: null, user: null, state: "off", err: "", last: null, timer: null, busy: null, again: false, first: true,
-  LABEL: { load: "Compte…", out: "Se connecter", busy: "Synchro…", on: "Synchronisé", err: "Non synchronisé" },
-  set(s, err) {
-    this.state = s; this.err = err || "";
-    const a = document.getElementById("acct");
-    if (a) { a.hidden = !this.on; a.dataset.s = s; a.textContent = this.LABEL[s] || ""; a.title = this.err || (this.user ? this.user.email : ""); }
-    if (typeof current !== "undefined" && current === "compte" && this.onChange) this.onChange();
-  },
+  on: !!(SYNC.url && SYNC.key), client: null, user: null, state: "off", err: "", last: null, timer: null, busy: null, again: false, first: true, legacy: false,
+  /* La connexion se fait sur l'accueil du Dojo ; ici, la page suit simplement la session partagée. */
+  set(s, err) { this.state = s; this.err = err || ""; },
   init() {
     if (!this.on) return;
     this.set("load");
@@ -744,14 +731,19 @@ const sync = {
       try {
         this.set("busy");
         const uid = this.user.id;
-        const { data: row, error } = await this.client.from("progression").select("data").eq("user_id", uid).maybeSingle();
+        const old = e => e && (e.code === "42703" || e.code === "PGRST204");   // table sans colonne « app » : ancien schéma
+        const read = () => { const q = this.client.from("progression").select("data").eq("user_id", uid); return (this.legacy ? q : q.eq("app", SYNC_APP)).maybeSingle(); };
+        let { data: row, error } = await read();
+        if (old(error) && !this.legacy) { this.legacy = true; ({ data: row, error } = await read()); }
         if (error) throw error;
         const remote = row && row.data && typeof row.data === "object" ? row.data : null;
         const before = store.content();
         const merged = remote ? mergeState(store.d, remote) : Object.assign(blankState(), store.d);
-        store.d = merged; store.mark(); store.write();
+        store.d = merged; try { store.d.sum = pySummary(); } catch (e) {} store.mark(); store.write();
         if (!remote || canon(remote) !== canon(merged)) {
-          const { error: e2 } = await this.client.from("progression").upsert({ user_id: uid, data: merged, updated_at: new Date().toISOString() });
+          const line = { user_id: uid, data: merged, updated_at: new Date().toISOString() };
+          if (!this.legacy) line.app = SYNC_APP;
+          const { error: e2 } = await this.client.from("progression").upsert(line);
           if (e2) throw e2;
         }
         this.last = Date.now();
@@ -774,13 +766,6 @@ const sync = {
     if (/relation .* does not exist|schema cache|PGRST205/i.test(m)) return "La table « progression » est introuvable dans Supabase : exécute d'abord le script SQL d'installation.";
     return m || "Erreur inconnue.";
   },
-  async signIn(email, password) { const { error } = await this.client.auth.signInWithPassword({ email, password }); if (error) throw error; },
-  async signUp(email, password) {
-    const { data, error } = await this.client.auth.signUp({ email, password, options: { emailRedirectTo: location.origin + location.pathname } });
-    if (error) throw error;
-    return !!(data && data.session);
-  },
-  async signOut() { if (this.timer) await this.run(); await this.client.auth.signOut(); },
 };
 function blankState() { return { done: {}, code: {}, seen: {}, last: null, sandbox: null, rev: {}, itw: 0, bilans: {}, track: null, start: null, checks: {} }; }
 const MODS = {};
@@ -805,6 +790,11 @@ function lessonState(l) {
   return n === l.items.length ? "done" : n ? "part" : "";
 }
 function modCount(m) { let d = 0, t = 0; m.lessons.forEach(l => l.items.forEach(x => { t++; if (store.d.done[x.id]) d++; })); return [d, t]; }
+function pySummary() {
+  const mods = COURSE.filter(m => m.lessons.some(l => l.items.length));
+  const last = store.d.last && BY_ID[store.d.last] ? BY_ID[store.d.last] : null;
+  return { done: doneCount(), total: TOTAL, mods: mods.filter(m => m.lessons.every(l => l.items.every(x => store.d.done[x.id]))).length, modsTotal: mods.length, last: last ? last.id : null, lastTitle: last ? last.title : null };
+}
 function doneCount() { return LESSONS.reduce((n, l) => n + l.items.filter(x => store.d.done[x.id]).length, 0); }
 
 /* ---------- moteur Python (Pyodide) ---------- */
@@ -1370,56 +1360,6 @@ function checkBlock(b) {
   upd();
   return wrap;
 }
-function renderAccount() {
-  const col = el("div", { class: "col account" });
-  main.replaceChildren(col);
-  col.append(el("p", { class: "crumb" }, ">>> compte"), el("h1", null, "Mon compte"));
-  const box = el("div");
-  col.append(box);
-  let note = null;
-  const draw = () => {
-    box.replaceChildren();
-    if (!sync.on) {
-      box.append(el("div", { class: "prose" }, el("p", null, "La synchronisation entre appareils n'est pas activée sur cette copie de l'application. Ta progression est enregistrée dans ce navigateur ; le code de sauvegarde de la page d'accueil permet de la transférer à la main.")));
-      return;
-    }
-    if (sync.user) {
-      const when = sync.last ? new Date(sync.last).toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }) : null;
-      box.append(el("div", { class: "panel" },
-        el("p", null, "Connecté : ", el("strong", null, sync.user.email || "")),
-        el("p", null, sync.state === "err" ? "Dernière tentative en échec. " + sync.err : sync.state === "busy" ? "Synchronisation en cours…" : when ? "Progression synchronisée à " + when + "." : "Synchronisation en attente."),
-        el("p", null, doneCount() + " exercices réussis sur " + TOTAL + "."),
-        el("div", { class: "row" },
-          el("button", { class: "btn", type: "button", onclick: () => sync.run() }, "Synchroniser maintenant"),
-          el("button", { class: "btn", type: "button", onclick: async () => { note = null; await sync.signOut(); } }, "Se déconnecter"))));
-      box.append(el("div", { class: "prose" }, el("p", null, "Connecte-toi avec le même compte sur chaque appareil : ordinateur, tablette, téléphone. La progression est envoyée quelques secondes après chaque changement, et récupérée à l'ouverture de l'application. Sans réseau, tu peux continuer : tout est gardé dans le navigateur, puis envoyé au retour de la connexion.")));
-      return;
-    }
-    if (sync.state === "load") { box.append(el("div", { class: "prose" }, el("p", null, "Chargement…"))); return; }
-    const email = el("input", { id: "acct-email", type: "email", autocomplete: "username", required: true });
-    const pass = el("input", { id: "acct-pass", type: "password", autocomplete: "current-password", required: true, minlength: "6" });
-    const msg = el("p", { class: "msg" + (note ? " " + note[0] : sync.state === "err" ? " ko" : ""), "aria-live": "polite" }, note ? note[1] : sync.state === "err" ? sync.err : "");
-    const go = async create => {
-      if (!sync.client) { msg.className = "msg ko"; msg.textContent = sync.err || "La synchronisation n'est pas prête. Recharge la page."; return; }
-      if (!email.value.trim() || pass.value.length < 6) { msg.className = "msg ko"; msg.textContent = "Saisis ton e-mail et un mot de passe d'au moins 6 caractères."; return; }
-      msg.className = "msg"; msg.textContent = "Un instant…";
-      try {
-        if (create) {
-          const direct = await sync.signUp(email.value.trim(), pass.value);
-          if (!direct) { note = ["ok", "Compte créé. Clique sur le lien de confirmation reçu par e-mail, puis reviens te connecter ici."]; draw(); }
-        } else await sync.signIn(email.value.trim(), pass.value);
-      } catch (e) { msg.className = "msg ko"; msg.textContent = sync.text(e); }
-    };
-    const form = el("form", { onsubmit: ev => { ev.preventDefault(); go(false); } },
-      el("label", { for: "acct-email" }, "E-mail"), email,
-      el("label", { for: "acct-pass" }, "Mot de passe"), pass,
-      el("div", { class: "row" }, el("button", { class: "btn", type: "submit" }, "Se connecter"), el("button", { class: "btn", type: "button", onclick: () => go(true) }, "Créer un compte")));
-    box.append(el("div", { class: "prose" }, el("p", null, "Un compte permet de retrouver ta progression sur tous tes appareils. La progression déjà enregistrée dans ce navigateur est conservée : elle est fusionnée avec celle du compte à la connexion.")), form, msg);
-  };
-  sync.onChange = draw;
-  viewCleanup = () => { sync.onChange = null; };
-  draw();
-}
 function renderLesson(l) {
   const col = el("article", { class: "col lesson" });
   main.replaceChildren(col);
@@ -1448,7 +1388,6 @@ function route() {
   else if (h === "revision") { current = h; renderReview(); }
   else if (h === "entretien") { current = h; renderInterview(); }
   else if (h === "glossaire") { current = h; renderGloss(); }
-  else if (h === "compte") { current = h; renderAccount(); }
   else if (h === "positionnement") { current = h; renderDiag(); }
   else if (h.startsWith("bilan-") && MODS[h.slice(6)] && bilanPool(MODS[h.slice(6)]).length >= 3) { current = h; renderBilan(MODS[h.slice(6)]); }
   else { current = "accueil"; renderHome(); }
@@ -1461,6 +1400,7 @@ $("#burger").addEventListener("click", () => { const o = document.body.classList
 $("#scrim").addEventListener("click", () => { document.body.classList.remove("nav"); $("#burger").setAttribute("aria-expanded", "false"); });
 window.addEventListener("hashchange", route);
 route();
+try { store.d.sum = pySummary(); store.write(); } catch (e) {}
 engine.init();
 sync.init();
 </script>
