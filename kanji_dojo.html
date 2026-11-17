@@ -83,6 +83,84 @@
     .due-hint { margin: -6px 0 14px; font-size: .78rem; color: var(--muted); text-align: center; }
     .due-hint b { color: var(--n3); }
 
+
+    /* ---------- saisie et détails ---------- */
+    .type-form { width: 100%; display: grid; gap: 8px; margin-bottom: 18px; }
+    .type-form input { width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--border); background: var(--card); color: var(--text); font: 600 1.2rem 'Inter', 'Noto Serif JP', sans-serif; text-align: center; }
+    .type-form input:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+    .type-form input.ok { border-color: var(--success); color: var(--success); }
+    .type-form input.ko { border-color: var(--error); color: var(--error); }
+    .type-form input:disabled ~ button { display: none; }
+    .type-preview.msg { font-family: 'Inter', sans-serif; font-size: .9rem; }
+    .type-preview { min-height: 1.6em; text-align: center; font-family: 'Noto Serif JP', serif; font-size: 1.3rem; color: var(--muted); }
+    .type-tag { display: inline-block; font-size: .62rem; letter-spacing: .14em; text-transform: uppercase; color: var(--n3); border: 1px solid rgba(255,209,102,.4); border-radius: 99px; padding: 2px 8px; margin-bottom: 8px; }
+    .card-extra { width: 100%; margin-bottom: 14px; }
+    .card-extra:empty { display: none; }
+    .ex-sec { font-size: .62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .16em; margin: 14px 0 6px; }
+    .ex-meaning { font-size: .95rem; font-weight: 600; }
+    .ex-word { display: grid; grid-template-columns: auto auto 1fr auto; gap: 10px; align-items: baseline; padding: 7px 10px; background: var(--card); border: 1px solid var(--border); border-radius: 9px; margin-bottom: 5px; }
+    .ex-w { font-family: 'Noto Serif JP', serif; font-size: 1.15rem; }
+    .ex-y { font-family: 'Noto Serif JP', serif; font-size: .85rem; color: var(--n4); }
+    .ex-fr { font-size: .8rem; color: var(--muted); }
+    .ex-comps { display: flex; flex-wrap: wrap; gap: 6px; }
+    .ex-comp { display: inline-flex; align-items: baseline; gap: 6px; padding: 4px 10px; border-radius: 99px; background: var(--card); border: 1px solid var(--border); font-size: .76rem; color: var(--muted); }
+    .ex-comp b { font-family: 'Noto Serif JP', serif; font-size: 1.05rem; color: var(--text); font-weight: 400; }
+
+    /* ---------- lecture ---------- */
+    #screen-read, #screen-editor { width: 100%; }
+    .read-opts { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; font-size: .78rem; color: var(--muted); margin: 4px 0 14px; }
+    .read-opts label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+    .read-info { font-size: .8rem; color: var(--muted); text-align: center; margin-bottom: 14px; line-height: 1.5; }
+    .sent { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+    .jp { font-family: 'Noto Serif JP', serif; font-size: 1.35rem; line-height: 2.3; word-break: break-all; }
+    .jp ruby { cursor: pointer; border-radius: 4px; }
+    .jp ruby.learning { text-decoration: underline dotted var(--n3); text-underline-offset: 6px; }
+    .jp rt { font-size: .5em; color: var(--n4); visibility: hidden; user-select: none; }
+    .jp ruby.on rt, .furi-all .jp rt { visibility: visible; }
+    .sent-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 6px; }
+    .tr-btn { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 99px; padding: 3px 12px; font-size: .74rem; cursor: pointer; }
+    .tr { font-size: .88rem; color: var(--muted); margin-top: 8px; display: none; }
+    .sent.open .tr { display: block; }
+    .src { font-size: .65rem; color: var(--dim); text-decoration: none; }
+    .tx-item { width: 100%; text-align: left; display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; margin-bottom: 8px; color: var(--text); cursor: pointer; }
+    .tx-item.locked { opacity: .55; cursor: default; }
+    .tx-item .jp { font-size: 1.05rem; line-height: 1.9; }
+    .tx-meta { font-size: .72rem; color: var(--muted); }
+    .tx-lv { font-size: .62rem; font-weight: 700; padding: 2px 7px; border-radius: 99px; margin-left: auto; white-space: nowrap; }
+    .tx-para .jp { font-size: 1.3rem; }
+    .tx-para .sent { padding: 10px 14px; }
+    .read-credit { font-size: .66rem; color: var(--dim); text-align: center; margin-top: 16px; line-height: 1.5; }
+    /* ---------- éditeur ---------- */
+    #ed-out { width: 100%; min-height: 170px; resize: vertical; background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 12px; padding: 14px; font: 1.35rem/1.8 'Noto Serif JP', serif; }
+    .ed-bar { display: flex; gap: 8px; align-items: center; margin: 10px 0; }
+    .ed-bar .ed-script { display: flex; gap: 4px; margin-right: auto; }
+    .ed-bar .mode-tab { padding: 6px 14px; font-family: 'Noto Serif JP', serif; }
+    .ed-comp { background: var(--surface, #111122); border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
+    #ed-in { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); font: 1.25rem 'Noto Serif JP', 'Inter', sans-serif; }
+    #ed-in:focus { outline: 2px solid var(--primary); outline-offset: 1px; }
+    .ed-segs { min-height: 2.4em; margin-top: 8px; font-family: 'Noto Serif JP', serif; font-size: 1.3rem; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+    .seg { padding: 2px 6px; border-bottom: 2px solid var(--dim); cursor: pointer; border-radius: 4px 4px 0 0; }
+    .seg.active { border-bottom-color: var(--primary); background: rgba(230,57,70,.12); }
+    .ed-cands { display: flex; flex-wrap: wrap; gap: 6px; min-height: 0; }
+    .cand { font-family: 'Noto Serif JP', serif; font-size: 1.15rem; padding: 5px 10px; border-radius: 9px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; }
+    .cand small { font-family: 'Inter', sans-serif; font-size: .62rem; color: var(--dim); margin-right: 5px; }
+    .cand.known { border-color: var(--n5); }
+    .cand.sel { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .ed-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
+    .ed-legend { font-size: .7rem; color: var(--dim); text-align: center; margin-top: 10px; }
+    .ed-legend .cand { font-size: .8rem; padding: 1px 6px; cursor: default; }
+
+    /* ---------- prononciation ---------- */
+    .say { background: none; border: 1px solid var(--border); border-radius: 99px; width: 30px; height: 30px; line-height: 1; font-size: .85rem; cursor: pointer; vertical-align: middle; padding: 0; color: var(--text); }
+    .say:hover { border-color: var(--n4); }
+    .say.playing { border-color: var(--n4); box-shadow: 0 0 0 3px rgba(76,201,240,.25); }
+    .card-reading .say { margin-left: 6px; }
+    .ex-word .say { width: 26px; height: 26px; font-size: .75rem; }
+    .say-cell { cursor: pointer; }
+    .read-opts select { background: var(--card); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 2px 4px; font-size: .75rem; }
+    #toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0; transition: .25s; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 10px 16px; border-radius: 10px; font-size: .82rem; max-width: 90vw; z-index: 99; pointer-events: none; text-align: center; }
+    .type-form[hidden] { display: none; }
+    #toast.on { opacity: 1; transform: translate(-50%, 0); }
     /* ---------- kana ---------- */
     .kana-body { width: 100%; }
     .kana-stats { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; font-size: .76rem; color: var(--muted); margin: 4px 0 14px; }
@@ -546,6 +624,26 @@
   </button>
 
   <div class="sep"></div>
+  <button class="num-entry-btn" onclick="showRead()">
+    <div class="num-entry-kanji">読む</div>
+    <div class="num-entry-text">
+      <div class="num-entry-title">Lecture</div>
+      <div class="num-entry-desc" id="read-entry-desc">Phrases et petits textes avec les kanji que tu as vus</div>
+    </div>
+    <span style="color:var(--dim);font-size:1.2rem">›</span>
+  </button>
+
+  <div class="sep"></div>
+  <button class="num-entry-btn" onclick="showEditor()">
+    <div class="num-entry-kanji">書く</div>
+    <div class="num-entry-text">
+      <div class="num-entry-title">Éditeur japonais</div>
+      <div class="num-entry-desc">Écris en romaji, choisis tes kanji comme sur un vrai clavier</div>
+    </div>
+    <span style="color:var(--dim);font-size:1.2rem">›</span>
+  </button>
+
+  <div class="sep"></div>
   <button class="num-entry-btn" onclick="showNumbers()">
     <div class="num-entry-kanji">数字</div>
     <div class="num-entry-text">
@@ -582,9 +680,15 @@
   </div>
 
   <div class="choices-grid" id="choices-grid"></div>
+  <form class="type-form" id="type-form" autocomplete="off" hidden>
+    <input id="type-in" type="text" lang="ja" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Ta réponse">
+    <div class="type-preview" id="type-preview" aria-live="polite"></div>
+    <button class="btn btn-primary" type="submit">Valider</button>
+  </form>
+  <div class="card-extra" id="card-extra"></div>
 
   <button class="next-btn" id="next-btn" onclick="nextCard()">Suivant →</button>
-  <div class="kbd-hint">Raccourcis : <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> pour choisir · <kbd>Entrée</kbd> pour suivant</div>
+  <div class="kbd-hint" id="kbd-hint">Raccourcis : <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> pour choisir · <kbd>Entrée</kbd> pour suivant</div>
 </div>
 
 
@@ -640,6 +744,59 @@
   <div id="kana-body" class="kana-body"></div>
 </div>
 
+
+<!-- ═══════════════════════════════
+     SCREEN: LECTURE
+════════════════════════════════ -->
+<div class="screen" id="screen-read">
+  <div class="sess-header">
+    <button class="btn btn-ghost btn-sm" onclick="readBack()">← Retour</button>
+    <div class="sess-info">読む · Lecture</div>
+    <div class="sess-score" id="read-counter"></div>
+  </div>
+  <div class="mode-wrap">
+    <button class="mode-tab active" id="read-tab-ph" onclick="setReadView('ph')">Phrases</button>
+    <button class="mode-tab" id="read-tab-tx" onclick="setReadView('tx')">Textes</button>
+  </div>
+  <div class="read-opts">
+    <label><input type="checkbox" id="opt-furi" onchange="readOpt()"> Toutes les lectures</label>
+    <label><input type="checkbox" id="opt-kana" onchange="readOpt()"> Kana vus seulement</label>
+    <label>Voix <select id="opt-rate" onchange="setVoiceRate(this.value)"><option value="0.65">lente</option><option value="0.85">normale</option><option value="1">rapide</option></select></label>
+  </div>
+  <div id="read-body"></div>
+</div>
+
+<!-- ═══════════════════════════════
+     SCREEN: ÉDITEUR
+════════════════════════════════ -->
+<div class="screen" id="screen-editor">
+  <div class="sess-header">
+    <button class="btn btn-ghost btn-sm" onclick="goHome()">← Retour</button>
+    <div class="sess-info">書く · Éditeur</div>
+    <div class="sess-score" id="ed-count">0</div>
+  </div>
+  <textarea id="ed-out" lang="ja" spellcheck="false" placeholder="Ton texte apparaît ici. Tu peux aussi le corriger directement."></textarea>
+  <div class="ed-bar">
+    <div class="ed-script">
+      <button class="mode-tab active" id="ed-h" onclick="edScript('h')">あ</button>
+      <button class="mode-tab" id="ed-k" onclick="edScript('k')">ア</button>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="edSay(this)">🔊 Écouter</button>
+    <button class="btn btn-ghost btn-sm" onclick="edCopy()" id="ed-copy">Copier</button>
+    <button class="btn btn-ghost btn-sm" onclick="edClear()">Effacer</button>
+  </div>
+  <div class="ed-comp">
+    <input id="ed-in" type="text" lang="ja" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="Tape en romaji : watashi, nihongo…">
+    <div class="ed-segs" id="ed-segs"></div>
+    <div class="ed-cands" id="ed-cands"></div>
+    <div class="ed-actions">
+      <button class="btn btn-ghost btn-sm" onclick="edConvert()">変換 Kanji</button>
+      <button class="btn btn-primary btn-sm" onclick="edCommit()">確定 Valider</button>
+    </div>
+  </div>
+  <div class="kbd-hint"><kbd>Espace</kbd> propose les kanji, encore <kbd>Espace</kbd> ou <kbd>1</kbd>…<kbd>9</kbd> pour choisir, <kbd>←</kbd><kbd>→</kbd> pour changer de mot, <kbd>Entrée</kbd> pour valider, <kbd>Échap</kbd> pour revenir aux kana.<br>Astuce : convertis mot par mot (watashi Espace Entrée, ha Entrée…) pour un résultat plus sûr.</div>
+  <p class="ed-legend"><span class="cand known">漢</span> tous les kanji déjà vus · <span class="cand">漢</span> au moins un kanji nouveau</p>
+</div>
 
 <!-- ═══════════════════════════════
      SCREEN: NUMBERS
@@ -1165,6 +1322,16 @@ const NUMBERS = [
   {n:10000, k:"万",    r:"man / ichiman"},
 ];
 
+
+// ──────────────────────────────────────────────────────
+//  VOCABULAIRE ET COMPOSANTS
+//  Mots : JMdict (EDRDG, CC BY-SA 4.0), choisis parmi les plus fréquents ; traductions françaises
+//  rédigées pour ce Dojo. Composants : KRADFILE (EDRDG, CC BY-SA 4.0).
+// ──────────────────────────────────────────────────────
+const VOCAB = {"一":[["一つ","ひとつ","un (objet)"],["一部","いちぶ","une partie"]],"二":[["二つ","ふたつ","deux (objets)"],["二人","ふたり","deux personnes"]],"三":[["三つ","みっつ","trois (objets)"],["三月","さんがつ","mars"]],"四":[["四つ","よっつ","quatre (objets)"],["四月","しがつ","avril"]],"五":[["五つ","いつつ","cinq (objets)"],["五月","ごがつ","mai"]],"六":[["六つ","むっつ","six (objets)"],["六月","ろくがつ","juin"]],"七":[["七つ","ななつ","sept (objets)"],["七月","しちがつ","juillet"]],"八":[["八つ","やっつ","huit (objets)"],["八月","はちがつ","août"]],"九":[["九つ","ここのつ","neuf (objets)"],["九月","くがつ","septembre"]],"十":[["十","じゅう","dix"],["十分","じゅうぶん","suffisant, assez"]],"百":[["百","ひゃく","cent"],["二百","にひゃく","deux cents"]],"千":[["千","せん","mille"],["三千","さんぜん","trois mille"]],"万":[["一万","いちまん","dix mille"],["万一","まんいち","au cas où, si jamais"]],"円":[["円","えん","yen ; cercle"],["円高","えんだか","yen fort (hausse du yen)"]],"日":[["日","ひ","jour ; soleil"],["毎日","まいにち","tous les jours"]],"月":[["月","つき","lune ; mois"],["今月","こんげつ","ce mois-ci"]],"年":[["年","とし","année ; âge"],["今年","ことし","cette année"]],"時":[["時","とき","moment, quand"],["時間","じかん","temps ; heure(s)"]],"間":[["間","あいだ","intervalle ; pendant"],["人間","にんげん","être humain"]],"分":[["分ける","わける","diviser, partager"],["部分","ぶぶん","partie, portion"]],"半":[["半分","はんぶん","moitié"],["後半","こうはん","seconde moitié"]],"前":[["前","まえ","devant ; avant"],["午前","ごぜん","matin (a.m.)"]],"後":[["後ろ","うしろ","derrière"],["午後","ごご","après-midi (p.m.)"]],"午":[["午前","ごぜん","matin (a.m.)"],["午後","ごご","après-midi (p.m.)"]],"朝":[["朝","あさ","matin"],["毎朝","まいあさ","chaque matin"]],"昼":[["昼","ひる","midi ; journée"],["昼食","ちゅうしょく","déjeuner (repas)"]],"夜":[["夜","よる","nuit, soir"],["今夜","こんや","ce soir"]],"毎":[["毎日","まいにち","tous les jours"],["毎週","まいしゅう","chaque semaine"]],"週":[["週","しゅう","semaine"],["今週","こんしゅう","cette semaine"]],"火":[["火","ひ","feu"],["火山","かざん","volcan"]],"水":[["水","みず","eau"],["水道","すいどう","eau courante, réseau d'eau"]],"木":[["木","き","arbre ; bois"],["木曜日","もくようび","jeudi"]],"金":[["お金","おかね","argent"],["金曜日","きんようび","vendredi"]],"土":[["土","つち","terre, sol"],["土地","とち","terrain"]],"曜":[["曜日","ようび","jour de la semaine"],["土曜日","どようび","samedi"]],"山":[["山","やま","montagne"],["火山","かざん","volcan"]],"川":[["川","かわ","rivière"],["小川","おがわ","ruisseau"]],"田":[["田んぼ","たんぼ","rizière"],["水田","すいでん","rizière inondée"]],"上":[["上","うえ","dessus, en haut"],["上手","じょうず","habile, doué"]],"下":[["下","した","dessous, en bas"],["下手","へた","maladroit, peu doué"]],"中":[["中","なか","intérieur, milieu"],["中心","ちゅうしん","centre"]],"大":[["大きい","おおきい","grand"],["大学","だいがく","université"]],"小":[["小さい","ちいさい","petit"],["小学校","しょうがっこう","école primaire"]],"右":[["右","みぎ","droite"],["左右","さゆう","gauche et droite"]],"左":[["左","ひだり","gauche"],["左手","ひだりて","main gauche"]],"北":[["北","きた","nord"],["南北","なんぼく","nord et sud"]],"南":[["南","みなみ","sud"],["東南","とうなん","sud-est"]],"東":[["東","ひがし","est"],["東西","とうざい","est et ouest"]],"西":[["西","にし","ouest"],["東西","とうざい","est et ouest"]],"人":[["人","ひと","personne"],["日本人","にほんじん","Japonais (personne)"]],"口":[["口","くち","bouche"],["人口","じんこう","population"]],"目":[["目","め","œil"],["目的","もくてき","but, objectif"]],"耳":[["耳","みみ","oreille"]],"手":[["手","て","main"],["選手","せんしゅ","joueur, athlète"]],"足":[["足","あし","pied ; jambe"],["手足","てあし","bras et jambes, membres"]],"父":[["お父さん","おとうさん","père, papa"],["父母","ふぼ","parents (père et mère)"]],"母":[["お母さん","おかあさん","mère, maman"],["父母","ふぼ","parents (père et mère)"]],"子":[["子","こ","enfant"],["子供","こども","enfant"]],"友":[["友だち","ともだち","ami(e)"],["友人","ゆうじん","ami(e)"]],"男":[["男","おとこ","homme"],["男子","だんし","garçon, homme"]],"女":[["女","おんな","femme"],["女子","じょし","fille, femme"]],"国":[["国","くに","pays"],["外国","がいこく","pays étranger"]],"外":[["外","そと","dehors, extérieur"],["海外","かいがい","à l'étranger (outre-mer)"]],"学":[["学ぶ","まなぶ","apprendre, étudier"],["学校","がっこう","école"]],"校":[["学校","がっこう","école"],["校長","こうちょう","directeur d'école"]],"先":[["先","さき","d'abord ; devant"],["先生","せんせい","professeur"]],"生":[["生きる","いきる","vivre"],["学生","がくせい","étudiant"]],"何":[["何","なに","quoi"],["何度","なんど","combien de fois"]],"今":[["今","いま","maintenant"],["今回","こんかい","cette fois-ci"]],"来":[["来る","くる","venir"],["来年","らいねん","l'année prochaine"]],"行":[["行く","いく","aller"],["行動","こうどう","action, comportement"]],"食":[["食べる","たべる","manger"],["食事","しょくじ","repas"]],"飲":[["飲む","のむ","boire"],["飲食","いんしょく","boire et manger, restauration"]],"見":[["見る","みる","voir, regarder"],["意見","いけん","opinion, avis"]],"聞":[["聞く","きく","entendre, écouter ; demander"],["新聞","しんぶん","journal"]],"書":[["書く","かく","écrire"],["書店","しょてん","librairie"]],"読":[["読む","よむ","lire"],["読者","どくしゃ","lecteur"]],"話":[["話す","はなす","parler"],["電話","でんわ","téléphone"]],"言":[["言う","いう","dire"],["言語","げんご","langue, langage"]],"買":[["買う","かう","acheter"],["売買","ばいばい","achat et vente"]],"白":[["白い","しろい","blanc"],["白書","はくしょ","livre blanc (rapport officiel)"]],"黒":[["黒い","くろい","noir"],["黒字","くろじ","excédent (être dans le vert)"]],"赤":[["赤い","あかい","rouge"],["赤字","あかじ","déficit (être dans le rouge)"]],"青":[["青い","あおい","bleu"],["青年","せいねん","jeune homme, jeunesse"]],"高":[["高い","たかい","haut ; cher"],["高校","こうこう","lycée"]],"安":[["安い","やすい","bon marché"],["安全","あんぜん","sécurité"]],"新":[["新しい","あたらしい","nouveau"],["新聞","しんぶん","journal"]],"古":[["古い","ふるい","vieux, ancien"],["古代","こだい","Antiquité"]],"長":[["長い","ながい","long"],["会長","かいちょう","président (d'une société)"]],"語":[["語る","かたる","raconter"],["日本語","にほんご","japonais (langue)"]],"字":[["字","じ","caractère, écriture"],["文字","もじ","caractère, lettre"]],"文":[["文","ぶん","phrase"],["文化","ぶんか","culture"]],"本":[["本","ほん","livre"],["日本","にほん","Japon"]],"会":[["会う","あう","rencontrer"],["会社","かいしゃ","entreprise"]],"社":[["会社","かいしゃ","entreprise"],["社会","しゃかい","société"]],"家":[["家","いえ","maison"],["国家","こっか","État, nation"]],"電":[["電話","でんわ","téléphone"],["電気","でんき","électricité"]],"車":[["車","くるま","voiture"],["電車","でんしゃ","train (électrique)"]],"駅":[["駅","えき","gare"],["駅前","えきまえ","devant la gare"]],"道":[["道","みち","chemin, route"],["柔道","じゅうどう","judo"]],"地":[["地下","ちか","sous-sol"],["地図","ちず","carte (géographique)"]],"図":[["図","ず","schéma, figure"],["地図","ちず","carte (géographique)"]],"室":[["室","しつ","salle, pièce"],["教室","きょうしつ","salle de classe"]],"員":[["店員","てんいん","vendeur, employé de magasin"],["会員","かいいん","membre"]],"店":[["お店","おみせ","magasin"],["支店","してん","succursale"]],"物":[["物","もの","chose, objet"],["人物","じんぶつ","personnage, personne"]],"用":[["用いる","もちいる","utiliser"],["使用","しよう","utilisation"]],"思":[["思う","おもう","penser"],["思想","しそう","pensée, idéologie"]],"知":[["知る","しる","savoir, connaître"],["知事","ちじ","préfet (gouverneur de préfecture)"]],"考":[["考える","かんがえる","réfléchir, penser"],["選考","せんこう","sélection (de candidats)"]],"教":[["教える","おしえる","enseigner"],["教室","きょうしつ","salle de classe"]],"習":[["習う","ならう","apprendre (auprès de quelqu'un)"],["学習","がくしゅう","apprentissage, étude"]],"音":[["音","おと","son, bruit"],["音楽","おんがく","musique"]],"楽":[["楽しい","たのしい","agréable, amusant"],["音楽","おんがく","musique"]],"歌":[["歌う","うたう","chanter"],["歌手","かしゅ","chanteur, chanteuse"]],"強":[["強い","つよい","fort"],["強化","きょうか","renforcement"]],"弱":[["弱い","よわい","faible"],["弱点","じゃくてん","point faible"]],"早":[["早い","はやい","tôt ; rapide"],["早朝","そうちょう","tôt le matin"]],"同":[["同じ","おなじ","pareil, identique"],["同時","どうじ","simultané, en même temps"]],"正":[["正しい","ただしい","correct, juste"],["正式","せいしき","officiel, en bonne et due forme"]],"動":[["動く","うごく","bouger"],["活動","かつどう","activité"]],"止":[["止まる","とまる","s'arrêter"],["中止","ちゅうし","annulation, interruption"]],"始":[["始まる","はじまる","commencer"],["開始","かいし","début"]],"終":[["終わる","おわる","finir"],["終わり","おわり","fin"]],"開":[["開ける","あける","ouvrir"],["開始","かいし","début"]],"閉":[["閉める","しめる","fermer"],["閉会","へいかい","clôture (d'une réunion)"]],"入":[["入る","はいる","entrer"],["輸入","ゆにゅう","importation"]],"出":[["出す","だす","sortir (quelque chose), envoyer"],["輸出","ゆしゅつ","exportation"]],"起":[["起きる","おきる","se lever, se réveiller"],["起用","きよう","nomination (à un poste)"]],"待":[["待つ","まつ","attendre"],["招待","しょうたい","invitation"]],"使":[["使う","つかう","utiliser"],["使用","しよう","utilisation"]],"働":[["働く","はたらく","travailler"],["共働き","ともばたらき","couple où les deux travaillent"]],"帰":[["帰る","かえる","rentrer, revenir"],["帰国","きこく","retour au pays"]],"急":[["急ぐ","いそぐ","se dépêcher"],["急行","きゅうこう","train express"]],"近":[["近い","ちかい","proche"],["近所","きんじょ","voisinage"]],"遠":[["遠い","とおい","loin, éloigné"],["遠足","えんそく","excursion, sortie scolaire"]],"多":[["多い","おおい","nombreux"],["多数","たすう","grand nombre"]],"少":[["少し","すこし","un peu"],["少年","しょうねん","garçon, jeune"]],"広":[["広い","ひろい","large, spacieux"],["広場","ひろば","place (publique)"]],"明":[["明るい","あかるい","lumineux ; gai"],["説明","せつめい","explication"]],"暗":[["暗い","くらい","sombre"],["明暗","めいあん","ombre et lumière"]],"重":[["重い","おもい","lourd"],["重要","じゅうよう","important"]],"軽":[["軽い","かるい","léger"],["手軽","てがる","facile, simple"]],"方":[["方","かた","personne (poli) ; manière"],["一方","いっぽう","d'un côté ; d'autre part"]],"送":[["送る","おくる","envoyer"],["輸送","ゆそう","transport"]],"受":[["受ける","うける","recevoir ; passer (un examen)"],["受験","じゅけん","passer un examen d'entrée"]],"取":[["取る","とる","prendre"],["取引","とりひき","transaction, affaire"]],"持":[["持つ","もつ","tenir ; posséder"],["支持","しじ","soutien, appui"]],"忘":[["忘れる","わすれる","oublier"],["忘年会","ぼうねんかい","fête de fin d'année"]],"覚":[["覚える","おぼえる","retenir, apprendre par cœur"],["感覚","かんかく","sensation"]],"転":[["転ぶ","ころぶ","tomber, trébucher"],["回転","かいてん","rotation"]],"走":[["走る","はしる","courir"],["走者","そうしゃ","coureur"]],"泳":[["泳ぐ","およぐ","nager"],["水泳","すいえい","natation"]],"乗":[["乗る","のる","monter (dans un véhicule)"],["乗客","じょうきゃく","passager"]],"降":[["降りる","おりる","descendre (d'un véhicule)"],["以降","いこう","à partir de, après"]],"歩":[["歩く","あるく","marcher"],["進歩","しんぽ","progrès"]],"引":[["引く","ひく","tirer"],["取引","とりひき","transaction, affaire"]],"押":[["押す","おす","pousser, appuyer"],["押収","おうしゅう","saisie (judiciaire)"]],"洗":[["洗う","あらう","laver"],["洗濯","せんたく","lessive"]],"切":[["切る","きる","couper"],["大切","たいせつ","important, précieux"]],"集":[["集める","あつめる","rassembler, collectionner"],["集会","しゅうかい","réunion, rassemblement"]],"気":[["気","き","esprit, humeur"],["人気","にんき","popularité"]],"体":[["体","からだ","corps"],["全体","ぜんたい","ensemble, totalité"]],"心":[["心","こころ","cœur, esprit"],["関心","かんしん","intérêt"]],"病":[["病む","やむ","tomber malade"],["病気","びょうき","maladie"]],"医":[["医者","いしゃ","médecin"],["医学","いがく","médecine (science)"]],"薬":[["薬","くすり","médicament"],["薬品","やくひん","produit pharmaceutique"]],"頭":[["頭","あたま","tête"],["先頭","せんとう","tête (d'une file), premier rang"]],"顔":[["顔","かお","visage"],["顔色","かおいろ","teint, mine"]],"声":[["声","こえ","voix"],["声明","せいめい","déclaration officielle"]],"空":[["空","そら","ciel"],["空気","くうき","air ; ambiance"]],"海":[["海","うみ","mer"],["海外","かいがい","à l'étranger (outre-mer)"]],"花":[["花","はな","fleur"],["花火","はなび","feu d'artifice"]],"雨":[["雨","あめ","pluie"],["大雨","おおあめ","forte pluie"]],"雪":[["雪","ゆき","neige"],["大雪","おおゆき","fortes chutes de neige"]],"風":[["風","かぜ","vent"],["風邪","かぜ","rhume"]],"天":[["天","てん","ciel"],["天気","てんき","temps (météo)"]],"星":[["星","ほし","étoile"],["火星","かせい","Mars (planète)"]],"光":[["光","ひかり","lumière"],["観光","かんこう","tourisme"]],"色":[["色","いろ","couleur"],["特色","とくしょく","caractéristique"]],"形":[["形","かたち","forme"],["形式","けいしき","format, forme"]],"数":[["数える","かぞえる","compter"],["数字","すうじ","chiffre, nombre"]],"力":[["力","ちから","force"],["勢力","せいりょく","influence, puissance"]],"点":[["点","てん","point"],["重点","じゅうてん","point essentiel"]],"線":[["線","せん","ligne"],["無線","むせん","radio, sans fil"]],"面":[["面","めん","surface ; masque"],["場面","ばめん","scène"]],"次":[["次","つぎ","suivant"],["次回","じかい","la prochaine fois"]],"度":[["度","ど","degré ; fois"],["制度","せいど","système, institution"]],"回":[["回す","まわす","tourner (quelque chose)"],["今回","こんかい","cette fois-ci"]],"変":[["変わる","かわる","changer"],["変化","へんか","changement"]],"意":[["意見","いけん","opinion, avis"],["合意","ごうい","accord"]],"感":[["感じる","かんじる","ressentir"],["感覚","かんかく","sensation"]],"情":[["情","じょう","sentiment, émotion"],["事情","じじょう","circonstances"]],"愛":[["愛する","あいする","aimer"],["愛情","あいじょう","affection, amour"]],"好":[["好き","すき","aimer, apprécier"],["好調","こうちょう","en bonne forme, favorable"]],"業":[["業","ぎょう","activité, métier"],["企業","きぎょう","entreprise"]],"場":[["場","ば","endroit"],["現場","げんば","sur place, lieu des faits"]],"研":[["研ぐ","とぐ","aiguiser"],["研究","けんきゅう","recherche"]],"究":[["研究","けんきゅう","recherche"],["究明","きゅうめい","élucidation"]],"科":[["科目","かもく","matière (scolaire)"],["科学","かがく","science"]],"技":[["技","わざ","technique, savoir-faire"],["技術","ぎじゅつ","technologie"]],"術":[["術","じゅつ","art, technique"],["技術","ぎじゅつ","technologie"]],"代":[["代わり","かわり","remplacement, à la place"],["時代","じだい","époque"]],"表":[["表す","あらわす","exprimer, représenter"],["代表","だいひょう","représentant"]],"実":[["実は","じつは","en fait, à vrai dire"],["現実","げんじつ","réalité"]],"現":[["現れる","あらわれる","apparaître"],["現在","げんざい","actuellement, présent"]],"問":[["問う","とう","demander, interroger"],["質問","しつもん","question"]],"題":[["題","だい","titre, sujet"],["問題","もんだい","problème ; question"]],"答":[["答え","こたえ","réponse"],["回答","かいとう","réponse (officielle)"]],"質":[["質","しつ","qualité"],["質問","しつもん","question"]],"量":[["量る","はかる","mesurer, peser"],["大量","たいりょう","grande quantité"]],"記":[["記す","しるす","noter, consigner"],["記事","きじ","article (de presse)"]],"事":[["事","こと","chose, fait"],["記事","きじ","article (de presse)"]],"者":[["者","もの","personne"],["記者","きしゃ","journaliste"]],"所":[["所","ところ","endroit"],["場所","ばしょ","lieu, emplacement"]],"部":[["部","ぶ","service, département ; club"],["一部","いちぶ","une partie"]],"作":[["作る","つくる","fabriquer, faire"],["作品","さくひん","œuvre"]],"品":[["品","しな","article, marchandise"],["作品","さくひん","œuvre"]],"特":[["特に","とくに","particulièrement"],["特別","とくべつ","spécial"]],"別":[["別に","べつに","pas particulièrement"],["特別","とくべつ","spécial"]],"定":[["定める","さだめる","fixer, décider"],["決定","けってい","décision"]],"決":[["決める","きめる","décider"],["決して","けっして","jamais (avec négation)"]],"合":[["合う","あう","convenir, aller ensemble"],["合意","ごうい","accord"]],"関":[["関係","かんけい","relation"],["関心","かんしん","intérêt"]],"続":[["続く","つづく","continuer"],["持続","じぞく","durée, persistance"]],"加":[["加える","くわえる","ajouter"],["増加","ぞうか","augmentation"]],"増":[["増える","ふえる","augmenter"],["増加","ぞうか","augmentation"]],"減":[["減る","へる","diminuer"],["減少","げんしょう","baisse, diminution"]],"進":[["進む","すすむ","avancer"],["推進","すいしん","promotion, propulsion"]],"退":[["退く","しりぞく","reculer, se retirer"],["引退","いんたい","retraite (fin de carrière)"]],"失":[["失う","うしなう","perdre"],["失業","しつぎょう","chômage"]],"得":[["得る","える","obtenir"],["所得","しょとく","revenu"]],"経":[["経る","へる","passer (le temps), traverser"],["経験","けいけん","expérience"]],"験":[["経験","けいけん","expérience"],["実験","じっけん","expérience (scientifique)"]],"成":[["成長","せいちょう","croissance"],["形成","けいせい","formation"]],"達":[["達する","たっする","atteindre"],["達成","たっせい","réalisation, accomplissement"]],"苦":[["苦しい","くるしい","pénible, douloureux"],["苦情","くじょう","réclamation, plainte"]],"悲":[["悲しい","かなしい","triste"],["悲観","ひかん","pessimisme"]],"喜":[["喜ぶ","よろこぶ","se réjouir"],["喜んで","よろこんで","avec plaisir"]],"怒":[["怒る","おこる","se mettre en colère"],["激怒","げきど","fureur"]],"恐":[["恐れ","おそれ","peur, crainte"],["恐縮","きょうしゅく","être confus, gêné (formule de politesse)"]],"注":[["注ぐ","そそぐ","verser"],["注目","ちゅうもく","attention, intérêt"]],"識":[["意識","いしき","conscience"],["知識","ちしき","connaissances"]],"想":[["思想","しそう","pensée, idéologie"],["感想","かんそう","impressions, avis"]],"念":[["念","ねん","idée, sentiment"],["記念","きねん","commémoration, souvenir"]],"必":[["必ず","かならず","sans faute, toujours"],["必要","ひつよう","nécessaire"]],"要":[["要る","いる","être nécessaire"],["重要","じゅうよう","important"]],"払":[["払う","はらう","payer"],["支払い","しはらい","paiement"]],"借":[["借りる","かりる","emprunter"],["借金","しゃっきん","dette"]],"貸":[["貸す","かす","prêter"],["貸金","かしきん","prêt (d'argent)"]],"売":[["売る","うる","vendre"],["売買","ばいばい","achat et vente"]],"選":[["選ぶ","えらぶ","choisir"],["選手","せんしゅ","joueur, athlète"]],"約":[["約","やく","environ"],["約束","やくそく","promesse ; rendez-vous"]],"礼":[["礼","れい","remerciement ; salut"],["失礼","しつれい","impolitesse ; excusez-moi"]],"祭":[["祭り","まつり","fête, festival"],["祭日","さいじつ","jour férié"]],"式":[["式","しき","cérémonie ; formule"],["正式","せいしき","officiel, en bonne et due forme"]],"法":[["法","ほう","loi"],["方法","ほうほう","méthode"]],"規":[["規則","きそく","règle, règlement"],["規定","きてい","disposition, réglementation"]],"政":[["政治","せいじ","politique"],["行政","ぎょうせい","administration"]],"治":[["治る","なおる","guérir"],["政治","せいじ","politique"]],"全":[["全て","すべて","tout, la totalité"],["安全","あんぜん","sécurité"]],"真":[["真ん中","まんなか","plein milieu"],["写真","しゃしん","photo"]],"確":[["確か","たしか","sûr, certain"],["確実","かくじつ","certain, fiable"]],"共":[["共に","ともに","ensemble"],["共同","きょうどう","en commun, coopération"]],"以":[["以上","いじょう","plus de, au-delà"],["以前","いぜん","auparavant"]],"対":[["対する","たいする","faire face à, envers"],["対策","たいさく","mesure, contre-mesure"]],"相":[["相手","あいて","partenaire, interlocuteur"],["相談","そうだん","consultation, conseil"]],"様":[["様","さま","M., Mme (très poli)"],["同様","どうよう","semblable, de même"]],"的":[["的","まと","cible"],["目的","もくてき","but, objectif"]],"化":[["化ける","ばける","se transformer, se déguiser"],["文化","ぶんか","culture"]],"活":[["活動","かつどう","activité"],["生活","せいかつ","vie quotidienne"]],"列":[["列","れつ","file, rangée"],["列車","れっしゃ","train"]],"並":[["並ぶ","ならぶ","s'aligner, faire la queue"],["並木","なみき","allée d'arbres"]],"交":[["交わす","かわす","échanger (des mots, des saluts)"],["外交","がいこう","diplomatie"]],"通":[["通る","とおる","passer"],["交通","こうつう","circulation, transports"]],"概":[["概念","がいねん","concept"],["概要","がいよう","résumé, vue d'ensemble"]],"象":[["象","ぞう","éléphant"],["対象","たいしょう","cible, objet (d'une étude)"]],"徴":[["特徴","とくちょう","caractéristique"],["象徴","しょうちょう","symbole"]],"索":[["検索","けんさく","recherche (dans une base, sur internet)"],["索引","さくいん","index (d'un livre)"]],"探":[["探す","さがす","chercher"],["探検","たんけん","exploration"]],"査":[["調査","ちょうさ","enquête, étude"],["検査","けんさ","contrôle, examen"]],"調":[["調べる","しらべる","examiner, vérifier"],["調査","ちょうさ","enquête, étude"]],"検":[["検査","けんさ","contrôle, examen"],["検事","けんじ","procureur"]],"証":[["証明","しょうめい","preuve, certificat"],["証人","しょうにん","témoin"]],"判":[["判断","はんだん","jugement, décision"],["判決","はんけつ","verdict"]],"断":[["断る","ことわる","refuser"],["判断","はんだん","jugement, décision"]],"論":[["論じる","ろんじる","débattre, discuter"],["議論","ぎろん","débat, discussion"]],"議":[["会議","かいぎ","réunion, conférence"],["議員","ぎいん","député, élu"]],"批":[["批判","ひはん","critique"],["批評","ひひょう","critique (d'une œuvre)"]],"評":[["評判","ひょうばん","réputation"],["評価","ひょうか","évaluation"]],"存":[["ご存じ","ごぞんじ","savoir, connaître (poli)"],["存在","そんざい","existence"]],"在":[["現在","げんざい","actuellement, présent"],["存在","そんざい","existence"]],"有":[["有名","ゆうめい","célèbre"],["有力","ゆうりょく","influent"]],"無":[["無い","ない","il n'y a pas"],["無料","むりょう","gratuit"]],"限":[["限る","かぎる","limiter"],["権限","けんげん","autorité, compétence"]],"超":[["超える","こえる","dépasser"],["超過","ちょうか","excédent, dépassement"]],"域":[["地域","ちいき","région, zone"],["海域","かいいき","zone maritime"]],"範":[["範囲","はんい","étendue, portée"],["広範","こうはん","vaste, étendu"]],"境":[["境","さかい","frontière, limite"],["国境","こっきょう","frontière nationale"]],"状":[["状況","じょうきょう","situation"],["状態","じょうたい","état, condition"]],"態":[["状態","じょうたい","état, condition"],["事態","じたい","situation, état des choses"]],"観":[["観る","みる","regarder (un spectacle)"],["観光","かんこう","tourisme"]],"角":[["角","かど","coin"],["三角","さんかく","triangle"]],"側":[["側","がわ","côté"],["側面","そくめん","flanc, aspect"]],"基":[["基づく","もとづく","se fonder sur"],["基本","きほん","base, fondamentaux"]],"準":[["準備","じゅんび","préparation"],["基準","きじゅん","critère, norme"]],"均":[["均一","きんいつ","uniforme"],["平均","へいきん","moyenne"]],"制":[["制度","せいど","système, institution"],["規制","きせい","réglementation"]],"率":[["率いる","ひきいる","diriger, mener"],["確率","かくりつ","probabilité"]],"値":[["値段","ねだん","prix"],["価値","かち","valeur"]],"額":[["額","ひたい","front (du visage)"],["金額","きんがく","montant, somme"]],"費":[["費やす","ついやす","dépenser, consacrer"],["費用","ひよう","frais, coût"]],"益":[["利益","りえき","bénéfice, profit"],["収益","しゅうえき","revenus, recettes"]],"損":[["損なう","そこなう","abîmer, nuire à"],["損失","そんしつ","perte"]],"資":[["資料","しりょう","documents, données"],["資金","しきん","fonds, capital"]],"産":[["生産","せいさん","production"],["産業","さんぎょう","industrie"]],"収":[["収める","おさめる","obtenir ; ranger"],["収入","しゅうにゅう","revenu"]],"支":[["支える","ささえる","soutenir"],["支持","しじ","soutien, appui"]],"税":[["税金","ぜいきん","impôt, taxe"],["関税","かんぜい","droits de douane"]],"価":[["物価","ぶっか","prix (coût de la vie)"],["価値","かち","valeur"]],"供":[["供える","そなえる","faire une offrande"],["子供","こども","enfant"]],"需":[["需要","じゅよう","demande (économie)"],["需給","じゅきゅう","offre et demande"]],"給":[["給料","きゅうりょう","salaire"],["供給","きょうきゅう","approvisionnement, offre"]],"輸":[["輸出","ゆしゅつ","exportation"],["輸入","ゆにゅう","importation"]],"貿":[["貿易","ぼうえき","commerce extérieur"]],"企":[["企てる","くわだてる","projeter, tenter"],["企業","きぎょう","entreprise"]],"画":[["画家","がか","peintre"],["計画","けいかく","plan, projet"]],"策":[["策","さく","stratagème, mesure"],["政策","せいさく","politique (mesures)"]],"略":[["略す","りゃくす","abréger"],["戦略","せんりゃく","stratégie"]],"拡":[["拡大","かくだい","agrandissement, expansion"],["拡散","かくさん","diffusion, propagation"]],"縮":[["縮む","ちぢむ","rétrécir"],["縮小","しゅくしょう","réduction"]],"推":[["推す","おす","recommander, soutenir"],["推進","すいしん","promotion, propulsion"]],"測":[["測る","はかる","mesurer"],["観測","かんそく","observation"]],"精":[["精神","せいしん","esprit, mental"],["精密","せいみつ","précis"]],"密":[["密か","ひそか","secret, discret"],["秘密","ひみつ","secret"]],"厳":[["厳しい","きびしい","sévère, strict"],["厳重","げんじゅう","rigoureux, strict"]],"激":[["激しい","はげしい","violent, intense"],["急激","きゅうげき","brusque, soudain"]],"穏":[["穏やか","おだやか","calme, paisible"],["平穏","へいおん","tranquillité"]],"柔":[["柔らかい","やわらかい","mou, doux"],["柔道","じゅうどう","judo"]],"契":[["契約","けいやく","contrat"],["契機","けいき","occasion, déclencheur"]],"締":[["締める","しめる","serrer, nouer"],["締め切り","しめきり","date limite"]],"違":[["違う","ちがう","être différent ; se tromper"],["違法","いほう","illégal"]],"抗":[["抗議","こうぎ","protestation"],["対抗","たいこう","rivalité, opposition"]],"崩":[["崩れる","くずれる","s'effondrer"],["崩壊","ほうかい","effondrement"]],"壊":[["壊す","こわす","casser, détruire"],["崩壊","ほうかい","effondrement"]],"廃":[["廃止","はいし","abolition"],["廃棄","はいき","mise au rebut"]],"滅":[["滅びる","ほろびる","périr, disparaître"],["絶滅","ぜつめつ","extinction"]],"衰":[["衰える","おとろえる","décliner, s'affaiblir"],["衰退","すいたい","déclin"]],"繁":[["繁栄","はんえい","prospérité"],["繁盛","はんじょう","prospérité (d'un commerce)"]],"栄":[["栄える","さかえる","prospérer"],["繁栄","はんえい","prospérité"]],"興":[["興味","きょうみ","intérêt"],["新興","しんこう","émergent"]],"盛":[["盛ん","さかん","florissant, actif"],["全盛","ぜんせい","apogée"]],"勢":[["勢い","いきおい","élan, vigueur"],["情勢","じょうせい","situation, conjoncture"]],"威":[["権威","けんい","autorité"],["脅威","きょうい","menace"]],"権":[["権利","けんり","droit"],["政権","せいけん","gouvernement (au pouvoir)"]],"覇":[["制覇","せいは","conquête, domination"],["覇権","はけん","hégémonie"]],"猛":[["猛烈","もうれつ","violent, acharné"],["猛威","もうい","fureur, ravages"]],"烈":[["強烈","きょうれつ","intense, violent"],["猛烈","もうれつ","violent, acharné"]],"燃":[["燃える","もえる","brûler"],["燃料","ねんりょう","combustible"]],"炎":[["炎","ほのお","flamme"],["炎上","えんじょう","embrasement ; polémique en ligne"]],"輝":[["輝く","かがやく","briller"],["輝き","かがやき","éclat"]],"閃":[["閃く","ひらめく","briller (éclair) ; avoir une idée soudaine"],["閃光","せんこう","éclair (de lumière)"]],"霊":[["霊","れい","âme, esprit"],["幽霊","ゆうれい","fantôme"]],"魂":[["魂","たましい","âme"],["鎮魂","ちんこん","repos de l'âme (requiem)"]],"魅":[["魅力","みりょく","charme, attrait"],["魅力的","みりょくてき","charmant, séduisant"]],"妖":[["妖精","ようせい","fée"],["妖怪","ようかい","yōkai (créature surnaturelle)"]],"幽":[["幽霊","ゆうれい","fantôme"],["幽玄","ゆうげん","profondeur mystérieuse (esthétique)"]],"玄":[["玄関","げんかん","entrée (d'une maison)"],["玄人","くろうと","expert, professionnel"]],"邪":[["邪魔","じゃま","gêne, dérangement"],["風邪","かぜ","rhume"]],"禍":[["災禍","さいか","catastrophe, fléau"],["禍根","かこん","source de malheur"]],"克":[["克服","こくふく","surmonter (une difficulté)"],["克明","こくめい","minutieux"]],"奪":[["奪う","うばう","arracher, voler"],["奪回","だっかい","reprise, reconquête"]],"脅":[["脅かす","おびやかす","menacer"],["脅威","きょうい","menace"]],"紛":[["紛れる","まぎれる","se confondre, se perdre dans"],["紛失","ふんしつ","perte (d'un objet)"]],"絡":[["絡む","からむ","s'emmêler ; être impliqué"],["連絡","れんらく","contact, prise de contact"]],"繰":[["繰る","くる","dévider, tourner (les pages)"],["繰り返す","くりかえす","répéter"]],"執":[["執る","とる","prendre en main (une affaire)"],["執行","しっこう","exécution (d'une décision)"]],"諦":[["諦める","あきらめる","renoncer, abandonner"],["諦観","ていかん","résignation lucide"]],"悟":[["悟る","さとる","comprendre, prendre conscience"],["覚悟","かくご","détermination, être prêt"]]};
+const COMPS = {"一":"一","二":"二","三":"一二","四":"儿囗","五":"一二五","六":"ハ亠","七":"乙匕ノ","八":"ハ","九":"九","十":"十","百":"一白","千":"ノ十","万":"｜ノ一","円":"冂亠一｜","日":"日","月":"月","年":"ノ一干","時":"寸土日","間":"日門","分":"刀ハ","半":"｜二并十","前":"一刂月并","後":"夂幺彳","午":"ノ干十","朝":"月十日","昼":"一日尸丶","夜":"⺅夕亠","毎":"母毋","週":"口辶土冂","火":"火","水":"水","木":"木","金":"金","土":"土","曜":"ヨ日隹","山":"山","川":"川","田":"田","上":"一卜","下":"｜一卜","中":"｜口","大":"大","小":"小","右":"ノ一口","左":"ノ一工","北":"匕爿","南":"干十并冂","東":"｜一日木田","西":"西","人":"人","口":"囗口","目":"目","耳":"耳","手":"手","足":"口足","父":"父","母":"母毋","子":"子","友":"ノ一又","男":"田力","女":"女","国":"王囗丶","外":"卜夕","学":"子⺌冖","校":"父木亠","先":"ノ土儿","生":"生","何":"⺅口亅","今":"𠆢一","来":"｜二米亠木","行":"行彳","食":"食","飲":"欠食","見":"見目儿","聞":"耳門","書":"日聿","読":"言士儿冖","話":"言口舌","言":"言","買":"貝目ハ罒","白":"白","黒":"黒里灬","赤":"赤土","青":"月青土二亠","高":"口高亠冂","安":"女宀","新":"斤十辛并木立亠","古":"口十","長":"長","語":"一言口五","字":"子宀","文":"文","本":"一木","会":"二𠆢厶","社":"土礻","家":"宀豕","電":"雨田乙","車":"車","駅":"馬尸","道":"辶自并首","地":"土也","図":"斗囗","室":"至土厶宀","員":"貝目ハ口","店":"口卜广","物":"勿牛勹","用":"用","思":"心田","知":"口矢","考":"⺹勹","教":"子⺹攵","習":"羽白冫","音":"音日立","楽":"白木冫","歌":"欠口亅","強":"弓虫厶","弱":"弓冫","早":"十日","同":"口冂一","正":"一止","動":"｜一日力里","止":"止","始":"口女厶","終":"糸幺小夂","開":"一門廾","閉":"ノ一門亅","入":"入","出":"｜山","起":"走土已","待":"寸土彳","使":"ノ一⺅口","働":"｜一⺅力日","帰":"ヨ刂巾冖","急":"ヨ心勹","近":"斤辶","遠":"衣口辶土","多":"夕","少":"ノ小","広":"厶广","明":"月日","暗":"音日立","重":"｜ノ一日里","軽":"車土又","方":"方","送":"辶并大一","受":"爪又冖","取":"耳又","持":"寸土扌","忘":"心亡亠","覚":"見⺌冖","転":"車二厶","走":"走土","泳":"氵水丶","乗":"｜ノ一禾ハ","降":"夂⻖十","歩":"ノ止小","引":"｜弓","押":"｜日扌田","洗":"ノ氵土儿","切":"刀匕","集":"木隹","気":"气丶ノ","体":"木一⺅","心":"心","病":"一人冂疒","医":"矢匚","薬":"日木冫⺾","頭":"貝目ハ口豆并頁","顔":"貝目ハ頁立亠厂彡","声":"士尸","空":"穴工儿宀","海":"氵母毋","花":"⺅匕⺾","雨":"雨","雪":"ヨ雨","風":"風冂虫ノ","天":"一大","星":"生日","光":"一⺌儿","色":"色巴勹","形":"廾彡ノ","数":"女米攵夂","力":"力","点":"口卜灬","線":"糸幺小水白","面":"面","次":"欠冫","度":"又广一凵","回":"口囗","変":"亠夂","意":"音心日立","感":"ノ口心戈","情":"月青土二忄亠","愛":"心爪冖夂","好":"子女","業":"｜一王并木羊耒","場":"土日勿","研":"｜口石亅廾ノ","究":"穴九儿宀","科":"禾斗","技":"支扌又十","術":"行十丶彳木","代":"⺅弋","表":"衣士","実":"士大宀","現":"王見","問":"口門","題":"貝目ハ日疋頁","答":"口竹𠆢","質":"貝目ハ斤","量":"一日里","記":"言已","事":"一口亅ヨ","者":"日⺹","所":"斤戸一尸","部":"口⻏立","作":"｜ノ⺅","品":"口品","特":"牛寸土","別":"刂口力","定":"疋宀","決":"氵人大二","合":"口𠆢一","関":"人大二ハ門并","続":"士糸幺小儿冖","加":"口力","増":"田土日并","減":"口氵亅戈","進":"辶隹","退":"辶艮","失":"ノ人二大","得":"寸日彳一","経":"糸幺小土又","験":"口人馬𠆢","成":"ノ戈","達":"王辶土并羊","苦":"口十⺾","悲":"心非","喜":"口士豆并","怒":"女心又","恐":"工心丶几","注":"王氵丶","識":"音言日立戈","想":"心木目","念":"｜一心𠆢","必":"ノ心","要":"女西","払":"厶扌","借":"⺅日","貸":"⺅貝目ハ弋","売":"士儿冖","選":"｜辶二ハ已","約":"糸幺小丶勹","礼":"乙礻","祭":"示二小𠆢癶","式":"工弋","法":"氵土厶","規":"見土大","政":"一止攵","治":"口氵厶","全":"王ハ𠆢","真":"一十ハ目","確":"口石宀隹","共":"ハ｜一二","以":"｜人丶","対":"寸文","相":"木目","様":"王水并木羊","的":"白丶勹","化":"⺅匕","活":"ノ口十氵舌","列":"刂歹","並":"｜一二并","交":"父亠","通":"辶用マ","概":"牙艮木","象":"勹豕口一","徴":"王山彳攵","索":"糸幺小十冖","探":"木儿冖扌","査":"一木目","調":"言口土冂","検":"口人木𠆢","証":"一言止","判":"｜刂二并十","断":"斤米｜一","論":"｜一言𠆢冊","議":"一王言并羊亅戈手","批":"比扌","評":"｜一言二并","存":"｜ノ一子","在":"｜ノ一土","有":"ノ一月","無":"｜ノ一灬無","限":"艮⻖","超":"口走土刀","域":"口土戈","範":"乙車竹卩","境":"音土日立儿","状":"犬爿","態":"月心匕厶","観":"見隹矢","角":"角勹月｜","側":"⺅貝目ハ刂","基":"一甘土ハ","準":"十氵隹","均":"土冫勹二","制":"ノ刂牛巾二","率":"玄十亠冫幺","値":"⺅十目｜一","額":"貝目ハ口頁夂宀","費":"｜貝目ハ弓","益":"一皿ハ并","損":"貝目ハ口扌","資":"貝目ハ欠冫","産":"ノ生并立亠厂","収":"｜又","支":"支十又","税":"禾口并儿","価":"⺅西","供":"｜一⺅二ハ","需":"雨而","給":"口糸幺小𠆢","輸":"刂月車𠆢","貿":"貝目ハ刀厶","企":"止𠆢","画":"一田凵","策":"｜巾竹ハ木亅冂","略":"口田夂","拡":"厶广扌","縮":"⺅糸幺小白宀","推":"扌隹","測":"貝目ハ刂氵","精":"月青土二米亠","密":"ノ山心丶宀","厳":"耳⺌厂攵","激":"氵白方攵","穏":"ヨ禾心爪","柔":"矛木マ","契":"大土刀亠","締":"巾糸幺小并立亠冖","違":"口辶韋","抗":"亠几扌","崩":"月山","壊":"衣十土罒","廃":"一儿广癶","滅":"ノ火氵戈","衰":"衣一亠","繁":"糸幺小母攵毋","栄":"⺌木冖","興":"臼口ハ冂一","盛":"ノ皿戈","勢":"土力丶儿九","威":"ノ女戈厂","権":"矢木隹","覇":"革月西","猛":"皿子犭","烈":"刂灬歹","燃":"火犬夕灬","炎":"火","輝":"車⺌儿冖","閃":"人門","霊":"｜一雨二","魂":"鬼田二儿匕厶","魅":"｜鬼田二ハ木亠儿匕","妖":"ノ女大","幽":"｜凵幺","玄":"玄亠幺","邪":"牙⻏","禍":"口礻冂","克":"口十儿","奪":"寸大隹","脅":"月力","紛":"糸幺小刀ハ","絡":"口糸幺小夂","繰":"口糸幺小木品","執":"ノ九十辛土立丶亠","諦":"巾言并立亠冖","悟":"一口忄五"};
+const COMP_NAMES = {"一":"un","口":"bouche","ノ":"trait oblique","｜":"trait vertical","土":"terre","ハ":"huit","日":"soleil, jour","二":"deux","木":"arbre","亠":"couvercle","十":"dix","并":"cornes","目":"œil","儿":"jambes","幺":"fil fin","小":"petit","⺅":"personne","心":"cœur","月":"lune, chair","冖":"couverture","貝":"coquillage, argent","丶":"point","𠆢":"toit (personne)","厶":"privé","糸":"fil de soie","氵":"eau","言":"parole","宀":"toit","立":"debout","冂":"cadre","辶":"marche, route","田":"rizière","大":"grand","刂":"couteau","又":"main, encore","扌":"main","夂":"pas lent","隹":"oiseau","人":"personne","女":"femme","王":"roi","勹":"envelopper","戈":"hallebarde","匕":"cuillère","白":"blanc","力":"force","亅":"crochet","冫":"glace","寸":"pouce (mesure)","門":"porte","子":"enfant","士":"lettré, guerrier","攵":"frapper","刀":"sabre","彳":"pas, chemin","ヨ":"main (ヨ)","⺌":"petit (⺌)","車":"véhicule","止":"arrêter","囗":"enclos","山":"montagne","卜":"divination","見":"voir","灬":"feu","斤":"hache","雨":"pluie","广":"abri","音":"son","巾":"tissu","乙":"crochet (乙)","九":"neuf","尸":"corps","夕":"soir","母":"mère","毋":"interdiction","火":"feu","水":"eau","工":"artisan","西":"ouest","耳":"oreille","米":"riz","欠":"bâiller, manquer","里":"village","矢":"flèche","弓":"arc","衣":"vêtement","禾":"céréale","頁":"tête, page","厂":"falaise","羊":"mouton","五":"cinq","干":"sec","父":"père","生":"vie","青":"bleu","礻":"autel, esprit","牛":"vache","⺹":"vieux","廾":"deux mains","走":"courir","已":"soi, serpent (己)","爪":"griffe","⺾":"herbe","凵":"récipient ouvert","弋":"flèche à corde","竹":"bambou","艮":"arrêt","皿":"plat","爿":"planche","手":"main","行":"aller","食":"manger","舌":"langue","罒":"filet","辛":"amer, piquant","文":"écrit","豕":"cochon","馬":"cheval","斗":"louche","勿":"ne… pas","用":"utiliser","虫":"insecte","方":"direction","⻖":"colline (à gauche)","豆":"haricot","彡":"poils, ornement","穴":"trou","忄":"cœur","石":"pierre","支":"branche, soutien","疋":"pied (疋)","⻏":"village (à droite)","品":"articles","几":"table","癶":"pieds écartés","歹":"mort","マ":"マ","牙":"croc","犬":"chien","玄":"sombre, profond","鬼":"démon","金":"or, métal","川":"rivière","足":"pied","聿":"pinceau","黒":"noir","赤":"rouge","高":"haut","長":"long","自":"soi-même","首":"cou, tête","也":"aussi","至":"arriver","羽":"plume, aile","入":"entrer","亡":"disparaître","气":"vapeur","疒":"maladie","匚":"boîte","風":"vent","色":"couleur","巴":"tourbillon","面":"visage","耒":"charrue","戸":"porte (battant)","非":"non, erreur","示":"montrer, autel","冊":"livre (tablettes)","比":"comparer","無":"néant","卩":"sceau","角":"corne","甘":"sucré","而":"et, barbe","矛":"lance","韋":"cuir tanné","臼":"mortier","革":"cuir","犭":"animal (chien)"};
+
 // ──────────────────────────────────────────────────────
 //  CONFIG NIVEAUX
 // ──────────────────────────────────────────────────────
@@ -1297,6 +1464,8 @@ function renderHome() {
   const dueLv = DB[ST.level].filter(d => isDue(d.k)).length;
   document.getElementById("due-hint").innerHTML = dueLv ? `<b>${dueLv}</b> kanji de ce niveau à revoir aujourd'hui : ils passent en priorité.` : "";
   const ks = summary().kana;
+  { const seen = new Set(Object.keys(ST.srs)); const n = TEXTES.filter(tx => [tx.t, ...tx.s.map(x => x[0])].flatMap(kanjiOf).every(c => seen.has(c))).length;
+    document.getElementById("read-entry-desc").textContent = `${n} / ${TEXTES.length} textes ouverts · phrases Tatoeba selon tes kanji vus`; }
   document.getElementById("kana-entry-desc").textContent = ks.some(x => x.v)
     ? `Hiragana ${ks[0].m}/${ks[0].t} · katakana ${ks[1].m}/${ks[1].t} maîtrisés` : "Tableau des kana, quiz et révisions espacées";
   Sync.line();
@@ -1355,7 +1524,123 @@ function resetConfirm() {
 // ──────────────────────────────────────────────────────
 //  SESSION
 // ──────────────────────────────────────────────────────
-function readingHTML(d) { return `<span class="rd-kana">${d.kn}</span><span class="rd-romaji">${d.r}</span>`; }
+
+// ──────────────────────────────────────────────────────
+//  SAISIE : conversion romaji → hiragana et comparaison des réponses
+//  Accepte le Hepburn (shi, chi, tsu, fu, ja…) et le Kunrei (si, ti, tu, hu, zya…).
+//  « nn » ou « n' » donnent ん ; une consonne doublée donne っ.
+// ──────────────────────────────────────────────────────
+const ROMA = (() => {
+  const t = {}, add = (r, k) => { t[r] = k; };
+  "a あ i い u う e え o お ka か ki き ku く ke け ko こ ga が gi ぎ gu ぐ ge げ go ご sa さ shi し si し su す se せ so そ za ざ ji じ zi じ zu ず ze ぜ zo ぞ ta た chi ち ti ち tsu つ tu つ te て to と da だ di ぢ du づ de で do ど na な ni に nu ぬ ne ね no の ha は hi ひ fu ふ hu ふ he へ ho ほ ba ば bi び bu ぶ be べ bo ぼ pa ぱ pi ぴ pu ぷ pe ぺ po ぽ ma ま mi み mu む me め mo も ya や yu ゆ yo よ ra ら ri り ru る re れ ro ろ wa わ wo を"
+    .split(" ").reduce((a, x, i, arr) => { if (i % 2 === 0) add(x, arr[i + 1]); return a; }, 0);
+  const yo = { k: "き", g: "ぎ", n: "に", h: "ひ", b: "び", p: "ぴ", m: "み", r: "り" };
+  for (const c in yo) { add(c + "ya", yo[c] + "ゃ"); add(c + "yu", yo[c] + "ゅ"); add(c + "yo", yo[c] + "ょ"); }
+  for (const [a, b] of [["sh", "し"], ["sy", "し"], ["ch", "ち"], ["ty", "ち"], ["cy", "ち"], ["j", "じ"], ["jy", "じ"], ["zy", "じ"], ["dy", "ぢ"]]) {
+    add(a + "a", b + "ゃ"); add(a + "u", b + "ゅ"); add(a + "o", b + "ょ");
+  }
+  add("je", "じぇ"); add("che", "ちぇ"); add("she", "しぇ"); add("fa", "ふぁ"); add("fi", "ふぃ"); add("fe", "ふぇ"); add("fo", "ふぉ");
+  add("-", "ー");
+  return t;
+})();
+function romajiToKana(str, final) {
+  const s = str.toLowerCase(); let out = "", i = 0;
+  while (i < s.length) {
+    const c = s[i], n1 = s[i + 1], n2 = s[i + 2];
+    if (!/[a-z'\-]/.test(c)) { out += c; i++; continue; }
+    if (c === "'") { i++; continue; }
+    if (c === "n") {
+      if (n1 === "'") { out += "ん"; i += 2; continue; }
+      if (n1 === "n") { out += "ん"; i += (n2 && /[aiueoy]/.test(n2)) ? 1 : 2; continue; }
+      if (n1 === undefined) { out += final ? "ん" : "n"; i++; continue; }
+      if (!/[aiueoy]/.test(n1)) { out += "ん"; i++; continue; }
+    }
+    if (n1 === c && /[bcdfghjkmpqrstvwxyz]/.test(c)) { out += "っ"; i++; continue; }
+    if (c === "t" && n1 === "c" && n2 === "h") { out += "っ"; i++; continue; }
+    let hit = false;
+    for (const len of [3, 2, 1]) { const k = s.substr(i, len); if (ROMA[k]) { out += ROMA[k]; i += len; hit = true; break; } }
+    if (!hit) { out += c; i++; }
+  }
+  return out;
+}
+const toHira = str => [...str].map(c => c >= "ァ" && c <= "ヶ" ? String.fromCharCode(c.charCodeAt(0) - 0x60) : c).join("");
+/* ぢ/じ, づ/ず et を/お se prononcent pareil : on les confond volontairement */
+const kanaKey = str => toHira(str).replace(/ぢ/g, "じ").replace(/づ/g, "ず").replace(/を/g, "お").replace(/[\s・.\-ー]/g, "");
+function typedToKana(raw) { const t = raw.trim(); return /[a-zA-Z]/.test(t) ? romajiToKana(t, true) : t; }
+function kanjiReadings(d) {
+  const set = new Set();
+  d.kn.split("/").map(x => x.trim()).filter(Boolean).forEach(tok => {
+    const m = tok.match(/^([^()]+)\(([^)]+)\)$/);
+    if (m) { set.add(kanaKey(m[1])); set.add(kanaKey(m[1] + m[2])); } else set.add(kanaKey(tok));
+  });
+  return set;
+}
+const TYPE_BOX = 2;   // à partir de 2 bonnes réponses d'affilée, la carte ne revient plus qu'en saisie
+
+
+// ──────────────────────────────────────────────────────
+//  PRONONCIATION : voix japonaise intégrée à l'appareil (synthèse vocale du navigateur)
+//  Rien à télécharger ; la qualité dépend de l'appareil (très bonne sur iPhone, Android, Mac et Windows).
+// ──────────────────────────────────────────────────────
+const Voice = {
+  v: null, rate: 0.85,
+  pick() {
+    if (!("speechSynthesis" in window)) return null;
+    const vs = speechSynthesis.getVoices().filter(v => /^ja/i.test(v.lang));
+    /* on préfère les voix « naturelles » ou « Google » quand elles existent */
+    this.v = vs.find(v => /natural|google|kyoko|o-ren|nanami/i.test(v.name)) || vs[0] || null;
+    return this.v;
+  },
+};
+if ("speechSynthesis" in window) { Voice.pick(); speechSynthesis.onvoiceschanged = () => Voice.pick(); }
+try { Voice.rate = +localStorage.getItem("kanji_voice_rate") || 0.85; } catch (e) {}
+function toast(msg) {
+  let t = document.getElementById("toast");
+  if (!t) { t = document.createElement("div"); t.id = "toast"; document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add("on"); clearTimeout(toast._h); toast._h = setTimeout(() => t.classList.remove("on"), 4200);
+}
+/* parts : un texte, ou une liste lue à la suite (lectures d'un kanji, phrases d'un texte) */
+function speak(parts, btn) {
+  if (!("speechSynthesis" in window)) return toast("Ce navigateur ne sait pas lire à voix haute.");
+  if (!Voice.v && !Voice.pick()) return toast("Pas de voix japonaise sur cet appareil : ajoute le japonais dans les réglages de langue / synthèse vocale du système.");
+  speechSynthesis.cancel();
+  document.querySelectorAll(".say.playing").forEach(b => b.classList.remove("playing"));
+  const list = (Array.isArray(parts) ? parts : [parts]).filter(Boolean);
+  list.forEach((txt, i) => {
+    const u = new SpeechSynthesisUtterance(txt);
+    u.voice = Voice.v; u.lang = Voice.v.lang; u.rate = Voice.rate;
+    if (btn) {
+      if (i === 0) u.onstart = () => btn.classList.add("playing");
+      if (i === list.length - 1) u.onend = u.onerror = () => btn.classList.remove("playing");
+    }
+    speechSynthesis.speak(u);
+  });
+}
+/* lectures d'un kanji : « カク / おぼ(える) » → ["カク", "おぼえる"] */
+/* pour lire une phrase, on remplace chaque kanji par sa lecture relue : la voix ne peut pas se tromper de lecture
+   (les particules comme は sont déjà écrites en kana dans la phrase d'origine, rien ne change pour elles) */
+const kanaOf = t => t.replace(/\[([^|\]]+)\|([^\]]*)\]/g, (_, b, r) => r.replace(/\|/g, ""));
+const readingsToSay = kn => kn.split("/").map(x => x.trim().replace(/[()\-]/g, "")).filter(Boolean);
+const escAttr = x => String(x).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+const sayBtn = (parts, label) => `<button type="button" class="say" data-say="${escAttr(JSON.stringify(parts))}" aria-label="${label || "Écouter"}" title="${label || "Écouter"}">🔊</button>`;
+document.addEventListener("click", e => {
+  const b = e.target.closest && (e.target.closest(".say") || e.target.closest(".say-cell"));
+  if (!b) return;
+  e.preventDefault(); e.stopPropagation();
+  speak(JSON.parse(b.dataset.say), b);
+}, true);
+function setVoiceRate(v) { Voice.rate = +v; try { localStorage.setItem("kanji_voice_rate", v); } catch (e) {} speak("ゆっくり話します。"); }
+
+function readingHTML(d) { return `<span class="rd-kana">${d.kn} ${sayBtn(readingsToSay(d.kn), "Écouter les lectures")}</span><span class="rd-romaji">${d.r}</span>`; }
+
+
+function extraHTML(d, withMeaning) {
+  const words = (VOCAB[d.k] || []).map(([w, y, fr]) => `<div class="ex-word"><span class="ex-w">${w}</span><span class="ex-y">${y}</span><span class="ex-fr">${fr}</span>${sayBtn(y, "Écouter " + y)}</div>`).join("");
+  const comps = [...(COMPS[d.k] || "")].filter(ch => ch !== d.k).map(ch => `<span class="ex-comp"><b>${ch}</b>${COMP_NAMES[ch] || ""}</span>`).join("");
+  return (withMeaning ? `<div class="ex-sec">Sens</div><div class="ex-meaning">${d.m}</div>` : "")
+    + (words ? `<div class="ex-sec">Mots</div>${words}` : "")
+    + (comps ? `<div class="ex-sec">Composants</div><div class="ex-comps">${comps}</div>` : "");
+}
 
 function startSession() {
   const lv      = ST.level;
@@ -1390,12 +1675,21 @@ function renderCard() {
 
   const fc = document.getElementById("flash-card");
   fc.className = "flash-card";
+  document.getElementById("card-extra").innerHTML = "";
+  const typed = ((ST.srs[card.k] || [0])[0]) >= TYPE_BOX;
+  session.typed = typed;
 
   const lbl  = document.getElementById("card-lbl");
   const main = document.getElementById("card-main");
   const rdg  = document.getElementById("card-reading");
 
-  if (curMode === "km") {
+  if (typed) {
+    /* kanji acquis : plus de choix, il faut écrire une de ses lectures */
+    lbl.innerHTML    = `<span class="type-tag">Écriture</span><br>Écris une lecture de ce kanji (on ou kun)`;
+    main.className   = "kanji-big";
+    main.textContent = card.k;
+    rdg.textContent  = "";
+  } else if (curMode === "km") {
     lbl.textContent  = "Quel est le sens de ce kanji ?";
     main.className   = "kanji-big";
     main.textContent = card.k;
@@ -1414,6 +1708,21 @@ function renderCard() {
 
   const grid = document.getElementById("choices-grid");
   grid.innerHTML = "";
+  const form = document.getElementById("type-form"), inp = document.getElementById("type-in");
+  form.hidden = !typed; grid.hidden = typed;
+  document.getElementById("kbd-hint").innerHTML = typed
+    ? "Tape en romaji (gakkou → がっこう) ou au clavier japonais · <kbd>Entrée</kbd> pour valider puis passer"
+    : "Raccourcis : <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> pour choisir · <kbd>Entrée</kbd> pour suivant";
+  if (typed) {
+    inp.value = ""; inp.className = ""; inp.disabled = false;
+    document.getElementById("type-preview").textContent = ""; document.getElementById("type-preview").classList.remove("msg");
+    inp.oninput = () => { document.getElementById("type-preview").textContent = /[a-zA-Z]/.test(inp.value) ? romajiToKana(inp.value, false) : ""; };
+    form.onsubmit = e => { e.preventDefault(); if (!session.answered && inp.value.trim()) handleTyped(card); };
+    session._choices = []; session._card = card; session.answered = false;
+    document.getElementById("next-btn").classList.remove("visible");
+    setTimeout(() => inp.focus(), 30);
+    return;
+  }
 
   choices.forEach((ch, i) => {
     const btn = document.createElement("button");
@@ -1436,6 +1745,26 @@ function renderCard() {
   session._card    = card;
   session.answered = false;
   document.getElementById("next-btn").classList.remove("visible");
+}
+
+
+function handleTyped(card) {
+  if (session.answered) return;
+  session.answered = true;
+  const inp = document.getElementById("type-in");
+  const answer = kanaKey(typedToKana(inp.value));
+  const isOk = kanjiReadings(card).has(answer);
+  record(card.k, isOk); saveState();
+  const fc = document.getElementById("flash-card");
+  inp.value = typedToKana(inp.value); inp.disabled = true; inp.className = isOk ? "ok" : "ko";
+  const pv = document.getElementById("type-preview"); pv.classList.add("msg"); pv.textContent = isOk ? "Bonne réponse" : "Réponses acceptées : " + card.kn;
+  if (isOk) { session.score++; session.correct.push(card); fc.classList.add("correct"); }
+  else { session.wrong.push(card); fc.classList.add("wrong"); }
+  document.getElementById("card-reading").innerHTML = readingHTML(card);
+  document.getElementById("card-extra").innerHTML = extraHTML(card, true);
+  const nb = document.getElementById("next-btn");
+  nb.textContent = (session.idx + 1 < session.cards.length) ? "Suivant →" : "Voir les résultats →";
+  nb.classList.add("visible"); inp.blur();
 }
 
 function handleAnswer(btn, chosen, correct) {
@@ -1466,6 +1795,7 @@ function handleAnswer(btn, chosen, correct) {
   // Always show reading after answer
   const rdg = document.getElementById("card-reading");
   rdg.innerHTML = readingHTML(correct);
+  document.getElementById("card-extra").innerHTML = extraHTML(correct, false);
   if (curMode === "mk") {
     document.getElementById("card-main").textContent = correct.m;
   }
@@ -1557,11 +1887,14 @@ function showResults(score, total, mistakes, unlocked) {
 //  KEYBOARD SHORTCUTS
 // ──────────────────────────────────────────────────────
 document.addEventListener("keydown", e => {
+  if (e.target && e.target.tagName === "INPUT" && e.target.type === "text") return;   // la saisie gère Entrée elle-même
+  if ((e.key === "l" || e.key === "L") && !e.ctrlKey && !e.metaKey) { const b = document.querySelector(".screen.active .card-reading .say, .screen.active #kana-reading .say"); if (b) { b.click(); return; } }
   const screen = document.querySelector(".screen.active")?.id;
 
   if (screen === "screen-kana" && kanaUI.quiz && !kanaUI.quiz.done) {
     const body = document.getElementById("kana-body");
     if (!kanaUI.quiz.answered) {
+      if (document.getElementById("kana-in")) return;
       const i = { "1": 0, "2": 1, "3": 2, "4": 3 }[e.key];
       const b = i !== undefined && body.querySelectorAll(".choice-btn")[i];
       if (b) b.click();
@@ -1813,6 +2146,274 @@ function shuffle(arr) {
 const kanaUI = { script: "h", view: "table", groups: { base: true, daku: false, yoon: false }, dir: "kr", quiz: null };
 const KQ_SIZE = 20;
 
+
+// ──────────────────────────────────────────────────────
+//  DONNÉES DE LECTURE ET DU CLAVIER (fichier kanji_dojo_data.json, à côté de cette page)
+//  Phrases : Tatoeba (tatoeba.org), CC BY 2.0 FR, uniquement les phrases dont les furigana ont été relus.
+//  Dictionnaire de conversion : JMdict (EDRDG), CC BY-SA 4.0, mots courants.
+// ──────────────────────────────────────────────────────
+const TEXTES = [{"t":"わたしの[一日|いちにち]","fr":"Ma journée","s":[["[毎朝|まいあさ]、[六時|ろくじ]におきます。","Chaque matin, je me lève à six heures."],["[朝|あさ]ごはんにパンを[食|た]べて、コーヒーを[飲|の]みます。","Au petit-déjeuner, je mange du pain et je bois du café."],["[八時|はちじ]にバスで[学校|がっこう]へ[行|い]きます。","À huit heures, je vais à l'école en bus."],["[午前|ごぜん]は[日本語|にほんご]の[本|ほん]を[読|よ]みます。","Le matin, je lis des livres de japonais."],["[昼|ひる]は[友|とも]だちと[学校|がっこう]の[食|しょく]どうで[食|た]べます。","Le midi, je mange à la cantine de l'école avec des amis."],["[午後|ごご][五時|ごじ]にうちへかえります。","Je rentre à la maison à cinq heures de l'après-midi."],["[夜|よる]はテレビを[見|み]て、[十一時|じゅういちじ]にねます。","Le soir, je regarde la télé et je me couche à vingt-trois heures."]]},{"t":"[土曜日|どようび]と[日曜日|にちようび]","fr":"Samedi et dimanche","s":[["[土曜日|どようび]に[父|ちち]と[母|はは]と[山|やま]へ[行|い]きました。","Samedi, je suis allé à la montagne avec mon père et ma mère."],["[山|やま]の[上|うえ]から[大|おお]きい[川|かわ]が[見|み]えました。","Du haut de la montagne, on voyait une grande rivière."],["[昼|ひる]ごはんに[母|はは]のおにぎりを[食|た]べました。","Pour le déjeuner, nous avons mangé les onigiri de ma mère."],["[日曜日|にちようび]は[友|とも]だちと[新|あたら]しい[本|ほん]を[買|か]いに[行|い]きました。","Dimanche, je suis allé acheter un nouveau livre avec un ami."],["その[本|ほん]は[三千円|さんぜんえん]でした。すこし[高|たか]かったです。","Ce livre coûtait trois mille yens. C'était un peu cher."],["[来週|らいしゅう]も[山|やま]へ[行|い]きたいです。","La semaine prochaine aussi, j'ai envie d'aller à la montagne."]]},{"t":"[先生|せんせい]との[話|はなし]","fr":"Une conversation avec le professeur","s":[["[先生|せんせい]：[田中|たなか]さん、[今|いま][何時|なんじ]ですか。","Le professeur : Monsieur Tanaka, quelle heure est-il ?"],["[田中|たなか]：[九時|くじ][半|はん]です。","Tanaka : Il est neuf heures et demie."],["[先生|せんせい]：[日本語|にほんご]の[本|ほん]を[読|よ]みましたか。","Le professeur : Avez-vous lu le livre de japonais ?"],["[田中|たなか]：はい、[読|よ]みました。でも、[字|じ]が[小|ちい]さかったです。","Tanaka : Oui, je l'ai lu. Mais les caractères étaient petits."],["[先生|せんせい]：そうですか。[来週|らいしゅう]は[大|おお]きい[字|じ]の[本|ほん]を[見|み]せますね。","Le professeur : Ah bon. La semaine prochaine, je vous montrerai un livre en gros caractères."],["[田中|たなか]：ありがとうございます。","Tanaka : Merci beaucoup."]]},{"t":"[駅|えき]で","fr":"À la gare","s":[["[大|おお]きい[駅|えき]は、いつも[人|ひと]が[多|おお]いです。","Les grandes gares sont toujours bondées."],["[今日|きょう]、[会社|かいしゃ]へ[行|い]く[電車|でんしゃ]がおくれました。","Aujourd'hui, le train pour aller au bureau a eu du retard."],["[駅員|えきいん]さんに「[次|つぎ]の[電車|でんしゃ]は[何時|なんじ]ですか」と[聞|き]きました。","J'ai demandé à l'employé de la gare : « À quelle heure est le prochain train ? »"],["「[十五分|じゅうごふん]ぐらい[待|ま]ってください」と[言|い]われました。","On m'a répondu : « Veuillez patienter environ quinze minutes. »"],["[駅|えき]の[近|ちか]くの[店|みせ]でコーヒーを[買|か]って、[待|ま]ちました。","J'ai acheté un café dans une boutique près de la gare et j'ai attendu."],["[会社|かいしゃ]には[少|すこ]しおくれましたが、だいじょうぶでした。","Je suis arrivé un peu en retard au bureau, mais ça s'est bien passé."]]},{"t":"[病気|びょうき]の[日|ひ]","fr":"Un jour de maladie","s":[["きのうから[頭|あたま]がいたくて、[体|からだ]も[重|おも]いです。","Depuis hier, j'ai mal à la tête et je me sens lourd."],["[朝|あさ]、[会社|かいしゃ]に[電話|でんわ]して「[今日|きょう]は[行|い]けません」と[言|い]いました。","Ce matin, j'ai appelé le bureau et j'ai dit : « Je ne peux pas venir aujourd'hui. »"],["[午後|ごご]、[近|ちか]くの[医者|いしゃ]に[行|い]きました。","L'après-midi, je suis allé chez le médecin du quartier."],["[医者|いしゃ]は「かぜですね。[薬|くすり]を[飲|の]んで、よくねてください」と[言|い]いました。","Le médecin a dit : « C'est un rhume. Prenez le médicament et dormez bien. »"],["[夜|よる]は[早|はや]くねました。[明日|あした]はよくなると[思|おも]います。","Je me suis couché tôt. Je pense que ça ira mieux demain."]]},{"t":"[雨|あめ]の[日|ひ]","fr":"Un jour de pluie","s":[["[今日|きょう]は[朝|あさ]から[雨|あめ]がふっています。","Aujourd'hui, il pleut depuis le matin."],["[外|そと]は[暗|くら]くて、[風|かぜ]も[強|つよ]いです。","Dehors, il fait sombre et le vent est fort."],["[友|とも]だちと[海|うみ]へ[行|い]くつもりでしたが、[止|や]めました。","Je comptais aller à la mer avec un ami, mais j'ai renoncé."],["[家|いえ]で[音楽|おんがく]を[聞|き]きながら、[本|ほん]を[読|よ]みました。","À la maison, j'ai lu un livre en écoutant de la musique."],["[夜|よる]になると[雨|あめ]が[止|や]んで、[空|そら]に[星|ほし]が[見|み]えました。","À la nuit tombée, la pluie s'est arrêtée et on voyait les étoiles dans le ciel."],["[明日|あした]は[天気|てんき]がいいそうです。","Il paraît qu'il fera beau demain."]]},{"t":"[新聞|しんぶん]の[記事|きじ]","fr":"Un article de journal","s":[["[今朝|けさ]、[新聞|しんぶん]で[面白|おもしろ]い[記事|きじ]を[読|よ]みました。","Ce matin, j'ai lu un article intéressant dans le journal."],["[日本|にほん]では、[会社|かいしゃ]で[働|はたら]く[人|ひと]の[数|かず]が[減|へ]っているそうです。","Il paraît qu'au Japon, le nombre de personnes qui travaillent en entreprise diminue."],["[記事|きじ]によると、この[問題|もんだい]の[答|こた]えは[一|ひと]つではありません。","Selon l'article, ce problème n'a pas qu'une seule réponse."],["[必要|ひつよう]なのは、[新|あたら]しい[働|はたら]き[方|かた]だと[書|か]いてありました。","Il y était écrit que ce dont on a besoin, c'est d'une nouvelle façon de travailler."],["わたしもその[意見|いけん]に[近|ちか]い[考|かんが]えを[持|も]っています。","Moi aussi, j'ai une idée proche de cet avis."],["[友|とも]だちとこの[記事|きじ]について[話|はな]して、[色|いろ]んな[意見|いけん]を[聞|き]きたいです。","J'aimerais en parler avec des amis et entendre différents avis."]]},{"t":"お[祭|まつ]り","fr":"Le festival","s":[["[毎年|まいとし][八月|はちがつ]に、この[地方|ちほう]では[大|おお]きなお[祭|まつ]りがあります。","Chaque année en août, il y a un grand festival dans cette région."],["[多|おお]くの[人|ひと]が[遠|とお]くから[電車|でんしゃ]で[来|き]ます。","Beaucoup de gens viennent de loin en train."],["[夜|よる]には[花火|はなび]が[上|あ]がって、[空|そら]が[明|あか]るくなります。","Le soir, on tire des feux d'artifice et le ciel s'illumine."],["[子|こ]どもたちは[特別|とくべつ]なゆかたをきて、[楽|たの]しそうに[歩|ある]いています。","Les enfants portent un yukata spécial et se promènent, l'air joyeux."],["[祭|まつ]りの[後|あと]は、みんなでごみを[集|あつ]めます。","Après le festival, tout le monde ramasse les déchets ensemble."],["このような[活動|かつどう]が、[地方|ちほう]の[文化|ぶんか]を[続|つづ]けていく[力|ちから]になっています。","Ce genre d'activité donne à la région la force de faire vivre sa culture."]]}];
+let DATA = null, dataP = null;
+function loadData() {
+  if (!dataP) dataP = fetch("kanji_dojo_data.json").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(d => (DATA = d)).catch(e => { dataP = null; throw e; });
+  return dataP;
+}
+const dataError = () => `<p class="read-info">Impossible de charger <b>kanji_dojo_data.json</b>.<br>Ce fichier doit être déposé à côté de <b>kanji_dojo.html</b> dans le dépôt, et la page ouverte en ligne (pas en double-cliquant sur le fichier).</p>`;
+const isKanji = c => c >= "一" && c <= "鿿";
+const ALL_KANJI = new Set(Object.values(DB).flat().map(d => d.k));
+const LEVEL_OF = {}; Object.entries(DB).forEach(([lv, arr]) => arr.forEach(d => { if (!LEVEL_OF[d.k]) LEVEL_OF[d.k] = +lv; }));
+function knownSets() {
+  const seen = new Set(Object.keys(ST.srs)), mastered = new Set([...seen].filter(isMastered));
+  return { seen, mastered };
+}
+/* balisage : [時間|じ|かん] (une lecture par kanji) ou [学生|がくせい] (une lecture pour le mot) */
+function rubyHTML(t, mastered) {
+  return t.replace(/\[([^|\]]+)\|([^\]]*)\]/g, (_, base, rd) => {
+    const parts = rd.split("|"), learning = [...base].some(c => isKanji(c) && !mastered.has(c)) ? " learning" : "";
+    if (parts.length === base.length && parts.length > 1)
+      return `<ruby class="${learning}">${[...base].map((c, i) => `${c}<rt>${parts[i]}</rt>`).join("")}</ruby>`;
+    return `<ruby class="${learning}">${base}<rt>${rd.replace(/\|/g, "")}</rt></ruby>`;
+  });
+}
+const plainOf = t => t.replace(/\[([^|\]]+)\|[^\]]*\]/g, "$1");
+const kanjiOf = t => [...new Set([...plainOf(t)].filter(isKanji))];
+/* kana « vus » : ceux qui ont déjà une fiche dans le quiz kana */
+function kanaOk(t) {
+  const small = "ゃゅょぁぃぅぇぉっャュョァィゥェォッー・";
+  return [...plainOf(t)].every(c => {
+    if (!(c >= "ぁ" && c <= "ヶ") || small.includes(c)) return true;
+    const id = (c >= "ァ" ? "k:" : "h:") + c;
+    return !KANA_BY[id] || !!ST.kana[id];
+  });
+}
+
+const readUI = { view: "ph", batch: null, text: null };
+function readPrefs() { try { return JSON.parse(localStorage.getItem("kanji_read_prefs") || "{}"); } catch (e) { return {}; } }
+function showRead() {
+  const p = readPrefs();
+  document.getElementById("opt-furi").checked = !!p.furi;
+  document.getElementById("opt-kana").checked = !!p.kana;
+  document.getElementById("opt-rate").value = String(Voice.rate);
+  readUI.batch = null; readUI.text = null;
+  show("screen-read"); renderRead();
+}
+function readOpt() {
+  const p = { furi: document.getElementById("opt-furi").checked, kana: document.getElementById("opt-kana").checked };
+  try { localStorage.setItem("kanji_read_prefs", JSON.stringify(p)); } catch (e) {}
+  readUI.batch = null; renderRead();
+}
+function readBack() { if (readUI.text !== null) { readUI.text = null; renderRead(); } else goHome(); }
+function setReadView(v) {
+  readUI.view = v; readUI.text = null;
+  document.getElementById("read-tab-ph").classList.toggle("active", v === "ph");
+  document.getElementById("read-tab-tx").classList.toggle("active", v === "tx");
+  renderRead();
+}
+function sentHTML(t, fr, src) {
+  return `<div class="sent"><div class="jp" lang="ja">${rubyHTML(t, knownSets().mastered)}</div>
+    <div class="sent-foot"><span>${sayBtn(kanaOf(t), "Écouter la phrase")} <button class="tr-btn" onclick="this.closest('.sent').classList.toggle('open')">Traduction</button></span>${src ? `<a class="src" href="https://tatoeba.org/fr/sentences/show/${src}" target="_blank" rel="noopener">Tatoeba n°${src}</a>` : ""}</div>
+    <div class="tr">${fr}</div></div>`;
+}
+function renderRead() {
+  const body = document.getElementById("read-body");
+  body.classList.toggle("furi-all", document.getElementById("opt-furi").checked);
+  const kanaFilter = document.getElementById("opt-kana").checked;
+  const { seen, mastered } = knownSets();
+  if (readUI.view === "tx") {
+    if (readUI.text !== null) {
+      const tx = TEXTES[readUI.text];
+      body.innerHTML = `<div class="sent" style="text-align:center"><div class="jp" lang="ja">${rubyHTML(tx.t, mastered)}</div><div class="tx-meta">${tx.fr}</div><div style="margin-top:8px">${sayBtn([kanaOf(tx.t), ...tx.s.map(x => kanaOf(x[0]))], "Écouter tout le texte")} <span class="tx-meta">Écouter tout le texte</span></div></div>
+        <div class="tx-para">${tx.s.map(([jp, fr]) => sentHTML(jp, fr)).join("")}</div>
+        <button class="btn btn-ghost" style="width:100%" onclick="document.querySelectorAll('#read-body .tx-para .sent').forEach(x=>x.classList.add('open'))">Afficher toute la traduction</button>
+        <p class="read-credit">Textes écrits pour le Dojo. Touche un kanji pour voir sa lecture ; les kanji soulignés en pointillé sont vus mais pas encore maîtrisés.</p>`;
+      document.getElementById("read-counter").textContent = tx.s.length + " phrases";
+      return;
+    }
+    let open = 0;
+    body.innerHTML = TEXTES.map((tx, i) => {
+      const ks = [...new Set([tx.t, ...tx.s.map(x => x[0])].flatMap(kanjiOf))];
+      const missing = ks.filter(c => !seen.has(c)), lv = Math.min(...ks.map(c => LEVEL_OF[c]));
+      const kanaMiss = kanaFilter && ![tx.t, ...tx.s.map(x => x[0])].every(kanaOk);
+      const ok = !missing.length && !kanaMiss; if (ok) open++;
+      const meta = ok ? `${tx.s.length} phrases · ${ks.filter(c => mastered.has(c)).length}/${ks.length} kanji maîtrisés`
+        : missing.length ? `Encore ${missing.length} kanji à découvrir : <span lang="ja">${missing.slice(0, 8).join(" ")}${missing.length > 8 ? "…" : ""}</span>` : "Contient des kana pas encore vus";
+      return `<button class="tx-item${ok ? "" : " locked"}" ${ok ? `onclick="readUI.text=${i};renderRead();window.scrollTo(0,0)"` : "disabled"}>
+        <div><div class="jp" lang="ja">${rubyHTML(tx.t, mastered)}</div><div class="tx-meta">${tx.fr} · ${meta}</div></div>
+        <span class="tx-lv ${LV_CONFIG[lv].cls}" style="background:rgba(255,255,255,.06);color:${LV_CONFIG[lv].color}">${LV_CONFIG[lv].label}</span></button>`;
+    }).join("") + `<p class="read-credit">Un texte s'ouvre quand tu as vu tous ses kanji en session.</p>`;
+    document.getElementById("read-counter").textContent = open + " / " + TEXTES.length;
+    return;
+  }
+  // phrases Tatoeba
+  if (!DATA) {
+    body.innerHTML = `<p class="read-info">Chargement des phrases…</p>`;
+    loadData().then(renderRead, () => { body.innerHTML = dataError(); });
+    return;
+  }
+  const pool = DATA.phrases.map(p => ({ p, ks: kanjiOf(p[1]) }))
+    .filter(x => x.ks.every(c => seen.has(c)) && (!kanaFilter || kanaOk(x.p[1])));
+  const withK = pool.filter(x => x.ks.length).length;
+  if (!readUI.batch) {
+    /* les phrases avec kanji d'abord, et parmi elles celles dont les kanji sont maîtrisés */
+    const score = x => (x.ks.length ? 1 : 0) + (x.ks.length ? x.ks.filter(c => mastered.has(c)).length / x.ks.length : 0) + Math.random() * .9;
+    readUI.batch = pool.map(x => [score(x), x]).sort((a, b) => b[0] - a[0]).slice(0, 10).map(y => y[1].p);
+  }
+  document.getElementById("read-counter").textContent = pool.length + " phrases";
+  const info = seen.size
+    ? `${pool.length} phrases lisibles avec tes ${seen.size} kanji vus (dont ${mastered.size} maîtrisés) : ${withK} avec kanji, ${pool.length - withK} en kana.`
+    : `Tu n'as encore vu aucun kanji : voici des phrases en kana. Fais une session pour débloquer des phrases avec kanji.`;
+  body.innerHTML = `<p class="read-info">${info}<br>Touche un kanji pour voir sa lecture.</p>`
+    + readUI.batch.map(p => sentHTML(p[1], p[2], p[0])).join("")
+    + `<button class="btn btn-primary" style="width:100%" onclick="readUI.batch=null;renderRead();window.scrollTo(0,0)">Nouvelle série</button>
+       <p class="read-credit">Phrases écrites par les contributeurs de Tatoeba (tatoeba.org), licence CC BY 2.0 FR. Seules les phrases dont la lecture a été relue sont gardées.</p>`;
+}
+document.addEventListener("click", e => {
+  const r = e.target.closest && e.target.closest("#read-body ruby");
+  if (r) r.classList.toggle("on");
+});
+
+// ──────────────────────────────────────────────────────
+//  ÉDITEUR : romaji → kana → kanji, comme un clavier japonais
+// ──────────────────────────────────────────────────────
+const ed = { script: "h", segs: null, act: 0 };
+const toKataStr = str => [...str].map(c => c >= "ぁ" && c <= "ゖ" ? String.fromCharCode(c.charCodeAt(0) + 0x60) : c).join("");
+const PUNCT = { ".": "。", ",": "、", "?": "？", "!": "！", "[": "「", "]": "」", "~": "〜", "(": "（", ")": "）", ":": "：" };
+function showEditor() {
+  show("screen-editor");
+  const out = document.getElementById("ed-out");
+  try { out.value = localStorage.getItem("kanji_editor_v1") || ""; } catch (e) {}
+  edCount(); edReset();
+  loadData().catch(() => { document.getElementById("ed-cands").innerHTML = dataError(); });
+  setTimeout(() => document.getElementById("ed-in").focus(), 50);
+}
+function edScript(x) {
+  ed.script = x;
+  document.getElementById("ed-h").classList.toggle("active", x === "h");
+  document.getElementById("ed-k").classList.toggle("active", x === "k");
+  const inp = document.getElementById("ed-in"); inp.value = edKana(inp.value, false); inp.focus();
+}
+function edKana(v, final) {
+  let k = romajiToKana(v.replace(/[.,?!\[\]~():]/g, c => PUNCT[c]), final);
+  k = toHira(k);
+  return ed.script === "k" ? toKataStr(k) : k;
+}
+function edCount() { document.getElementById("ed-count").textContent = [...document.getElementById("ed-out").value.replace(/\s/g, "")].length + " car."; }
+function edSave() { try { localStorage.setItem("kanji_editor_v1", document.getElementById("ed-out").value); } catch (e) {} edCount(); }
+function edReset() { ed.segs = null; ed.act = 0; document.getElementById("ed-segs").innerHTML = ""; if (DATA || !dataP) document.getElementById("ed-cands").innerHTML = ""; }
+function edInsert(txt) {
+  const out = document.getElementById("ed-out"), a = out.selectionStart ?? out.value.length, b = out.selectionEnd ?? a;
+  out.setRangeText(txt, a, b, "end"); edSave();
+}
+/* candidats d'un morceau de kana : kanji (déjà vus d'abord), puis hiragana et katakana */
+function candsFor(kana, stemFirst) {
+  const { seen } = knownSets();
+  const wl = ((DATA && DATA.ime[kana]) || [0]).slice(1), sl = ((DATA && DATA.st[kana]) || [0]).slice(1);
+  const words = [...new Set(stemFirst ? [...sl, ...wl] : [...wl, ...sl])].map((w, i) => ({ w, known: [...w].some(isKanji) && [...w].filter(isKanji).every(c => seen.has(c)), i }));
+  words.sort((a, b) => (b.known - a.known) || (a.i - b.i));
+  const list = words.map(x => ({ w: x.w, known: x.known }));
+  for (const w of [kana, toKataStr(kana)]) if (!list.some(x => x.w === w)) list.push({ w, known: false, kana: true });
+  return list;
+}
+/* découpage de la phrase en mots : on cherche le chemin le moins « coûteux ».
+   Un mot fréquent du dictionnaire coûte peu, une particule ou une terminaison (は, を, ます, でした…) coûte très peu,
+   un kana isolé inconnu coûte cher. C'est ce qui évite de transformer は en 歯 ou ました en 真下. */
+const FUNC = new Set(("は が を に の で と も へ や か ね よ な わ ぞ さ だ です ます ました ません ませんでした でした ましょう でしょう だろう " +
+  "ない なかった なくて たい たかった たくない て た だ だった ている ています ていた ていました てください ください " +
+  "から まで より ので のに けど けれど でも し って という する します しました して いる います いい よい " +
+  "この その あの どの これ それ あれ どれ ここ そこ あそこ どこ なに なん だれ いつ どう そう こう ああ はい いいえ ええ " +
+  "さん ちゃん くん さま ごろ ぐらい くらい だけ しか ばかり など たち かった くない くて く ければ れる られる せる よう ば ん").split(" "));
+const VERB_END = /^(ます|まし|ませ|ましょ|たい|たく|たか|て|で|た|だ|ない|なか|なく|ば|う|よう|れ|られ|させ|せ)/;
+function segment(kana) {
+  const n = kana.length, best = Array(n + 1).fill(Infinity), prev = Array(n + 1).fill(null);
+  best[0] = 0;
+  for (let i = 0; i < n; i++) {
+    if (best[i] === Infinity) continue;
+    const go = (j, cost, type) => { if (best[i] + cost < best[j]) { best[j] = best[i] + cost; prev[j] = { i, type }; } };
+    go(i + 1, 14, "x");                                         // kana isolé
+    for (let j = i + 1; j <= Math.min(n, i + 12); j++) {
+      const w = kana.slice(i, j), e = DATA.ime[w];
+      if (FUNC.has(w)) go(j, 4, "f");
+      if (e) go(j, 10 + e[0] / 8 + (w.length === 1 ? 6 : 0), "d");
+      const st = DATA.st[w];                                    // radical de verbe ou d'adjectif : 行き, 飲ん, 見, 高…
+      if (st) go(j, 9 + st[0] / 8 - (VERB_END.test(kana.slice(j)) ? 3 : 0), "s");
+    }
+  }
+  const parts = []; let j = n;
+  while (j > 0) { const p = prev[j]; parts.unshift({ k: kana.slice(p.i, j), type: p.type }); j = p.i; }
+  const segs = [];
+  for (const p of parts) {                                     // on regroupe les kana qui restent en kana
+    const last = segs[segs.length - 1];
+    const conv = t => t === "d" || t === "s";
+    if (!conv(p.type) && last && !conv(last.type)) last.k += p.k; else segs.push({ k: p.k, type: p.type });
+  }
+  return segs.map(sg => ({ k: sg.k, c: sg.type === "d" ? candsFor(sg.k) : sg.type === "s" ? candsFor(sg.k, true) : kanaCands(sg.k), i: 0 }));
+}
+const kanaCands = k => [{ w: k, known: false, kana: true }, { w: toKataStr(k), known: false, kana: true }];
+function edConvert() {
+  const inp = document.getElementById("ed-in");
+  if (!DATA) { loadData().then(edConvert, () => {}); return; }
+  if (ed.segs) { const s = ed.segs[ed.act]; s.i = (s.i + 1) % s.c.length; return edDraw(); }
+  const kana = toHira(edKana(inp.value, true)).replace(/\s/g, "");
+  if (!kana) return;
+  inp.value = kana; ed.segs = segment(kana); ed.act = 0; edDraw();
+}
+function edDraw() {
+  const segsEl = document.getElementById("ed-segs"), cEl = document.getElementById("ed-cands");
+  if (!ed.segs) { segsEl.innerHTML = ""; cEl.innerHTML = ""; return; }
+  segsEl.innerHTML = ed.segs.map((s, i) => `<span class="seg${i === ed.act ? " active" : ""}" onclick="ed.act=${i};edDraw()">${s.c[s.i].w}</span>`).join("");
+  const s = ed.segs[ed.act];
+  cEl.innerHTML = s.c.map((x, i) => `<button class="cand${x.known ? " known" : ""}${i === s.i ? " sel" : ""}" onclick="ed.segs[ed.act].i=${i};edDraw();document.getElementById('ed-in').focus()"><small>${i < 9 ? i + 1 : ""}</small>${x.w}</button>`).join("");
+}
+function edCommit() {
+  const inp = document.getElementById("ed-in");
+  if (ed.segs) edInsert(ed.segs.map(s => s.c[s.i].w).join(""));
+  else if (inp.value) edInsert(edKana(inp.value, true));
+  else edInsert("\n");
+  inp.value = ""; edReset(); inp.focus();
+}
+(function edWire() {
+  const inp = document.getElementById("ed-in"), out = document.getElementById("ed-out");
+  out.addEventListener("input", edSave);
+  inp.addEventListener("input", e => {
+    if (e.isComposing) return;                      // clavier japonais du téléphone : on le laisse faire
+    if (inp.value.includes(" ")) {                  // Espace sur un clavier tactile
+      inp.value = inp.value.replace(/ /g, "");
+      if (inp.value) edConvert(); else { edInsert("　"); }
+      return;
+    }
+    if (ed.segs) { edReset(); }
+    inp.value = edKana(inp.value, false);
+  });
+  inp.addEventListener("keydown", e => {
+    if (e.isComposing) return;
+    if (e.key === " ") { e.preventDefault(); if (inp.value) edConvert(); else edInsert("　"); return; }
+    if (e.key === "Enter") { e.preventDefault(); edCommit(); return; }
+    if (ed.segs) {
+      if (e.key === "Escape") { e.preventDefault(); edReset(); return; }
+      if (e.key === "ArrowRight" || e.key === "ArrowLeft") { e.preventDefault(); ed.act = Math.max(0, Math.min(ed.segs.length - 1, ed.act + (e.key === "ArrowRight" ? 1 : -1))); edDraw(); return; }
+      if (/^[1-9]$/.test(e.key)) { e.preventDefault(); const s = ed.segs[ed.act], n = +e.key - 1; if (n < s.c.length) { s.i = n; edDraw(); } return; }
+      if (e.key === "Backspace") { e.preventDefault(); edReset(); return; }
+      if (e.key.length === 1) { edCommit(); return; }   // on continue à taper : le choix est validé
+    } else if (e.key === "Backspace" && !inp.value) {
+      e.preventDefault(); const a = out.selectionStart ?? out.value.length;
+      if (a > 0) { out.setRangeText("", a - 1, a, "end"); edSave(); }
+    }
+  });
+})();
+function edSay(btn) {
+  const out = document.getElementById("ed-out"), a = out.selectionStart, b = out.selectionEnd;
+  const txt = (a !== b ? out.value.slice(a, b) : out.value).trim();       // une sélection, sinon tout le texte
+  if (txt) speak(txt.split(/\n+/), btn); else toast("Écris d'abord quelque chose.");
+}
+function edCopy() {
+  const out = document.getElementById("ed-out");
+  (navigator.clipboard ? navigator.clipboard.writeText(out.value) : Promise.reject()).then(
+    () => { const b = document.getElementById("ed-copy"); b.textContent = "Copié ✓"; setTimeout(() => b.textContent = "Copier", 1500); },
+    () => { out.select(); document.execCommand && document.execCommand("copy"); });
+}
+function edClear() { if (!document.getElementById("ed-out").value || confirm("Effacer tout le texte ?")) { document.getElementById("ed-out").value = ""; edSave(); edReset(); } }
+
 function showKana() { kanaUI.quiz = null; show("screen-kana"); renderKana(); }
 function setKanaScript(sc) { kanaUI.script = sc; kanaUI.quiz = null; renderKana(); }
 function setKanaView(v) { kanaUI.view = v; kanaUI.quiz = null; renderKana(); }
@@ -1844,7 +2445,7 @@ function renderKanaTable(body, m, v, due, total) {
       if (!x) { grid.insertAdjacentHTML("beforeend", '<div class="kana-cell empty"></div>'); return; }
       const id = kanaUI.script + ":" + (kanaUI.script === "k" ? toKata(x.k) : x.k);
       const st = kanaMastered(id) ? " mastered" : ST.kana[id] ? " seen" : "";
-      grid.insertAdjacentHTML("beforeend", `<div class="kana-cell${st}"><div class="kc">${KANA_BY[id].k}</div><div class="kr">${x.r}</div></div>`);
+      grid.insertAdjacentHTML("beforeend", `<div class="kana-cell${st} say-cell" data-say="${escAttr(JSON.stringify(KANA_BY[id].k))}"><div class="kc">${KANA_BY[id].k}</div><div class="kr">${x.r}</div></div>`);
     });
     body.appendChild(grid);
   }
@@ -1884,7 +2485,9 @@ function startKanaQuiz() {
 }
 
 function renderKanaCard(body) {
-  const q = kanaUI.quiz, card = q.cards[q.i], rk = kanaUI.dir === "rk";
+  const q = kanaUI.quiz, card = q.cards[q.i];
+  if (((ST.kana[card.id] || [0])[0]) >= TYPE_BOX) return renderKanaTyped(body, q, card);
+  const rk = kanaUI.dir === "rk";
   body.insertAdjacentHTML("beforeend", `<div class="prog-wrap"><div class="prog-fill" style="width:${q.i / q.cards.length * 100}%"></div></div>
     <div class="flash-card" id="kana-card"><div class="card-mode-lbl">${rk ? "Quel kana se lit ainsi ?" : "Comment se lit ce kana ?"}</div>
     <div class="${rk ? "kana-roma-big" : "kana-big"}">${rk ? card.r : card.k}</div><div class="card-reading" id="kana-reading"></div></div>`);
@@ -1906,6 +2509,33 @@ function renderKanaCard(body) {
   q.answered = false;
 }
 
+
+/* kana acquis : on l'affiche et il faut écrire sa lecture en romaji */
+function renderKanaTyped(body, q, card) {
+  body.insertAdjacentHTML("beforeend", `<div class="prog-wrap"><div class="prog-fill" style="width:${q.i / q.cards.length * 100}%"></div></div>
+    <div class="flash-card" id="kana-card"><div class="card-mode-lbl"><span class="type-tag">Écriture</span><br>Écris la lecture en romaji</div>
+    <div class="kana-big">${card.k}</div><div class="card-reading" id="kana-reading"></div></div>
+    <form class="type-form" id="kana-form" autocomplete="off"><input id="kana-in" type="text" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Lecture en romaji"><div class="type-preview" id="kana-preview" aria-live="polite"></div><button class="btn btn-primary" type="submit">Valider</button></form>`);
+  const nb = document.createElement("button"); nb.className = "next-btn"; nb.id = "kana-next";
+  nb.textContent = q.i + 1 < q.cards.length ? "Suivant →" : "Voir les résultats →"; nb.onclick = nextKana; body.appendChild(nb);
+  body.insertAdjacentHTML("beforeend", '<div class="kbd-hint"><kbd>Entrée</kbd> pour valider puis passer</div>');
+  const inp = document.getElementById("kana-in");
+  q.answered = false;
+  document.getElementById("kana-form").onsubmit = e => {
+    e.preventDefault(); if (q.answered || !inp.value.trim()) return;
+    q.answered = true;
+    const ok = kanaKey(typedToKana(inp.value)) === kanaKey(card.k);
+    recordKana(card.id, ok); saveState();
+    inp.disabled = true; inp.className = ok ? "ok" : "ko";
+    document.getElementById("kana-preview").classList.add("msg"); document.getElementById("kana-preview").textContent = ok ? "Bonne réponse" : "Réponse : " + card.r;
+    document.getElementById("kana-card").classList.add(ok ? "correct" : "wrong");
+    document.getElementById("kana-reading").innerHTML = `<span class="rd-romaji">${card.r}</span> ${sayBtn(card.k)}`;
+    if (ok) q.score++; else q.wrong.push(card);
+    nb.classList.add("visible"); inp.blur();
+  };
+  setTimeout(() => inp.focus(), 30);
+}
+
 function answerKana(btn, chosen, card, grid) {
   const q = kanaUI.quiz; if (q.answered) return; q.answered = true;
   const ok = chosen.id === card.id;
@@ -1916,7 +2546,7 @@ function answerKana(btn, chosen, card, grid) {
     q.wrong.push(card); fc.classList.add("wrong"); btn.classList.add("wrong-c");
     grid.querySelectorAll(".choice-btn").forEach(b => { if ((kanaUI.dir === "rk" ? b.textContent : b.textContent) === (kanaUI.dir === "rk" ? card.k : card.r)) b.classList.add("correct-c"); });
   }
-  document.getElementById("kana-reading").innerHTML = kanaUI.dir === "rk" ? `<span class="rd-romaji">${card.r}</span>` : `<span class="rd-kana">${card.k}</span>`;
+  document.getElementById("kana-reading").innerHTML = (kanaUI.dir === "rk" ? `<span class="rd-romaji">${card.r}</span>` : `<span class="rd-kana">${card.k}</span>`) + " " + sayBtn(card.k);
   grid.querySelectorAll(".choice-btn").forEach(b => b.disabled = true);
   document.getElementById("kana-next").classList.add("visible");
 }
