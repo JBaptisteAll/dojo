@@ -300,9 +300,21 @@ function drawAzure() {
   box.innerHTML = html ? html + srcLine(b.src) : "";
 }
 function drawKanji() {
-  const d = local("kanji"), box = $('.prog[data-app="kanji"]');
-  if (!d || !(d.mastered && d.mastered.length) && !d.sessions) return box.replaceChildren();
-  box.innerHTML = `<div class="meta">${nf((d.mastered || []).length)} kanji maîtrisé(s) · ${d.sessions || 0} session(s)${d.streak ? " · série de " + d.streak : ""}</div><span class="src">Sur cet appareil (cette formation ne se synchronise pas encore)</span>`;
+  const b = best("kanji"), box = $('.prog[data-app="kanji"]');
+  if (!b) return box.replaceChildren();
+  const d = b.d, s = d.sum;
+  if (!s) {
+    const n = (d.mastered || []).length;
+    box.innerHTML = n || d.sessions ? `<div class="meta">${nf(n)} kanji maîtrisé(s) · ${d.sessions || 0} session(s). Ouvre la formation pour mettre le détail à jour.</div>${srcLine(b.src)}` : "";
+    return;
+  }
+  if (!s.seen && !s.sessions) return box.replaceChildren();
+  /* les révisions dues dépendent du jour : on les recalcule à partir du détail quand il est disponible */
+  const day = Math.floor(Date.now() / 864e5);
+  const due = d.srs ? Object.values(d.srs).filter(r => r[1] <= day).length : s.due;
+  const open = (s.levels || []).filter(l => l.u).map(l => "N" + l.lv).join(", ");
+  box.innerHTML = bar("Kanji maîtrisés", pct(s.mastered, s.total), `${nf(s.mastered)} / ${nf(s.total)}`)
+    + `<div class="meta">${due ? `<b style="color:#edf2f4">${nf(due)}</b> à revoir aujourd'hui` : "Rien à revoir aujourd'hui"} · ${nf(s.seen)} déjà vus${open ? `<br>Niveaux ouverts : ${open}` : ""}</div>` + srcLine(b.src);
 }
 function draw() { drawPython(); drawAzure(); drawKanji(); }
 

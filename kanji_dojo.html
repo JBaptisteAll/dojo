@@ -76,6 +76,12 @@
     }
 
     /* ── STATS BAR ── */
+    a.dojo { position: fixed; top: 14px; left: 16px; z-index: 50; font: 600 13px 'Inter', sans-serif; color: var(--muted); text-decoration: none; padding: 6px 4px; }
+    a.dojo:hover { color: var(--primary); }
+    @media (max-width: 640px) { #screen-home .logo { padding-top: 30px; } }
+    .sync-line { margin-top: 14px; font-size: .72rem; color: var(--dim); text-align: center; }
+    .due-hint { margin: -6px 0 14px; font-size: .78rem; color: var(--muted); text-align: center; }
+    .due-hint b { color: var(--n3); }
     .stats-bar {
       display: flex;
       width: 100%;
@@ -452,7 +458,7 @@
 </head>
 <body>
 
-<a href="index.html" style="position:fixed;top:14px;left:14px;z-index:9999;background:rgba(230,57,70,.15);border:1px solid rgba(230,57,70,.4);color:#e63946;text-decoration:none;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;padding:6px 12px;border-radius:6px;backdrop-filter:blur(6px);transition:background .2s;" onmouseover="this.style.background='rgba(230,57,70,.3)'" onmouseout="this.style.background='rgba(230,57,70,.15)'">← Accueil</a>
+<a class="dojo" href="index.html" aria-label="Retour à l'accueil du Dojo">← Dojo</a>
 
 <!-- ═══════════════════════════════
      SCREEN: HOME
@@ -478,8 +484,8 @@
       <div class="stat-l">Sessions</div>
     </div>
     <div class="stat">
-      <div class="stat-v" id="s-total">—</div>
-      <div class="stat-l">Total</div>
+      <div class="stat-v" id="s-total">0</div>
+      <div class="stat-l">À revoir</div>
     </div>
   </div>
 
@@ -495,6 +501,7 @@
     </button>
   </div>
 
+  <p class="due-hint" id="due-hint"></p>
   <button class="btn btn-primary" onclick="startSession()">▶ Commencer la session (10 kanji)</button>
 
   <div class="sep"></div>
@@ -509,6 +516,7 @@
 
   <div class="sep"></div>
   <button class="btn btn-ghost btn-sm" onclick="resetConfirm()" style="width:100%">Réinitialiser la progression</button>
+  <p class="sync-line" id="sync-line"></p>
 </div>
 
 
@@ -800,7 +808,7 @@ const DB = {
     {k:"取",m:"prendre / obtenir",r:"shu / to-"},
     {k:"持",m:"tenir / posséder",r:"ji / mo-"},
     {k:"忘",m:"oublier",r:"bou / wasu-"},
-    {k:"覚",m:"se souvenir / apprendre",r:"kaku / oba-"},
+    {k:"覚",m:"se souvenir / apprendre / s'éveiller",r:"kaku / obo- / sa-"},
     {k:"転",m:"rouler / tomber / changer",r:"ten / koro-"},
     {k:"走",m:"courir",r:"sou / hashi-"},
     {k:"泳",m:"nager",r:"ei / oyo-"},
@@ -923,12 +931,8 @@ const DB = {
     {k:"相",m:"aspect / mutuel / ministre",r:"sou / ai"},
     {k:"様",m:"aspect / façon / Monsieur",r:"you / sama"},
     {k:"的",m:"cible / -ique / -al",r:"teki / mato"},
-    {k:"的",m:"cible / adjectivant (-ique)",r:"teki / mato"},
     {k:"化",m:"transformer / -isation",r:"ka / ke / ba-"},
     {k:"活",m:"activité / vivre",r:"katsu / i-"},
-    {k:"用",m:"utiliser / besoin",r:"you / mochi-"},
-    {k:"場",m:"lieu / endroit",r:"jou / ba"},
-    {k:"数",m:"nombre / compter",r:"suu / kazu"},
     {k:"列",m:"rangée / file / liste",r:"retsu"},
     {k:"並",m:"s'aligner / ordinaire",r:"hei / nara-"},
     {k:"交",m:"croiser / alterner / ami",r:"kou / kawa-"},
@@ -1042,7 +1046,6 @@ const DB = {
     {k:"繰",m:"dérouler / répéter",r:"kuri-"},
     {k:"執",m:"saisir / s'attacher / rédiger",r:"shitsu / shuu / tori-"},
     {k:"諦",m:"renoncer / résignation / vérité",r:"tei / akirame-"},
-    {k:"覚",m:"s'éveiller / réaliser",r:"kaku / sa-"},
     {k:"悟",m:"comprendre / réaliser / éveil",r:"go / sato-"},
   ]
 };
@@ -1114,33 +1117,60 @@ const UNLOCK_FROM = { 4:5, 3:4, 2:3, 1:2 };
 // ──────────────────────────────────────────────────────
 //  STATE
 // ──────────────────────────────────────────────────────
-let ST = loadState();
+let ST;   // chargé à l'initialisation, une fois toutes les fonctions définies
 let session   = null;
 let curMode   = "km";  // km = kanji→meaning, mk = meaning→kanji
 
-function loadState() {
-  try {
-    const raw = JSON.parse(localStorage.getItem("kanji_v2") || "{}");
-    return {
-      mastered:  new Set(raw.mastered  || []),
-      unlocked:  new Set(raw.unlocked  || [5]),
-      streak:    raw.streak   || 0,
-      sessions:  raw.sessions || 0,
-      level:     raw.level    || 5,
-    };
-  } catch {
-    return { mastered: new Set(), unlocked: new Set([5]), streak:0, sessions:0, level:5 };
+/* Répétition espacée. Pour chaque kanji : [boîte 0 à 5, jour d'échéance, essais, réussites, horodatage de la dernière réponse].
+   Une bonne réponse fait monter d'une boîte et repousse la prochaine révision (1, 3, 7, 14 puis 30 jours).
+   Une erreur renvoie en boîte 0 : le kanji revient dès la session suivante. Il est « maîtrisé » à partir de la boîte 3. */
+const GAP = [1, 3, 7, 14, 30];
+const MASTER_BOX = 3;
+const KEY = "kanji_v2";
+const today = () => Math.floor(Date.now() / 864e5);
+
+function blankState() { return { v: 3, srs: {}, unlocked: new Set([5]), streak: 0, sessions: 0, level: 5, ts: 0, rz: 0 }; }
+function fromRaw(raw) {
+  const st = blankState();
+  if (!raw || typeof raw !== "object") return st;
+  st.unlocked = new Set(raw.unlocked && raw.unlocked.length ? raw.unlocked : [5]);
+  st.streak = raw.streak || 0; st.sessions = raw.sessions || 0; st.level = raw.level || 5;
+  st.ts = raw.ts || 0; st.rz = raw.rz || 0;
+  if (raw.srs && typeof raw.srs === "object") st.srs = raw.srs;
+  else if (Array.isArray(raw.mastered)) {
+    /* ancienne version : les kanji « maîtrisés » entrent en boîte 3, avec des révisions étalées sur la semaine */
+    raw.mastered.forEach((k, i) => { st.srs[k] = [MASTER_BOX, today() + (i % 7), 1, 1, 0]; });
   }
+  return st;
+}
+function toRaw(st) { return { v: 3, srs: st.srs, unlocked: [...st.unlocked].sort(), streak: st.streak, sessions: st.sessions, level: st.level, ts: st.ts, rz: st.rz }; }
+function loadState() { try { return fromRaw(JSON.parse(localStorage.getItem(KEY) || "null")); } catch (e) { return blankState(); } }
+
+const isMastered = k => !!(ST.srs[k] && ST.srs[k][0] >= MASTER_BOX);
+const isDue = k => !!(ST.srs[k] && ST.srs[k][1] <= today());
+function record(k, ok) {
+  const r = ST.srs[k] ? ST.srs[k].slice() : [0, 0, 0, 0, 0];
+  r[2]++; if (ok) r[3]++;
+  if (ok) { r[0] = Math.min(r[0] + 1, 5); r[1] = today() + GAP[r[0] - 1]; }
+  else { r[0] = 0; r[1] = today(); }
+  r[4] = Date.now();
+  ST.srs[k] = r;
 }
 
+/* résumé lu par l'accueil du Dojo */
+function summary() {
+  const levels = LV_ORDER.map(lv => ({ lv, m: DB[lv].filter(d => isMastered(d.k)).length, t: DB[lv].length, u: ST.unlocked.has(lv) }));
+  const all = Object.values(DB).flat();
+  return { total: all.length, mastered: all.filter(d => isMastered(d.k)).length, seen: all.filter(d => ST.srs[d.k]).length,
+           due: all.filter(d => isDue(d.k)).length, day: today(), streak: ST.streak, sessions: ST.sessions, levels };
+}
+let snap = "";
+const content = () => JSON.stringify([ST.srs, [...ST.unlocked].sort(), ST.streak, ST.sessions, ST.level, ST.rz]);
 function saveState() {
-  localStorage.setItem("kanji_v2", JSON.stringify({
-    mastered:  [...ST.mastered],
-    unlocked:  [...ST.unlocked],
-    streak:    ST.streak,
-    sessions:  ST.sessions,
-    level:     ST.level,
-  }));
+  const c = content(); if (c !== snap) { snap = c; ST.ts = Date.now(); }
+  const raw = toRaw(ST); try { raw.sum = summary(); } catch (e) {}
+  try { localStorage.setItem(KEY, JSON.stringify(raw)); } catch (e) {}
+  Sync.touch();
 }
 
 // ──────────────────────────────────────────────────────
@@ -1149,6 +1179,7 @@ function saveState() {
 function show(id) {
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
+  const back = document.querySelector("a.dojo"); if (back) back.hidden = id !== "screen-home";   // en session, « ← Quitter » occupe ce coin
 }
 function goHome() { show("screen-home"); renderHome(); }
 
@@ -1156,11 +1187,14 @@ function goHome() { show("screen-home"); renderHome(); }
 //  HOME
 // ──────────────────────────────────────────────────────
 function renderHome() {
-  const total = Object.values(DB).reduce((a, arr) => a + arr.length, 0);
-  document.getElementById("s-mastered").textContent = ST.mastered.size;
+  const sm = summary();
+  document.getElementById("s-mastered").textContent = sm.mastered;
   document.getElementById("s-streak").textContent   = ST.streak;
   document.getElementById("s-sessions").textContent = ST.sessions;
-  document.getElementById("s-total").textContent    = total;
+  document.getElementById("s-total").textContent    = sm.due;
+  const dueLv = DB[ST.level].filter(d => isDue(d.k)).length;
+  document.getElementById("due-hint").innerHTML = dueLv ? `<b>${dueLv}</b> kanji de ce niveau à revoir aujourd'hui : ils passent en priorité.` : "";
+  Sync.line();
 
   const grid = document.getElementById("levels-grid");
   grid.innerHTML = "";
@@ -1169,7 +1203,7 @@ function renderHome() {
     const cfg     = LV_CONFIG[lv];
     const kanji   = DB[lv];
     const total   = kanji.length;
-    const done    = kanji.filter(d => ST.mastered.has(d.k)).length;
+    const done    = kanji.filter(d => isMastered(d.k)).length;
     const pct     = total > 0 ? Math.round((done / total) * 100) : 0;
     const locked  = !ST.unlocked.has(lv);
     const sel     = ST.level === lv;
@@ -1205,9 +1239,10 @@ function setMode(m) {
 }
 
 function resetConfirm() {
-  if (confirm("Réinitialiser toute la progression ? Cette action est irréversible.")) {
-    localStorage.removeItem("kanji_v2");
-    ST = loadState();
+  if (confirm("Réinitialiser toute la progression, sur tous tes appareils ? Cette action est irréversible.")) {
+    const rz = Date.now();
+    ST = blankState(); ST.rz = rz;
+    saveState();
     renderHome();
   }
 }
@@ -1218,16 +1253,11 @@ function resetConfirm() {
 function startSession() {
   const lv      = ST.level;
   const all     = DB[lv];
-  const unseen  = all.filter(d => !ST.mastered.has(d.k));
-  const seen    = all.filter(d =>  ST.mastered.has(d.k));
-
-  let pool;
-  if (unseen.length >= 10)       pool = shuffle([...unseen]).slice(0, 10);
-  else if (unseen.length > 0)    pool = shuffle([...unseen, ...shuffle([...seen]).slice(0, 10 - unseen.length)]).slice(0, 10);
-  else                           pool = shuffle([...seen]).slice(0, Math.min(10, seen.length));
-
-  ST.sessions++;
-  saveState();
+  const t       = today();
+  const due     = shuffle(all.filter(d => ST.srs[d.k] && ST.srs[d.k][1] <= t)).sort((a, b) => ST.srs[a.k][0] - ST.srs[b.k][0]);
+  const unseen  = shuffle(all.filter(d => !ST.srs[d.k]));
+  const later   = all.filter(d => ST.srs[d.k] && ST.srs[d.k][1] > t).sort((a, b) => ST.srs[a.k][1] - ST.srs[b.k][1]);
+  const pool    = shuffle([...due, ...unseen, ...later].slice(0, Math.min(10, all.length)));
 
   session = {
     lv,
@@ -1308,6 +1338,9 @@ function handleAnswer(btn, chosen, correct) {
   const isOk = chosen.k === correct.k;
   const fc   = document.getElementById("flash-card");
 
+  record(correct.k, isOk);
+  saveState();
+
   if (isOk) {
     session.score++;
     session.correct.push(correct);
@@ -1352,8 +1385,7 @@ function endSession() {
   // Streak
   ST.streak = pct >= 0.7 ? ST.streak + 1 : 0;
 
-  // Mastery: mark correctly answered kanji if session passed
-  if (pct >= 0.7) session.correct.forEach(c => ST.mastered.add(c.k));
+  ST.sessions++;
 
   // Unlock next level
   let unlocked = null;
@@ -1654,11 +1686,105 @@ function shuffle(arr) {
   return arr;
 }
 
+
+// ──────────────────────────────────────────────────────
+//  SYNCHRONISATION ENTRE APPAREILS (Supabase)
+//  La connexion se fait sur l'accueil du Dojo ; cette page suit la session partagée.
+//  Tant que url et key sont vides, la progression reste dans ce navigateur.
+// ──────────────────────────────────────────────────────
+const SYNC = { url: "https://cezasvhqmmjudlzhsjyu.supabase.co", key: "sb_publishable_123lbagpIPcVLDAQ7HKO3w_cgebhCvF" };
+const SYNC_APP = "kanji";
+const canon = v => v && typeof v === "object" ? (Array.isArray(v) ? "[" + v.map(canon).join(",") + "]" : "{" + Object.keys(v).sort().map(k => JSON.stringify(k) + ":" + canon(v[k])).join(",") + "}") : JSON.stringify(v === undefined ? null : v);
+function mergeRaw(a, b) {
+  const A = fromRaw(a), B = fromRaw(b);
+  if ((A.rz || 0) !== (B.rz || 0)) return (A.rz || 0) > (B.rz || 0) ? A : B;   // une remise à zéro plus récente l'emporte
+  const [n, o] = (A.ts || 0) >= (B.ts || 0) ? [A, B] : [B, A];
+  const m = blankState();
+  m.srs = Object.assign({}, o.srs);
+  for (const k in n.srs) { const x = m.srs[k], y = n.srs[k]; if (!x || (y[4] || 0) >= (x[4] || 0)) m.srs[k] = y; }
+  m.unlocked = new Set([...A.unlocked, ...B.unlocked]);
+  m.sessions = Math.max(A.sessions, B.sessions);
+  m.streak = n.streak; m.level = n.level; m.rz = n.rz;
+  m.ts = Math.max(A.ts || 0, B.ts || 0);
+  return m;
+}
+const Sync = {
+  on: !!(SYNC.url && SYNC.key), client: null, user: null, state: "off", last: null, timer: null, busy: null, again: false,
+  line() {
+    const el = document.getElementById("sync-line"); if (!el) return;
+    el.textContent = !this.on ? "" : this.state === "on" ? "Progression synchronisée avec ton compte" + (this.user && this.user.email ? " (" + this.user.email + ")" : "")
+      : this.state === "err" ? "Synchronisation impossible pour l'instant : ta progression reste enregistrée ici."
+      : this.state === "out" ? "Progression enregistrée sur cet appareil. Connecte-toi depuis l'accueil du Dojo pour la retrouver partout."
+      : "";
+  },
+  set(s) { this.state = s; this.line(); },
+  init() {
+    if (!this.on) return;
+    const sc = document.createElement("script");
+    sc.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+    sc.onload = () => this.start(); sc.onerror = () => this.set("err");
+    document.head.append(sc);
+  },
+  async start() {
+    try {
+      this.client = window.supabase.createClient(SYNC.url, SYNC.key);
+      this.client.auth.onAuthStateChange((ev, session) => setTimeout(() => this.session(session), 0));
+      const { data } = await this.client.auth.getSession();
+      this.session(data && data.session);
+    } catch (e) { this.set("err"); }
+    document.addEventListener("visibilitychange", () => {
+      if (!this.user) return;
+      if (document.visibilityState === "hidden") { if (this.timer) this.run(); }
+      else if (!this.last || Date.now() - this.last > 30000) this.run();
+    });
+    window.addEventListener("online", () => { if (this.user) this.run(); });
+  },
+  session(session) {
+    const u = session && session.user ? session.user : null;
+    if (u && this.user && u.id === this.user.id) return;
+    this.user = u;
+    if (u) this.run(); else this.set("out");
+  },
+  touch() { if (!this.user) return; clearTimeout(this.timer); this.timer = setTimeout(() => this.run(), 2500); },
+  run() {
+    clearTimeout(this.timer); this.timer = null;
+    if (!this.user) return Promise.resolve();
+    if (this.busy) { this.again = true; return this.busy; }
+    this.busy = (async () => {
+      try {
+        const uid = this.user.id;
+        const { data: row, error } = await this.client.from("progression").select("data").eq("user_id", uid).eq("app", SYNC_APP).maybeSingle();
+        if (error) throw error;
+        const remote = row && row.data && typeof row.data === "object" ? row.data : null;
+        const before = content();
+        if (remote) ST = mergeRaw(toRaw(ST), remote);
+        const changed = content() !== before;
+        snap = content();
+        const raw = toRaw(ST); raw.sum = summary();
+        try { localStorage.setItem(KEY, JSON.stringify(raw)); } catch (e) {}
+        if (!remote || canon(remote) !== canon(raw)) {
+          const { error: e2 } = await this.client.from("progression").upsert({ user_id: uid, app: SYNC_APP, data: raw, updated_at: new Date().toISOString() });
+          if (e2) throw e2;
+        }
+        this.last = Date.now(); this.set("on");
+        if (changed && !session && document.getElementById("screen-home").classList.contains("active")) renderHome();
+      } catch (e) { this.set("err"); }
+      this.busy = null;
+      if (this.again) { this.again = false; this.touch(); }
+    })();
+    return this.busy;
+  },
+};
+
 // ──────────────────────────────────────────────────────
 //  INIT
 // ──────────────────────────────────────────────────────
+ST = loadState();
+snap = content();
+saveState();
 show("screen-home");
 renderHome();
+Sync.init();
 
 // ── PWA Service Worker ──
 if ('serviceWorker' in navigator) {
