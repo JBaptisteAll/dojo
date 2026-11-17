@@ -761,6 +761,7 @@
   <div class="read-opts">
     <label><input type="checkbox" id="opt-furi" onchange="readOpt()"> Toutes les lectures</label>
     <label><input type="checkbox" id="opt-kana" onchange="readOpt()"> Kana vus seulement</label>
+    <button type="button" class="tr-btn" onclick="toast(voiceDiag());speak('こんにちは。日本語の練習をしましょう。'.replace('練習','れんしゅう'))">Diagnostic de la voix</button>
     <label>Voix <select id="opt-rate" onchange="setVoiceRate(this.value)"><option value="0.65">lente</option><option value="0.85">normale</option><option value="1">rapide</option></select></label>
   </div>
   <div id="read-body"></div>
@@ -1602,15 +1603,21 @@ function toast(msg) {
 /* parts : un texte, ou une liste lue à la suite (lectures d'un kanji, phrases d'un texte) */
 function speak(parts, btn) {
   if (!("speechSynthesis" in window)) return toast("Ce navigateur ne sait pas lire à voix haute.");
-  if (!Voice.v && !Voice.pick()) return toast("Pas de voix japonaise sur cet appareil : ajoute le japonais dans les réglages de langue / synthèse vocale du système.");
+  Voice.v || Voice.pick();             // certaines tablettes n'annoncent pas leurs voix : on essaie quand même en japonais
   speechSynthesis.cancel();
+  if (speechSynthesis.paused) speechSynthesis.resume();
+  let started = false;
+  clearTimeout(speak._t);
+  speak._t = setTimeout(() => { if (!started) toast(Voice.v ? "La voix n'a pas démarré : vérifie le volume (et le bouton silencieux sur iPad)." : "Aucune voix japonaise sur cet appareil : installe le japonais dans les réglages de synthèse vocale (voir « Diagnostic de la voix » dans Lecture)."); }, 2500);
   document.querySelectorAll(".say.playing").forEach(b => b.classList.remove("playing"));
   const list = (Array.isArray(parts) ? parts : [parts]).filter(Boolean);
   list.forEach((txt, i) => {
     const u = new SpeechSynthesisUtterance(txt);
-    u.voice = Voice.v; u.lang = Voice.v.lang; u.rate = Voice.rate;
+    if (Voice.v) u.voice = Voice.v;
+    u.lang = Voice.v ? Voice.v.lang : "ja-JP"; u.rate = Voice.rate;
+    u.addEventListener("start", () => { started = true; clearTimeout(speak._t); });
     if (btn) {
-      if (i === 0) u.onstart = () => btn.classList.add("playing");
+      if (i === 0) u.addEventListener("start", () => btn.classList.add("playing"));
       if (i === list.length - 1) u.onend = u.onerror = () => btn.classList.remove("playing");
     }
     speechSynthesis.speak(u);
@@ -1629,6 +1636,12 @@ document.addEventListener("click", e => {
   e.preventDefault(); e.stopPropagation();
   speak(JSON.parse(b.dataset.say), b);
 }, true);
+function voiceDiag() {
+  if (!("speechSynthesis" in window)) return "Ce navigateur ne propose pas la synthèse vocale.";
+  const all = speechSynthesis.getVoices(), ja = all.filter(v => /^ja/i.test(v.lang));
+  return ja.length ? `Voix utilisée : ${(Voice.v || ja[0]).name} (${(Voice.v || ja[0]).lang}). ${ja.length} voix japonaise(s) trouvée(s).`
+    : `Aucune voix japonaise annoncée (${all.length} voix au total sur l'appareil). La page essaie quand même de parler en japonais.`;
+}
 function setVoiceRate(v) { Voice.rate = +v; try { localStorage.setItem("kanji_voice_rate", v); } catch (e) {} speak("ゆっくり話します。"); }
 
 function readingHTML(d) { return `<span class="rd-kana">${d.kn} ${sayBtn(readingsToSay(d.kn), "Écouter les lectures")}</span><span class="rd-romaji">${d.r}</span>`; }
